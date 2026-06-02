@@ -23,6 +23,7 @@
 ## 文件说明
 
 - [research-nine-steps.md](./research-nine-steps.md)：按“研究思维画布九步法”回答你的九个问题。
+- [research-problem-clarification.md](./research-problem-clarification.md)：落实“问题澄清”要求，细化当前问题、研究问题构建、文献阅读方式、近期任务和目标产出。
 - [design-thinking-and-steps.md](./design-thinking-and-steps.md)：详细说明设计思路、设计步骤、为什么这么设计，以及可直接写进论文的方法设计段落。
 - [ctde-mappo-model.md](./ctde-mappo-model.md)：具体说明为什么选择 PS-MAPPO，以及 Actor、Critic、动作掩码和奖励函数。
 - [factor-impact-analysis.md](./factor-impact-analysis.md)：说明队列、负载、带宽、链路寿命等因素分别影响哪些实验结果，以及如何影响。
