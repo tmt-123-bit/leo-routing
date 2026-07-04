@@ -1166,3 +1166,21 @@ LEO 高动态 + 万颗级规模
 2. 奖励函数参数：D_target、Q_max、T_safe 和各项权重；
 3. 消融实验表：每个模块去掉后观察哪些指标变化。
 这样后续讨论“如何证明”时，可以直接对应到具体实验和指标。
+
+---
+## 10. 下一步已经开始做的实验
+根据老师后面提的问题，我现在不把 Dijkstra 继续当成主方法，而是把它固定成全局 baseline。后续路线改成：
+
+```text
+全局 Dijkstra baseline
+    ↓
+逐跳本地下一跳决策
+    ↓
+visited 防环
+    ↓
+队列、链路负载、可靠性和链路剩余寿命约束
+    ↓
+导出 MAPPO/CTDE 训练需要的交互轨迹
+```
+
+对应代码在 `try_matlab/try_next_hop_v2.m`，说明在 `try_matlab/next_hop_v2_note.md`。这一版已经能导出 `mappo_rollout_like_v2.csv`，后面接 MAPPO 时不准备从零写算法，而是优先参考 `marlbenchmark/on-policy`、`cleanmarl` 或 `BenchMARL` 这类现有实现。
