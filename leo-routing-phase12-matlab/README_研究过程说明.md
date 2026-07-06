@@ -1,23 +1,23 @@
 # LEO 路由研究过程原型：Phase 1-3
 
-这个文件夹不是最终算法实现，而是论文前期“中间研究过程”的 MATLAB 原型。它现在覆盖从传统全局 Dijkstra baseline 到逐跳本地决策的过渡步骤。后续主线代码建议看 `leo-routing-preliminary-matlab`，因为那里进一步整理了局部观测、动作掩码、reward、控制开销和计算开销。
+这个文件夹先放论文前期“中间研究过程”的 MATLAB 原型。它现在覆盖从传统全局 Dijkstra baseline 到逐跳本地决策的过渡步骤。后面主线更适合看 `leo-routing-preliminary-matlab`，因为那里进一步整理了局部观测、动作掩码、reward、控制开销和计算开销。
 
 它对应后续研究路线里的前三块：
 
 1. **动态拓扑 + Dijkstra 基线**
    - 对应时变图建模：`G(t) = (V, E(t), X(t))`
-   - 作用：验证 LEO 拓扑会随时间变化，并建立传统最短路基线。
+   - 用处：验证 LEO 拓扑会随时间变化，并建立传统最短路基线。
    - 注意：Dijkstra 不是本文最终方法，只是 baseline。
 
 2. **加入队列和链路负载的 queue/load-aware baseline**
    - 对应变量：`q_i(t)`、`q_j(t)`、`delay_ij(t)`、`rho_ij(t)`、`T_rem_ij(t)`
-   - 作用：证明只看传播时延的最短路径不一定是最低端到端时延路径。
-   - 注意：这一块仍然不是最终 MAPPO/CTDE，只是用来铺垫为什么要做队列感知和负载感知。
+   - 用处：证明只看传播时延的最短路径不一定是最低端到端时延路径。
+   - 注意：这一块仍然还不是最后的 MAPPO/CTDE，只是用来铺垫为什么要做队列感知和负载感知。
 
 3. **逐跳本地决策 + 动作掩码 + 防环**
-   - 作用：把“全局一次性算完整路径”改成“当前卫星只根据邻居局部状态选择下一跳”。
-   - 这是后续接 Dec-POMDP / MAPPO / 其他 MARL 算法前的中间层。
-   - 注意：这里的本地策略仍然是手写启发式，不是最终学习算法。
+   - 用处：把“全局一次性算完整路径”改成“当前卫星只根据邻居局部状态选择下一跳”。
+   - 这是之后接 Dec-POMDP / MAPPO / 其他 MARL 算法前的中间层。
+   - 注意：这里的本地策略仍然是手写启发式，还不是最后的学习算法。
 
 ## 文件
 
@@ -109,7 +109,7 @@ cost_ij =
 这一块的论文定位：
 
 ```text
-Phase 2 不是最终算法，而是验证“只按传播时延选路可能忽略拥塞”。
+Phase 2 还不是最后的算法，而是验证“只按传播时延选路可能忽略拥塞”。
 如果 queue/load-aware baseline 的最大队列和 P95 时延下降，就说明队列/负载状态确实值得进入后续 Dec-POMDP/MAPPO 的局部观测设计。
 ```
 
@@ -155,7 +155,7 @@ Phase 3 是从传统路由到学习型路由的过渡。
 
 老师的建议是：后续不再继续深挖 Dijkstra。Dijkstra 保留为 baseline。主线应转向逐跳本地决策、真实星座、学习型算法和通信开销约束。
 
-后续路线建议如下：
+后续路线我先按这个顺序走：
 
 ```text
 Phase 1: 动态拓扑 + Dijkstra baseline
@@ -170,45 +170,45 @@ Phase 7: 加入通信开销预算约束
 所以向老师解释时可以说：
 
 ```text
-前两块不是最终方法，而是为了验证仿真环境和问题动机。
+前两块还不是最后的方法，而是为了验证仿真环境和问题动机。
 Phase 3 把全局路径规划改成逐跳本地决策，为 Dec-POMDP/MARL 做接口准备。
-最终方法仍然是“实时 Dec-POMDP + 学习型多智能体路由 + 队列/链路寿命/通信开销约束”。
+最后主线还是“实时 Dec-POMDP + 学习型多智能体路由 + 队列/链路寿命/通信开销约束”。
 ```
 
 ## 参考资料
 
 1. **MAPPO official implementation**
    - GitHub: https://github.com/marlbenchmark/on-policy
-   - 用途：老师给的 MAPPO 官方实现，后续接 MAPPO 时优先参考。
+   - 用来：老师给的 MAPPO 官方实现，之后接 MAPPO 时优先参考。
 
 2. **CleanMARL**
    - GitHub: https://github.com/AmineAndam04/cleanmarl
-   - 用途：单文件 MARL 实现，更适合理解算法和快速改环境接口。
+   - 用来：单文件 MARL 实现，更适合理解算法和快速改环境接口。
 
 3. **BenchMARL**
    - GitHub: https://github.com/facebookresearch/BenchMARL#algorithm
-   - 用途：较完整的 MARL benchmark 框架，比较重，后期作为算法组织参考。
+   - 用来：较完整的 MARL benchmark 框架，比较重，后期作为算法组织参考。
 
 4. **MA-DRL satellite routing simulator**
    - GitHub: https://github.com/SatCom-TELMA/MA-DRL_Routing_Simulator
-   - 用途：参考卫星路由仿真、Dijkstra/Q-routing/MA-DRL baseline 的组织方式。
+   - 用来：参考卫星路由仿真、Dijkstra/Q-routing/MA-DRL baseline 的组织方式。
 
 5. **Hypatia: LEO satellite network simulator**
    - GitHub: https://github.com/snkas/hypatia
-   - 用途：参考动态 LEO 拓扑、时间片链路变化和路径计算。
+   - 用来：参考动态 LEO 拓扑、时间片链路变化和路径计算。
 
 6. **LEOPath**
    - GitHub: https://github.com/Fundacio-i2CAT/LEOPath
-   - 用途：参考 Python 版 LEO 路由仿真框架、拓扑与路由评估。
+   - 用来：参考 Python 版 LEO 路由仿真框架、拓扑与路由评估。
 
 7. **Queue-Aware and Resilient Routing in LEO Satellite Networks Using Multi-Agent Reinforcement Learning**
    - arXiv: https://arxiv.org/abs/2605.04448
-   - 用途：支撑队列积压和实时流量变化会影响 LEO 路由决策。
+   - 用来：支撑队列积压和实时流量变化会影响 LEO 路由决策。
 
 8. **Real-Time Routing Design for LEO Satellite Networks: An Enhanced Multi-Agent DRL Approach**
    - IEEE Xplore: https://ieeexplore.ieee.org/document/10693714/
-   - 用途：支撑 RTMDP/实时路由建模思路。
+   - 用来：支撑 RTMDP/实时路由建模思路。
 
 9. **NetworkX shortest path / Dijkstra documentation**
    - https://networkx.org/documentation/stable/reference/algorithms/shortest_paths.html
-   - 用途：虽然本代码是 MATLAB，但 Dijkstra baseline 的实验逻辑和常见实现方式可参考该文档。
+   - 用来：虽然本代码是 MATLAB，但 Dijkstra baseline 的实验逻辑和常见实现方式可参考该文档。

@@ -1,6 +1,6 @@
 # 真实/准真实星座拓扑接入计划
 
-这份文件说明：后续如果要把 `leo_marl_env.py` 从 toy topology 升级到真实或准真实星座拓扑，应该怎么做，最小需要哪些字段，以及当前项目里哪些文件已经为这件事做好准备。
+这里记录：之后如果要把 `leo_marl_env.py` 从 toy topology 升级到真实或准真实星座拓扑，应该怎么做，最小需要哪些字段，以及现在这版里哪些文件已经为这件事做好准备。
 
 当前已经准备好的接口是：
 
@@ -12,7 +12,7 @@ leo_marl_env.py 里的 orbital_geodetic_coord()
 
 ---
 
-## 1. 当前环境已经支持什么
+## 1. 现在环境已经支持什么
 
 `leo_marl_env.py` 里，`EnvConfig` 已经有：
 
@@ -25,7 +25,7 @@ topology_provider: Optional[TopologyProvider] = None
 - 如果 `topology_provider is None`，就使用当前 toy topology；
 - 如果传入了 `topology_provider(t, env)`，就直接用外部提供的链路快照替换 `_build_topology()`。
 
-所以后续接真实拓扑时，最重要的不是重写整个环境，而是：
+所以之后接真实拓扑时，最重要的不是重写整个环境，而是：
 
 ```text
 提供一个正确的 topology_provider
@@ -69,7 +69,7 @@ Dict[(src, dst), LinkState]
 
 ### 方式 A：接 Hypatia
 
-如果后续使用 Hypatia，最推荐的做法是：
+如果后续使用 Hypatia，我更想先走的做法是：
 
 1. 先让 Hypatia 生成时间片级的链路快照；
 2. 把每个时间片的拓扑转成：
@@ -160,7 +160,7 @@ Dict[(src, dst), LinkState]
 
 ---
 
-## 5. 当前最推荐的接入顺序
+## 5. 当前我更想先走的接入顺序
 
 ### Step 1
 保持当前 `leo_marl_env.py` 不动，只新增一个真正的 provider 文件。
@@ -205,9 +205,9 @@ env = LeoRoutingEnv(cfg)
 
 ---
 
-## 6. 当前结论
+## 6. 现在的判断
 
-当前项目已经把真实/准真实星座接入最关键的一步准备好了：
+现在这版已经把真实/准真实星座接入最关键的一步准备好了：
 
 ```text
 环境接口已经支持外部 topology_provider

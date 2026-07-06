@@ -1,6 +1,6 @@
 # 真实拓扑数据文件格式说明
 
-这份文件的目的，是把后续接真实/准真实星座拓扑时需要的最小数据格式固定下来。这样不管数据来自：
+这里先把之后接真实/准真实星座拓扑时需要的最小数据格式固定下来。这样不管数据来自：
 
 - Hypatia
 - StarryNet
@@ -71,7 +71,7 @@ time_slot,src,dst,delay_ms,available,capacity_mbps,reliability,t_rem,is_cross,sh
 1,4,3,12.0,True,100.0,0.94,4.0,True,1,1
 ```
 
-当前项目里运行：
+现在这版里运行：
 
 ```bash
 python hypatia_topology_provider_stub.py
@@ -100,7 +100,7 @@ outputs/hypatia_topology_demo.csv
 - `(u, v)`
 - `(v, u)`
 
-这样和当前环境内部的转发逻辑最一致。
+这样和现在环境内部的转发逻辑最一致。
 
 ### 4.2 时间片一致性
 
@@ -134,9 +134,9 @@ outputs/hypatia_topology_demo.csv
 
 ---
 
-## 6. 当前项目与该格式的关系
+## 6. 现在这版与该格式的关系
 
-当前项目里已经有三层支持：
+现在这版里已经有三层支持：
 
 1. `leo_marl_env.py`
    - 提供 `topology_provider` 接口
@@ -147,7 +147,7 @@ outputs/hypatia_topology_demo.csv
 3. `hypatia_topology_provider_stub.py`
    - 说明如何从 CSV 快照读入并转成 provider
 
-所以后续如果拿到真实/准真实拓扑，最推荐做法是：
+所以之后如果拿到真实/准真实拓扑，我更想先走做法是：
 
 ```text
 先转成统一 CSV

@@ -1,30 +1,30 @@
 # LEO 路由训练接入说明
 
-这份说明的目的不是重复论文思路，而是把当前 `F:\leo-routing-preliminary-matlab` 里的环境、评测和训练脚本，和用户已经 clone 到 F 盘的三个算法仓库对应起来，说明下一步最适合怎么接。
+这里不重复论文思路，主要把当前 `F:\leo-routing-preliminary-matlab` 里的环境、评测和训练脚本，和我已经 clone 到 F 盘的三个算法仓库对应起来，说明下一步最适合怎么接。
 
 ## 1. 当前我们已经有什么
 
-当前这个文件夹里已经有四类东西：
+这个文件夹里已经有四类东西：
 
 1. `run_preliminary_leo_routing.m`
    - MATLAB 前期仿真与消融脚本。
-   - 作用：验证 Dijkstra baseline、queue/load-aware baseline、链路寿命约束、逐跳本地决策、防环、TTL、局部 reward 和消融策略。
+   - 用处：验证 Dijkstra baseline、queue/load-aware baseline、链路寿命约束、逐跳本地决策、防环、TTL、局部 reward 和消融策略。
    - 它不是训练代码，而是论文前期验证和消融实验代码。
 
 2. `leo_marl_env.py`
    - Python 环境层。
-   - 作用：把论文里的“实时 Dec-POMDP + CTDE/MAPPO”思路转成可训练环境接口。
+   - 用处：把论文里的“实时 Dec-POMDP + CTDE/MAPPO”思路转成可训练环境接口。
    - 已包含：场景配置、局部观测、action mask、防环、TTL、AoI/Hello、控制预算、真实星座占位、critic state、MAPPO 风格输入。
 
 3. `run_python_experiments.py`
    - 统一评测入口。
-   - 作用：固定多场景、多策略、多指标导出流程。
+   - 用处：固定多场景、多策略、多指标导出流程。
    - 当前支持：`random_feasible`、`delay_only`、`queue_load`、`full_masked_heuristic`、`linear_policy`。
 
 4. `train_linear_policy.py`
    - 轻量学习型 baseline。
-   - 作用：在当前没有 PyTorch/Gym 的环境里，先打通“学习型策略训练 -> 保存权重 -> 统一评测”的闭环。
-   - 它不是最终 MAPPO。
+   - 用处：在当前没有 PyTorch/Gym 的环境里，先打通“学习型策略训练 -> 保存权重 -> 统一评测”的闭环。
+   - 它还不是最后的 MAPPO。
 
 此外还有：
 
@@ -42,7 +42,7 @@
 
 ## 2. 三个算法仓库怎么选
 
-用户已 clone 的三个算法仓库：
+我已经 clone 到 F 盘的三个算法仓库：
 
 - `F:\cleanmarl`
 - `F:\on-policy`
@@ -50,7 +50,7 @@
 
 ### 2.1 为什么当前先选 cleanmarl
 
-当前最适合先接的是 `cleanmarl`，原因很简单：
+现在更适合先接的是 `cleanmarl`，原因是：
 
 第一，它最轻。`cleanmarl/cleanmarl/mappo.py` 是单文件实现，环境接口清晰，最容易对齐当前 `LeoRoutingEnv`。
 
@@ -85,7 +85,7 @@
 
 - 它更重；
 - 更依赖 TorchRL/Hydra；
-- 当前本地环境没有 torch；
+- 现在本地环境没有 torch；
 - 现在最急的是把训练线跑通，而不是先做大而全 benchmark。
 
 因此当前对 BenchMARL 的使用建议是：
@@ -102,7 +102,7 @@
 
 - 现在任务本质上是“当前持包卫星根据局部观测选择下一跳”；
 - 因此先把“当前活跃决策点”包装成一个 agent，最容易跑通训练；
-- 后续如果要更接近严格的多智能体表述，可以把“多包并发”或“多卫星并发决策”扩成多 agent 版本。
+- 之后如果要更接近严格的多智能体表述，可以把“多包并发”或“多卫星并发决策”扩成多 agent 版本。
 
 这种做法的好处是：
 
@@ -111,7 +111,7 @@
 - 可以先验证学习型策略是否优于启发式和 Dijkstra baseline；
 - 后续再升级为多 agent 共享参数版本。
 
-## 4. 当前最推荐的下一步
+## 4. 当前我更想先走的下一步
 
 ### Step 1
 先保留现在的 `train_linear_policy.py` 和 `run_python_experiments.py`，作为“环境可训练 + 指标可导出”的底线。
@@ -135,7 +135,7 @@
 1. 还没有真正用 `cleanmarl` 或 `on-policy` 跑正式 MAPPO。
 2. 真实星座/TLE/Hypatia/StarryNet 还没接入，只是有接口占位。
 3. 对比方法还不完整，尤其缺少正式学习型对比和更大规模种子实验。
-4. 当前轻量 `linear_policy` 只是学习型 baseline，不是最终 MAPPO/CTDE 结果。
+4. 当前轻量 `linear_policy` 只是学习型 baseline，还不是最后的 MAPPO/CTDE 结果。
 
 所以当前最准确的说法是：
 
@@ -154,11 +154,11 @@
 7. `F:\cleanmarl\cleanmarl\mappo.py`
 8. `F:\on-policy\README.md`
 
-## 7. 当前最重要的结论
+## 7. 我现在的判断
 
 在现阶段，最适合当前 LEO 环境接入的实现方式是：
 
-- 论文主线仍然按用户文稿；
+- 论文主线仍然按我现在的文稿；
 - 算法接入优先使用 `cleanmarl` 作为第一正式训练目标；
 - `on-policy` 作为第二阶段官方 MAPPO 对齐目标；
 - `BenchMARL` 暂时只参考结构，不优先接；

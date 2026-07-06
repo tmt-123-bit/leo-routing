@@ -1,20 +1,20 @@
 # tmt-123-bit/leo-routing 并入计划
 
-这份文件的目的，是解决一个很现实的问题：
+这里先记一个现实问题：
 
-当前已经定位到了三个算法仓库：
+现在已经找到了三个算法仓库：
 
 - `F:\cleanmarl`
 - `F:\on-policy`
 - `F:\BenchMARL`
 
-但你提到的主参考仓库：
+但我说过要参考的主仓库：
 
 - `tmt-123-bit/leo-routing`
 
 还没有在当前已挂载路径里找到。所以现在只能把它作为研究方向参考，而不能按它的具体文件结构直接对齐。
 
-为了避免后面一旦找到仓库又要重新理路线，这份文件先把“找到以后该怎么并进当前项目”写清楚。
+为了避免后面一找到仓库又重新理一遍，这里先把“找到以后怎么并进现在这版”写清楚。
 
 ---
 
@@ -26,7 +26,7 @@
 PS-MAPPO + queue-aware + link-lifetime constrained LEO routing 的研究笔记 / 原型仓库
 ```
 
-也就是说，它对当前项目最可能的价值不是：
+也就是说，它对现在这版最可能的价值不是：
 
 - 直接替换整个项目
 
@@ -80,24 +80,24 @@ PS-MAPPO + queue-aware + link-lifetime constrained LEO routing 的研究笔记 /
 
 ---
 
-## 3. 找到以后最推荐的并入方式
+## 3. 找到以后我更想先走的并入方式
 
 ### 不推荐的方式
 
 不建议：
 
 ```text
-把当前项目全部删掉，用 tmt 仓库完全替代
+把现在这版全部删掉，用 tmt 仓库完全替代
 ```
 
 原因：
 
-- 当前项目已经有完整的 MATLAB 前期验证、Python 环境、评测入口、轻量学习闭环、cleanmarl bridge；
+- 现在这版已经有完整的 MATLAB 前期验证、Python 环境、评测入口、轻量学习闭环、cleanmarl bridge；
 - 如果直接替换，容易把已经梳理好的论文映射打乱。
 
 ### 推荐的方式
 
-更推荐：
+更稳的做法是：
 
 ```text
 把 tmt 仓库当成“设计和实现对照源”，逐项并入
@@ -105,7 +105,7 @@ PS-MAPPO + queue-aware + link-lifetime constrained LEO routing 的研究笔记 /
 
 也就是：
 
-1. 保留当前项目目录和评测入口不变；
+1. 保留现在这版目录和评测入口不变；
 2. 从 tmt 仓库里抽取更优的：
    - 状态字段
    - reward 设计
@@ -119,7 +119,7 @@ PS-MAPPO + queue-aware + link-lifetime constrained LEO routing 的研究笔记 /
 
 这样做的好处是：
 
-- 当前项目不会失控；
+- 现在这版不会失控；
 - 论文主线保持一致；
 - 更容易说清楚“哪些部分来自主参考仓库启发，哪些是自己整理后的工程实现”。
 
@@ -141,7 +141,7 @@ PS-MAPPO + queue-aware + link-lifetime constrained LEO routing 的研究笔记 /
 
 例如：
 
-| tmt 仓库模块 | 当前项目模块 | 处理方式 |
+| tmt 仓库模块 | 现在这版模块 | 处理方式 |
 |---|---|---|
 | 状态定义 | `leo_marl_env.py` | 合并 / 保留 / 替换 |
 | reward 设计 | `_local_reward()` | 调整 |
@@ -159,15 +159,15 @@ PS-MAPPO + queue-aware + link-lifetime constrained LEO routing 的研究笔记 /
 - 真实拓扑输入
 - 场景配置
 
-并进当前项目。
+并进现在这版。
 
 训练脚本是否替换，应该放后面判断。
 
 ---
 
-## 5. 当前项目和 tmt 仓库未来最可能的融合点
+## 5. 现在这版和 tmt 仓库未来最可能的融合点
 
-如果后续找到 tmt 仓库，它最可能和当前项目对接的地方是：
+如果后续找到 tmt 仓库，它最可能和现在这版对接的地方是：
 
 ### 融合点 1：`leo_marl_env.py`
 
@@ -196,9 +196,9 @@ PS-MAPPO + queue-aware + link-lifetime constrained LEO routing 的研究笔记 /
 
 ---
 
-## 6. 当前结论
+## 6. 现在的判断
 
-现在虽然还没找到 `tmt-123-bit/leo-routing` 的本地路径，但这不会阻塞当前项目继续推进。当前项目已经完成：
+现在虽然还没找到 `tmt-123-bit/leo-routing` 的本地路径，但这不会阻塞现在这版继续推进。现在这版已经完成：
 
 - 环境层
 - 评测层

@@ -1,8 +1,8 @@
 # CleanMARL 正式接入计划
 
-这份文件说明：当后续在有 PyTorch 的环境里继续推进时，如何把当前 `F:\leo-routing-preliminary-matlab` 里的 LEO 路由环境正式接到 `F:\cleanmarl\cleanmarl\mappo.py`。
+这里记录：当后续在有 PyTorch 的环境里继续推进时，如何把当前 `F:\leo-routing-preliminary-matlab` 里的 LEO 路由环境正式接到 `F:\cleanmarl\cleanmarl\mappo.py`。
 
-当前已经完成的桥接文件是：
+已经做完的桥接文件是：
 
 ```text
 cleanmarl_leo_wrapper.py
@@ -29,9 +29,9 @@ cleanmarl_leo_wrapper.py
 
 ---
 
-## 2. 当前 wrapper 的输入输出定义
+## 2. 这个 wrapper 的输入输出定义
 
-当前 wrapper 把任务先包装成单智能体 cooperative 形式：
+这个 wrapper 把任务先包装成单智能体 cooperative 形式：
 
 ```text
 n_agents    = 1
@@ -46,7 +46,7 @@ state_size  = 9
 - `action_size=6`：最多 6 个可选下一跳。
 - `state_size=9`：集中式 Critic 用的全局摘要（队列、负载、公平性、控制开销等）。
 
-这不是最终多 agent 扩展版，而是当前最稳的 MAPPO 接入起点。
+这还不是最后的多 agent 扩展版，而是当前最稳的 MAPPO 接入起点。
 
 ---
 
@@ -141,7 +141,7 @@ cleanmarl/env/leo_wrapper.py
 
 ---
 
-## 6. 当前继续推进时最推荐的实际顺序
+## 6. 当前继续推进时我更想先走的实际顺序
 
 ### Step 1
 保留当前本地文件：
@@ -189,7 +189,7 @@ run_python_experiments.py
 
 ---
 
-## 7. 当前结论
+## 7. 现在的判断
 
 当前最合理的正式接入路径是：
 

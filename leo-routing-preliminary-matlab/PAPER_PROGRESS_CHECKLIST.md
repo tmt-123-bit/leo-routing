@@ -1,14 +1,14 @@
-# 论文实验推进清单（当前代码进度汇总）
+# 论文实验推进清单（现在代码进度汇总）
 
-这份文件的目标很简单：把当前 `F:\leo-routing-preliminary-matlab` 已经做到哪一步、还差哪一步、下一步该怎么补，写成一个可以直接对照论文思路推进的清单。
+这里主要记：当前 `F:\leo-routing-preliminary-matlab` 已经做到哪一步、还差哪一步、下一步该怎么补，写成一个可以直接对照论文思路推进的清单。
 
 ---
 
-## 1. 当前已经完成的部分
+## 1. 已经做完的部分
 
 ### 1.1 MATLAB 前期仿真与消融
 
-已完成：
+已经做了：
 
 - `run_preliminary_leo_routing.m`
 - Dijkstra baseline
@@ -24,7 +24,7 @@
   - `A3_local_no_reliability_risk`
   - `A4_local_no_progress`
 
-作用：
+用处：
 
 - 用来支撑论文里“为什么 Dijkstra 只是 baseline”；
 - 用来支撑“队列/负载/链路寿命/防环”这些模块的消融验证；
@@ -32,7 +32,7 @@
 
 ### 1.2 Python MARL 环境层
 
-已完成：
+已经做了：
 
 - `leo_marl_env.py`
 - 场景配置 `SCENARIOS`
@@ -49,14 +49,14 @@
 - `orbital_geodetic_coord()` 占位
 - `topology_provider` 占位
 
-作用：
+用处：
 
 - 用来支撑论文里“实时 Dec-POMDP + CTDE/MAPPO 环境层”的代码映射；
 - 用来作为后续 cleanmarl / on-policy / BenchMARL 训练的核心环境。
 
 ### 1.3 统一评测入口
 
-已完成：
+已经做了：
 
 - `run_python_experiments.py`
 - 批量运行多个场景：
@@ -76,27 +76,27 @@
 - `full_masked_heuristic`
 - `linear_policy`
 
-作用：
+用处：
 
 - 固定统一的评测流程；
-- 后续训练出的 MAPPO policy 也应该通过这个入口做统一对比，而不是另起一套评测逻辑。
+- 之后训练出的 MAPPO policy 也应该通过这个入口做统一对比，而不是另起一套评测逻辑。
 
 ### 1.4 轻量学习型 baseline
 
-已完成：
+已经做了：
 
 - `train_linear_policy.py`
 - `models/linear_policy_weights.npz`
 - `outputs/linear_policy_training_log.csv`
 
-作用：
+用处：
 
-- 证明当前环境已经支持学习型策略闭环；
-- 不是最终 MAPPO，只是过渡性学习 baseline。
+- 证明现在环境已经支持学习型策略闭环；
+- 还不是最后的 MAPPO，只是过渡性学习 baseline。
 
 ### 1.5 CleanMARL 接入桥接层
 
-已完成：
+已经做了：
 
 - `cleanmarl_leo_wrapper.py`
 - `train_cleanmarl_style_stub.py`
@@ -107,15 +107,15 @@
 - `RUN_CLEANMARL_LEO.md`
 - `ON_POLICY_INTEGRATION_PLAN.md`
 
-作用：
+用处：
 
-- 已经把当前环境和 cleanmarl 的接口对齐；
+- 已经把现在环境和 cleanmarl 的接口对齐；
 - 已经把后续 cleanmarl / on-policy 的接入路线写清楚；
 - 已经验证了 rollout 数据结构不是拍脑袋写的。
 
 ---
 
-## 2. 当前还没完成的部分
+## 2. 还没做完的部分
 
 ### 2.1 正式 MAPPO 训练还没跑
 
@@ -156,7 +156,7 @@
 
 ### 2.4 tmt-123-bit/leo-routing 本地仓库还没定位到
 
-当前已经定位到：
+现在已经找到：
 
 - `F:\cleanmarl`
 - `F:\on-policy`
@@ -182,7 +182,7 @@ CleanMARLLeoWrapper
 为什么第一优先做这个：
 
 - 这是从“环境原型”变成“正式训练代码”的分水岭；
-- 当前所有桥接工作都已经为这一步准备好了；
+- 前面的桥接工作基本都是为这一步准备的；
 - cleanmarl 是三个算法仓库里当前最轻、最稳、最容易先落地的。
 
 ### 第二优先级
@@ -239,7 +239,7 @@ run_python_experiments.py
 
 ### 还不能作为最终论文结论的部分
 
-当前还不能直接作为最终论文结论的包括：
+现在还不能直接作为最终论文结论的包括：
 
 - “MAPPO 比 baseline 明显更好”
 - “真实星座下表现稳定”
@@ -272,9 +272,9 @@ run_python_experiments.py
 
 ---
 
-## 6. 一句话总结
+## 6. 我现在的判断
 
-当前项目已经完成到：
+现在这版已经完成到：
 
 ```text
 研究思路 -> 前期仿真 -> MARL环境 -> 统一评测 -> 轻量学习闭环 -> CleanMARL桥接

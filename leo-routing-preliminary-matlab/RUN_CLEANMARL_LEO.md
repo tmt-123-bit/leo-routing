@@ -1,6 +1,6 @@
 # 在有 PyTorch 环境时运行 CleanMARL + LEO 路由的最小模板
 
-这份文件是给未来正式运行 cleanmarl MAPPO 用的。
+这里先把以后正式跑 cleanmarl MAPPO 的入口写清楚。
 
 当前限制：
 - 这个会话里的 Python 环境没有 `torch`
@@ -15,17 +15,17 @@
 
 - Python 环境里安装 `torch`
 - `F:\cleanmarl` 可运行
-- 当前项目目录加入 `PYTHONPATH`，或者把 `cleanmarl_leo_wrapper.py` 复制进 cleanmarl 仓库
+- 现在这版目录加入 `PYTHONPATH`，或者把 `cleanmarl_leo_wrapper.py` 复制进 cleanmarl 仓库
 
-推荐做法是：
+我倾向的做法是：
 
-1. 保持当前项目目录不变：
+1. 保持现在这版目录不变：
 
 ```text
 F:\leo-routing-preliminary-matlab
 ```
 
-2. 把下面这些文件作为当前项目环境侧实现：
+2. 把下面这些文件作为现在这版环境侧实现：
 
 ```text
 leo_marl_env.py
@@ -75,7 +75,7 @@ python cleanmarl\mappo.py --env_type="leo" --env_name="medium_load" --batch_size
 
 ---
 
-## 4. 训练跑通后怎么接回当前评测入口
+## 4. 训练跑通后怎么接回现在评测入口
 
 训练跑通后，建议不要新写一套评测逻辑，而是把训练好的策略接回：
 
@@ -114,9 +114,9 @@ mappo_policy
 
 ---
 
-## 6. 这一阶段的定位
+## 6. 这阶段的定位
 
-这一阶段的目标不是直接出最终 IEEE 表格，而是：
+这阶段的目标不是直接出最终 IEEE 表格，而是：
 
 ```text
 把 CleanMARL 的 MAPPO 真正接进当前 LEO 环境
