@@ -1,0 +1,6 @@
+﻿episode,scenario,steps,delivered,dropped,total_reward,final_status,obs_shape,state_shape,avail_shape
+1,low_load,12,0,1,-15.2513,ttl_exceeded,"(1, 66)","(9,)","(1, 6)"
+2,medium_load,1,1,0,0.6651,delivered,"(1, 66)","(9,)","(1, 6)"
+3,hotspot_high_load,1,1,0,0.6651,delivered,"(1, 66)","(9,)","(1, 6)"
+4,frequent_break,12,0,1,-15.5359,ttl_exceeded,"(1, 66)","(9,)","(1, 6)"
+5,fault_links,9,1,0,-8.0117,delivered,"(1, 66)","(9,)","(1, 6)"

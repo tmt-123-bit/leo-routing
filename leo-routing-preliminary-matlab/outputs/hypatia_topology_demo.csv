@@ -1,0 +1,7 @@
+﻿time_slot,src,dst,delay_ms,available,capacity_mbps,reliability,t_rem,is_cross,shell_src,shell_dst
+1,1,2,8.2,True,100.0,0.98,999.0,False,1,1
+1,2,1,8.2,True,100.0,0.98,999.0,False,1,1
+1,2,3,8.5,True,100.0,0.97,999.0,False,1,1
+1,3,2,8.5,True,100.0,0.97,999.0,False,1,1
+1,3,4,12.0,True,100.0,0.94,4.0,True,1,1
+1,4,3,12.0,True,100.0,0.94,4.0,True,1,1

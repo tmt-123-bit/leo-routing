@@ -1,0 +1,3 @@
+policy,delivered,dropped,dropRate,avgDelayMs,p95DelayMs,avgHops,maxQueue
+B0_delay_only_dijkstra,830,0,0,39.0157000799021,65.3998043930962,3.6433734939759,39
+B1_queue_load_dijkstra,830,0,0,36.6569764239877,60.2720519752685,3.63614457831325,10

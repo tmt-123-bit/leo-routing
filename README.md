@@ -1184,3 +1184,11 @@ visited 防环
 ```
 
 对应代码在 `try_matlab/try_next_hop_v2.m`，说明在 `try_matlab/next_hop_v2_note.md`。这一版已经能导出 `mappo_rollout_like_v2.csv`，后面接 MAPPO 时不准备从零写算法，而是优先参考 `marlbenchmark/on-policy`、`cleanmarl` 或 `BenchMARL` 这类现有实现。
+
+## 11. 当前代码目录
+这次补进仓库的代码主要有两块：
+
+- `leo-routing-phase12-matlab`：早期 MATLAB 原型，主要看动态拓扑、Dijkstra baseline、队列/负载感知和逐跳本地决策的过渡。
+- `leo-routing-preliminary-matlab`：目前更完整的前期代码，包含 MATLAB 消融、Python MARL 环境接口、统一评测入口、轻量学习 baseline、CleanMARL/on-policy 接入计划和真实拓扑输入占位。
+
+其中 `cleanmarl`、`on-policy`、`BenchMARL` 只是本地参考库，没有整个上传到本仓库。
