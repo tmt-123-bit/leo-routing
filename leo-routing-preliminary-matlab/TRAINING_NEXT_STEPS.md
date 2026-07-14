@@ -23,7 +23,7 @@
 
 4. `train_linear_policy.py`
    - 轻量学习型 baseline。
-   - 用处：在当前没有 PyTorch/Gym 的环境里，先打通“学习型策略训练 -> 保存权重 -> 统一评测”的闭环。
+   - 用处：保留一个简单学习 baseline，用来检查环境和统一评测闭环。
    - 它还不是最后的 MAPPO。
 
 此外还有：
@@ -85,7 +85,7 @@
 
 - 它更重；
 - 更依赖 TorchRL/Hydra；
-- 现在本地环境没有 torch；
+- 本地已有 torch，CleanMARL `leo_multi` smoke training 已通过；
 - 现在最急的是把训练线跑通，而不是先做大而全 benchmark。
 
 因此当前对 BenchMARL 的使用建议是：
@@ -132,7 +132,7 @@
 
 目前还不能这么说，原因有四个：
 
-1. 还没有真正用 `cleanmarl` 或 `on-policy` 跑正式 MAPPO。
+1. 只跑了 CleanMARL 工程 smoke training，还没有多 seed、预注册的正式性能实验，也没有跑官方 on-policy MAPPO。
 2. 真实星座/TLE/Hypatia/StarryNet 还没接入，只是有接口占位。
 3. 对比方法还不完整，尤其缺少正式学习型对比和更大规模种子实验。
 4. 当前轻量 `linear_policy` 只是学习型 baseline，还不是最后的 MAPPO/CTDE 结果。

@@ -1,5 +1,19 @@
 # LEO 分布式动态路由前期研究代码说明
 
+## 2026-07-14 MAPPO 设计修订
+
+根据 `MAPPO当前设计与问题审查.md`，这次把原来单包 wrapper 的结构问题和真正多 Agent 环境分开处理：
+
+- `leo_marl_env.py`：候选特征从 11 维扩成 20 维，补入 remaining hop budget、hop count、switch context、current/destination 物理位置、visited 摘要和 topology phase；TTL 作为吸收式 drop 返回 `terminated=True`。
+- `cleanmarl_leo_wrapper.py`：单包 PPO baseline 仍明确使用 `n_agents=1`，actor 输入为 `(1,120)`，packet-conditioned critic state 为 146 维。
+- `mappo_design.py`：共享候选编码/打分 Actor、LayerNorm critic、running statistics、带 terminal/truncation 语义的 GAE 和安全 normalization。
+- `leo_multiagent_env.py`：24 颗卫星对应 24 个逻辑 Agent，所有 Agent 基于同一时隙快照决策，环境批量解析传输和队列归属。
+- `cleanmarl_leo_multiagent_wrapper.py`：CleanMARL 的 `leo_multi` 接口，输出 `(24,140)` actor observation、`(24,7)` action mask 和 3073 维 centralized state。
+- `cleanmarl_mappo_leo.py`：改过的 CleanMARL trainer 快照，加入 shared candidate scorer、active-agent policy mask、GAE、epsilon、梯度裁剪、KL/entropy/gradient/explained-variance 诊断和 checkpoint。
+- `test_mappo_design.py`：13 项环境、表示和 PPO 数值测试。
+
+本机结果：13 项测试全部通过；64 timesteps 的 `leo_multi` trainer smoke run 正常结束并保存 periodic/final checkpoint。该 smoke run 只证明训练链路和数值保护可用，不代表新版 MAPPO 已取得性能提升。
+
 这份代码先做论文前期原型，还不是最后的 MAPPO/CTDE 训练代码。主要是把论文里提出的研究思路先落到可运行仿真中，验证几个基础判断：
 
 1. LEO 网络应建成时变图 `G(t)=(V,E(t),X(t))`；
@@ -242,9 +256,9 @@ cleanmarl_leo_wrapper.py
 该文件把 `LeoRoutingEnv` 包装成 CleanMARL 风格环境。当前先按单包逐跳路由建成 `n_agents = 1` 的任务，输出维度如下：
 
 ```text
-obs_shape   = (1, 66)   # 6 个候选邻居 × 11 维邻居特征
+obs_shape   = (1, 120)  # 6 个候选邻居 × 20 维候选/packet context
 action_size = 6         # 最多 6 个候选下一跳
-state_size  = 9         # 集中式 Critic 使用的全局摘要
+state_size  = 146       # packet-conditioned critic state
 ```
 
 运行 smoke test：
@@ -255,7 +269,7 @@ python cleanmarl_leo_wrapper.py
 
 现在先先适配 CleanMARL，而不是直接改 `marlbenchmark/on-policy` 或 BenchMARL，原因是：CleanMARL 单文件结构最清楚，环境接口要求也最容易对齐；`marlbenchmark/on-policy` 更适合后续正式 MAPPO 复现实验；BenchMARL 较重，适合后期做标准化 benchmark 和多算法对比。
 
-注意：目前 wrapper 只是接口适配，还没有直接运行 CleanMARL 的 PyTorch MAPPO 训练，因为现在环境没有安装 PyTorch。后续在有 PyTorch 的环境里，可以把 `CleanMARLLeoWrapper` 接入 cleanmarl 的 `environment()` 分支，或者写一个 `env/leo_wrapper.py`，再运行 MAPPO 训练。
+上面是旧接口记录。修订后单包 baseline 已变为 `(1,120)` actor observation 和 146 维 packet-conditioned critic；卫星级 `leo_multi` 使用 24 Agent、每 Agent 140 维 observation、7 个动作和 3073 维 centralized state。CleanMARL smoke training 已跑通，但还没有新的多 seed 性能实验。
 
 ## 算法仓库接入建议
 
@@ -271,7 +285,7 @@ train_cleanmarl_style_stub.py
 outputs/cleanmarl_rollout_preview.csv
 ```
 
-这个脚本不会真正训练 PyTorch MAPPO，但会尽量模仿 `F:\cleanmarl\cleanmarl\mappo.py` 的 rollout 数据采集方式，验证 `cleanmarl_leo_wrapper.py` 输出的 `obs/actions/log_prob/reward/states/done/avail_actions` 数据结构是否合理。它的作用是：在当前没有 torch 的环境里，先把 CleanMARL 正式接入前最容易出问题的 rollout 结构验证掉。
+这个脚本只保留为 rollout 结构预览。真正的最小 PPO 数值闭环由 `test_mappo_design.py` 和 `cleanmarl_mappo_leo.py --env-type leo_multi` 验证。
 
 ## on-policy 官方 MAPPO 升级计划
 

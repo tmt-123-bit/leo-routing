@@ -6,6 +6,7 @@
 
 ```text
 cleanmarl_leo_wrapper.py
+cleanmarl_leo_multiagent_wrapper.py
 ```
 
 它已经把我们的环境包装成 cleanmarl `mappo.py` 需要的 API 风格。
@@ -31,22 +32,22 @@ cleanmarl_leo_wrapper.py
 
 ## 2. 这个 wrapper 的输入输出定义
 
-这个 wrapper 把任务先包装成单智能体 cooperative 形式：
+单包 PPO baseline 的接口为：
 
 ```text
 n_agents    = 1
-obs_shape   = (1, 66)
+obs_shape   = (1, 120)
 action_size = 6
-state_size  = 9
+state_size  = 146
 ```
 
 含义：
 
-- `obs_shape=(1,66)`：1 个 agent，最多 6 个候选邻居，每个邻居 11 维特征；flatten 后是 66。
+- `obs_shape=(1,120)`：1 个 active decision point，6 个候选邻居，每个邻居 20 维特征。
 - `action_size=6`：最多 6 个可选下一跳。
-- `state_size=9`：集中式 Critic 用的全局摘要（队列、负载、公平性、控制开销等）。
+- `state_size=146`：网络摘要、当前 packet context、候选集合和 action mask。
 
-这还不是最后的多 agent 扩展版，而是当前最稳的 MAPPO 接入起点。
+卫星级 MAPPO 使用 `cleanmarl_leo_multiagent_wrapper.py`：`n_agents=24`、actor observation `(24,140)`、action mask `(24,7)`、centralized state 3073 维。只有 `env_type=leo_multi` 才能用于多 Agent/CTDE 语义。
 
 ---
 
@@ -112,7 +113,7 @@ cleanmarl/env/leo_wrapper.py
 但当前先不直接改它，原因是：
 
 1. 它环境接入更重；
-2. 当前机器没有 torch，暂时跑不起来；
+2. 当前机器已有 Torch，但 on-policy 官方仓库尚未完成环境适配；
 3. cleanmarl 更适合作为第一条最短训练链。
 
 因此推荐顺序是：

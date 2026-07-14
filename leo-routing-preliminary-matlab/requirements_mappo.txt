@@ -1,0 +1,4 @@
+numpy>=2.0
+torch>=2.2
+tensorboard>=2.17
+tyro>=0.9

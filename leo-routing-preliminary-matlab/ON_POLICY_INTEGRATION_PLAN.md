@@ -6,7 +6,7 @@
 
 当前不直接优先接 `F:\on-policy`，主要有三个原因：
 
-1. 现在本地环境没有 PyTorch；
+1. 本地已有 PyTorch，但官方 on-policy 仓库还没有接入新版 24 Agent 环境；
 2. `on-policy` 的环境包装和训练入口更重；
 3. 我们已经用 `cleanmarl_leo_wrapper.py` 把最关键的环境接口桥接跑通，先走这条更稳。
 

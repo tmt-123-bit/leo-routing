@@ -5,3 +5,5 @@ __pycache__/
 *.m~
 .DS_Store
 Thumbs.db
+leo-routing-preliminary-matlab/outputs/mappo_smoke_checkpoints/
+runs/

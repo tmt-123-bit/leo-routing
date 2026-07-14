@@ -1192,3 +1192,17 @@ visited 防环
 - `leo-routing-preliminary-matlab`：目前更完整的前期代码，包含 MATLAB 消融、Python MARL 环境接口、统一评测入口、轻量学习 baseline、CleanMARL/on-policy 接入计划和真实拓扑输入占位。
 
 其中 `cleanmarl`、`on-policy`、`BenchMARL` 只是本地参考库，没有整个上传到本仓库。
+
+## 12. MAPPO 代码修订状态
+
+根据 2026-07-11 的设计审查，原来的 `n_agents=1` wrapper 现在只作为单 active packet PPO baseline，不再称为多智能体协作证据。仓库新增了同步 24 星环境、shared candidate Actor、packet-conditioned critic、终止/截断 GAE、active-agent policy mask、PPO 数值诊断和 13 项工程测试。
+
+主要入口：
+
+- `leo-routing-preliminary-matlab/MAPPO当前设计与问题审查.md`
+- `leo-routing-preliminary-matlab/leo_multiagent_env.py`
+- `leo-routing-preliminary-matlab/cleanmarl_leo_multiagent_wrapper.py`
+- `leo-routing-preliminary-matlab/cleanmarl_mappo_leo.py`
+- `leo-routing-preliminary-matlab/test_mappo_design.py`
+
+现在可以确认环境语义和最小 PPO 数值闭环已通过现有测试；还不能确认新版 MAPPO 的最终性能提升，正式结论要等多 seed、held-out 和真实拓扑实验。

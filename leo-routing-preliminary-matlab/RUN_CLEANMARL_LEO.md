@@ -1,11 +1,16 @@
 # 在有 PyTorch 环境时运行 CleanMARL + LEO 路由的最小模板
 
-这里先把以后正式跑 cleanmarl MAPPO 的入口写清楚。
+这里记录修订后 CleanMARL MAPPO 的运行入口。
 
-当前限制：
-- 这个会话里的 Python 环境没有 `torch`
-- 所以这里不直接运行 `F:\cleanmarl\cleanmarl\mappo.py`
-- 但可以先把命令和接入方式固定下来
+先安装依赖：
+
+```bash
+py -m pip install -r requirements_mappo.txt
+```
+
+`env_type=leo` 是单 active packet PPO baseline；`env_type=leo_multi` 才是 24 颗卫星同步决策的共享参数 MAPPO 环境。
+
+本机已经安装 Torch、Tyro 和 TensorBoard，`leo_multi` smoke training 已跑通。正式结果仍需要扩大 timesteps、seeds，并单独冻结 validation/test workload。
 
 ---
 
@@ -30,10 +35,13 @@ F:\leo-routing-preliminary-matlab
 ```text
 leo_marl_env.py
 cleanmarl_leo_wrapper.py
+leo_multiagent_env.py
+cleanmarl_leo_multiagent_wrapper.py
+mappo_design.py
 run_python_experiments.py
 ```
 
-3. 在 `F:\cleanmarl\cleanmarl\mappo.py` 里加 `env_type == "leo"` 的环境分支。
+3. 使用已经修改的 `cleanmarl_mappo_leo.py`，或将对应改动并入 `F:\cleanmarl\cleanmarl\mappo.py`。
 
 ---
 
@@ -43,12 +51,12 @@ run_python_experiments.py
 
 ```bash
 cd /d F:\cleanmarl
-python cleanmarl\mappo.py --env_type="leo" --env_name="medium_load" --batch_size=4 --total_timesteps=50000 --learning_rate_actor=0.0008 --learning_rate_critic=0.0008 --device="cpu"
+py cleanmarl\mappo.py --env-type leo_multi --env-name medium_load --leo-project-path F:\leo-routing-preliminary-matlab --batch-size 4 --total-timesteps 50000 --learning-rate-actor 0.0008 --learning-rate-critic 0.0008 --device cpu
 ```
 
 说明：
 
-- `env_type="leo"`：这是后续在 cleanmarl 里新增的环境类型。
+- `env_type="leo_multi"`：24 个卫星 Agent 同槽决策；`leo` 只保留为单包 PPO 对照。
 - `env_name="medium_load"`：这里复用我们 `SCENARIOS` 里的场景名。
 - `batch_size=4`：先小一点，只验证能不能训练通。
 - `total_timesteps=50000`：先跑最小闭环。

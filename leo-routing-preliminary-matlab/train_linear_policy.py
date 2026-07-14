@@ -1,10 +1,8 @@
 """
 Lightweight learning baseline for LEO local next-hop routing.
 
-This is NOT the final MAPPO implementation. The current environment does not
-have PyTorch/Gym installed, so this script provides a no-extra-dependency
-learning baseline using a masked linear softmax policy trained with a simple
-REINFORCE-style update.
+This is a small linear control baseline, not the MAPPO implementation. It uses
+a masked linear softmax policy with a REINFORCE-style update.
 
 Why it exists:
 - proves the environment supports learning-style rollouts
@@ -27,7 +25,7 @@ import numpy as np
 from leo_marl_env import LeoRoutingEnv, SCENARIOS
 
 
-FEATURE_DIM = 11
+FEATURE_DIM = LeoRoutingEnv.candidate_feature_dim
 MODEL_DIR = Path(__file__).resolve().parent / "models"
 OUTPUT_DIR = Path(__file__).resolve().parent / "outputs"
 MODEL_PATH = MODEL_DIR / "linear_policy_weights.npz"
@@ -88,8 +86,15 @@ class MaskedLinearPolicy:
         np.savez(path, w=self.w, b=np.asarray([self.b]))
 
     @classmethod
-    def load(cls, path: Path) -> "MaskedLinearPolicy":
+    def load(
+        cls, path: Path, expected_feature_dim: int = FEATURE_DIM
+    ) -> "MaskedLinearPolicy":
         data = np.load(path)
+        if len(data["w"]) != expected_feature_dim:
+            raise ValueError(
+                f"saved linear policy has {len(data['w'])} features; "
+                f"environment expects {expected_feature_dim}. Retrain it."
+            )
         obj = cls(feature_dim=len(data["w"]))
         obj.w = data["w"].astype(float)
         obj.b = float(data["b"][0])

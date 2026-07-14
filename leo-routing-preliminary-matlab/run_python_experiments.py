@@ -37,7 +37,10 @@ _LINEAR_POLICY = None
 def load_linear_policy():
     global _LINEAR_POLICY
     if _LINEAR_POLICY is None and MODEL_PATH.exists():
-        _LINEAR_POLICY = MaskedLinearPolicy.load(MODEL_PATH)
+        try:
+            _LINEAR_POLICY = MaskedLinearPolicy.load(MODEL_PATH)
+        except ValueError as exc:
+            print(f"Ignoring incompatible linear policy: {exc}")
     return _LINEAR_POLICY
 
 

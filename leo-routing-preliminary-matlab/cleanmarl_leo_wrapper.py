@@ -12,10 +12,9 @@ CleanMARL MAPPO expects an environment object with:
 - get_state_size()
 - get_action_size()
 
-The current LEO environment is a single-packet local next-hop environment, so
-this wrapper exposes it as a one-agent cooperative MARL task first. This is the
-least risky bridge: it keeps the LEO routing environment correct, while making
-its data layout compatible with cleanmarl MAPPO/IPPO scripts.
+This wrapper is the revised single-active-packet PPO baseline. It deliberately
+reports n_agents=1; the synchronous satellite-level MAPPO environment lives in
+leo_multiagent_env.py and must be used for multi-agent/CTDE claims.
 
 Later extension:
 - multiple simultaneous packets can be mapped to multiple agents;
@@ -37,10 +36,16 @@ class CleanMARLLeoWrapper:
             cfg = EnvConfig(scenario=SCENARIOS[scenario])
         self.env = LeoRoutingEnv(cfg)
         self.n_agents = 1
-        self.max_degree = max_degree
-        self.feature_dim = 11
+        if max_degree != self.env.max_degree:
+            raise ValueError(
+                f"max_degree={max_degree} does not match environment schema "
+                f"{self.env.max_degree}"
+            )
+        self.max_degree = self.env.max_degree
+        self.feature_dim = self.env.candidate_feature_dim
         self._obs: Optional[Dict] = None
         self._last_info: Dict = {}
+        self._state_size: Optional[int] = None
 
     def reset(self) -> Tuple[np.ndarray, Dict]:
         self._obs = self.env.reset()
@@ -66,34 +71,43 @@ class CleanMARLLeoWrapper:
     def get_state(self) -> np.ndarray:
         if self._obs is None:
             self.reset()
-        state = self._obs["global_state_for_critic"]
-        arr = np.asarray([
-            state["avg_queue"],
-            state["max_queue"],
-            state["avg_rho"],
-            state["jain_load"],
-            state["num_available_links"] / max(1, self.env.cfg.n_sats * 4),
-            state["control_overhead_ratio"],
-            state["delivery_ratio"],
-            state["drop_rate"],
-            state.get("switch_count", 0),
-        ], dtype=np.float32)
+        arr = np.asarray(
+            self.env.as_mappo_inputs(self._obs)["critic_state"],
+            dtype=np.float32,
+        )
+        if self._state_size is None:
+            self._state_size = int(arr.size)
         return arr
 
     def get_obs_size(self) -> int:
         return self.max_degree * self.feature_dim
 
     def get_state_size(self) -> int:
-        return 9
+        if self._state_size is None:
+            self.get_state()
+        assert self._state_size is not None
+        return self._state_size
 
     def get_action_size(self) -> int:
         return self.max_degree
 
+    def get_policy_active_mask(self) -> np.ndarray:
+        return np.ones((self.n_agents,), dtype=np.float32)
+
+    def get_candidate_feature_dim(self) -> int:
+        return self.feature_dim
+
+    def get_candidate_shape(self) -> Tuple[int, int]:
+        return self.max_degree, self.feature_dim
+
+    def close(self) -> None:
+        return None
+
     def _obs_array(self) -> np.ndarray:
         assert self._obs is not None
-        padded = np.zeros((self.n_agents, self.max_degree, self.feature_dim), dtype=np.float32)
-        for i, feat in enumerate(self._obs["neighbor_features"][: self.max_degree]):
-            padded[0, i, :] = np.asarray(feat, dtype=np.float32)
+        mappo_inputs = self.env.as_mappo_inputs(self._obs)
+        padded = np.asarray(mappo_inputs["candidate_obs"], dtype=np.float32)
+        padded = padded.reshape(self.n_agents, self.max_degree, self.feature_dim)
         return padded.reshape(self.n_agents, -1)
 
 

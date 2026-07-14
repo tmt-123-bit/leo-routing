@@ -117,9 +117,9 @@
 
 ## 2. 还没做完的部分
 
-### 2.1 正式 MAPPO 训练还没跑
+### 2.1 工程 smoke training 已跑，正式性能实验还没跑
 
-目前还没有真正运行：
+已经跑通修订版 CleanMARL `leo_multi` 的小规模 PPO smoke training，并保存 periodic/final checkpoint；还没有完成：
 
 - `F:\cleanmarl\cleanmarl\mappo.py`
 - `F:\on-policy` 的官方 MAPPO

@@ -1,7 +1,7 @@
 """
 LEO routing MARL environment interface.
 
-This file follows the user's research manuscript:
+This file follows the research manuscript:
 - Time-varying LEO graph G(t) = (V, E(t), X(t))
 - Real-time Dec-POMDP style local next-hop decision
 - Queue/load/reliability/link-lifetime aware observation
@@ -131,9 +131,13 @@ class LeoRoutingEnv:
     step(action_index) -> obs, reward, terminated, truncated, info
 
     Action is an index over the current node's neighbor list, not a global node id.
-    For MAPPO/CleanMARL style code, use as_mappo_inputs(obs) to obtain a flat
-    actor observation, centralized critic state, and an action mask.
+    For PPO/MAPPO-style code, use as_mappo_inputs(obs). Candidate rows keep a
+    fixed feature schema so a shared candidate scorer can process them without
+    depending on neighbor ordering.
     """
+
+    max_degree = 6
+    candidate_feature_dim = 20
 
     def __init__(self, cfg: Optional[EnvConfig] = None):
         self.cfg = cfg or EnvConfig()
@@ -224,7 +228,8 @@ class LeoRoutingEnv:
             self.packet.dropped = True
             self.dropped_packets += 1
             reward -= self.cfg.w_loop
-            truncated = True
+            # TTL exhaustion is an absorbing packet drop, not a time-limit cut.
+            terminated = True
             status = "ttl_exceeded"
 
         self._advance_time()
@@ -254,11 +259,27 @@ class LeoRoutingEnv:
         current = self.packet.current
         dst = self.packet.dst
         neighbors = self._neighbors(current)
+        current_u, current_w = self.orbital_geodetic_coord(current, self.time_slot)
+        dst_u, dst_w = self.orbital_geodetic_coord(dst, self.time_slot)
+        hop_ratio = self.packet.hop_count / max(1, self.cfg.max_local_hops)
+        remaining_hop_ratio = max(
+            0.0,
+            (self.cfg.max_local_hops - self.packet.hop_count)
+            / max(1, self.cfg.max_local_hops),
+        )
+        visited_ratio = len(set(self.packet.visited)) / max(1, self.cfg.n_sats)
+        topology_phase = (self.time_slot % max(1, self.cfg.max_steps)) / max(
+            1, self.cfg.max_steps
+        )
         features = []
         mask = []
         for j in neighbors:
             edge = self.graph[(current, j)]
             u_coord, w_coord = self.orbital_geodetic_coord(j, self.time_slot)
+            switch_if_selected = float(
+                self.packet.last_next_hop is not None
+                and j != self.packet.last_next_hop
+            )
             features.append([
                 self.queues[current] / self.cfg.q_max,
                 self.queues[j] / self.cfg.q_max,
@@ -271,6 +292,15 @@ class LeoRoutingEnv:
                 self._progress_value(current, j, dst),
                 u_coord,
                 w_coord,
+                current_u,
+                current_w,
+                dst_u,
+                dst_w,
+                remaining_hop_ratio,
+                hop_ratio,
+                switch_if_selected,
+                visited_ratio,
+                topology_phase,
             ])
             mask.append(self._action_feasible(current, j))
         return {
@@ -281,35 +311,84 @@ class LeoRoutingEnv:
             "neighbor_ids": neighbors,
             "neighbor_features": features,
             "action_mask": mask,
+            "packet_context": {
+                "hop_ratio": hop_ratio,
+                "remaining_hop_ratio": remaining_hop_ratio,
+                "visited_ratio": visited_ratio,
+                "last_next_hop": self.packet.last_next_hop,
+                "current_coord": [current_u, current_w],
+                "destination_coord": [dst_u, dst_w],
+                "topology_phase": topology_phase,
+            },
             "global_state_for_critic": self._global_state_summary(),
         }
 
     def as_mappo_inputs(self, obs: Dict) -> Dict:
         """Return a simple MAPPO/CleanMARL friendly representation.
 
-        on-policy MAPPO and cleanmarl wrappers can flatten actor_obs, use state
-        for centralized critic, and pass action_mask to the policy distribution.
+        actor_obs is flattened only for API compatibility. The revised actor
+        reshapes it back to [candidate, feature] and scores every candidate with
+        shared parameters. critic_state is packet-conditioned and normalized.
         """
-        max_degree = 6
-        feat_dim = 11
+        max_degree = self.max_degree
+        feat_dim = self.candidate_feature_dim
         padded = [[0.0] * feat_dim for _ in range(max_degree)]
         mask = [False] * max_degree
         for i, feat in enumerate(obs["neighbor_features"][:max_degree]):
+            if len(feat) != feat_dim:
+                raise ValueError(
+                    f"candidate feature length {len(feat)} != expected {feat_dim}"
+                )
             padded[i] = feat
             mask[i] = bool(obs["action_mask"][i])
         actor_obs = [x for row in padded for x in row]
-        state_dict = obs["global_state_for_critic"]
-        critic_state = [
-            state_dict["avg_queue"],
-            state_dict["max_queue"],
-            state_dict["avg_rho"],
-            state_dict["jain_load"],
-            state_dict["num_available_links"] / max(1, self.cfg.n_sats * 4),
-            state_dict["control_overhead_ratio"],
-            state_dict["delivery_ratio"],
-            state_dict["drop_rate"],
+        critic_state = self._critic_state_vector(obs, padded, mask)
+        return {
+            "actor_obs": actor_obs,
+            "candidate_obs": padded,
+            "critic_state": critic_state,
+            "action_mask": mask,
+        }
+
+    def _critic_state_vector(
+        self, obs: Dict, padded_candidates: List[List[float]], mask: List[bool]
+    ) -> List[float]:
+        """Normalized, packet-conditioned state for the centralized critic."""
+        assert self.packet is not None
+        state = obs["global_state_for_critic"]
+        ctx = obs["packet_context"]
+        last_u, last_w = (0.0, 0.0)
+        has_last_hop = float(self.packet.last_next_hop is not None)
+        if self.packet.last_next_hop is not None:
+            last_u, last_w = self.orbital_geodetic_coord(
+                self.packet.last_next_hop, self.time_slot
+            )
+
+        global_part = [
+            state["avg_queue"] / max(1, self.cfg.q_max),
+            state["max_queue"] / max(1, self.cfg.q_max),
+            state["avg_rho"],
+            state["jain_load"],
+            state["num_available_links"] / max(1, self.cfg.n_sats * 4),
+            min(2.0, state["control_overhead_ratio"] / max(1e-6, self.cfg.control_budget_ratio)),
+            state["delivery_ratio"],
+            state["drop_rate"],
+            state.get("switch_count", 0) / max(1, self.cfg.max_local_hops),
         ]
-        return {"actor_obs": actor_obs, "critic_state": critic_state, "action_mask": mask}
+        packet_part = [
+            *ctx["current_coord"],
+            *ctx["destination_coord"],
+            ctx["hop_ratio"],
+            ctx["remaining_hop_ratio"],
+            ctx["visited_ratio"],
+            has_last_hop,
+            last_u,
+            last_w,
+            ctx["topology_phase"],
+        ]
+        candidate_part = [x for row in padded_candidates for x in row]
+        mask_part = [float(x) for x in mask]
+        return global_part + packet_part + candidate_part + mask_part
 
     def _action_feasible(self, u: int, v: int) -> bool:
         assert self.packet is not None
@@ -377,7 +456,7 @@ class LeoRoutingEnv:
         return self.control_bytes_acc / max(1, self.data_bytes_acc)
 
     def estimate_decision_flops(self, neighbor_count: int) -> int:
-        z_dim, h1, h2 = 11, 32, 16
+        z_dim, h1, h2 = self.candidate_feature_dim, 32, 16
         macs_per_neighbor = z_dim * h1 + h1 * h2 + h2
         return 2 * neighbor_count * macs_per_neighbor
 
