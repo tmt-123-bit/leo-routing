@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Large / generated artifacts (keep CSV results, ignore model weights & logs)
+**/checkpoints/
+*.pt
+*.pth
+*.ckpt
+outputs/
+models/
+
+# Experiment logs (large, regenerable)
+*.stderr.log
+*.stdout.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

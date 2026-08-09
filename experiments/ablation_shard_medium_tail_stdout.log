@@ -1,0 +1,6 @@
+completed medium_load/flat_critic/seed_7
+completed medium_load/flat_critic/seed_42
+completed medium_load/flat_critic/seed_1024
+failed medium_load/no_ppo_protection/seed_7: training failed for medium_load/seed=7; see F:\leo-routing-preliminary-matlab\experiments\ABLATION-FULL\checkpoints\medium_load\no_ppo_protection\seed_7\trainer_stdout.log
+failed medium_load/no_ppo_protection/seed_42: training failed for medium_load/seed=42; see F:\leo-routing-preliminary-matlab\experiments\ABLATION-FULL\checkpoints\medium_load\no_ppo_protection\seed_42\trainer_stdout.log
+failed medium_load/no_ppo_protection/seed_1024: training failed for medium_load/seed=1024; see F:\leo-routing-preliminary-matlab\experiments\ABLATION-FULL\checkpoints\medium_load\no_ppo_protection\seed_1024\trainer_stdout.log

@@ -1,0 +1,10 @@
+{
+  "experiment": "EXP-005",
+  "source": "F:\\leo-routing-preliminary-matlab\\experiments\\EXP-004-FULL",
+  "runs": 15,
+  "entropy_collapse_runs": 0,
+  "low_actor_gradient_runs": 0,
+  "critic_clipping_runs": 15,
+  "validation_indistinguishable_runs": 0,
+  "threshold_note": "0.01 thresholds are diagnostic flags inherited from the prior audit; they are not universal convergence criteria."
+}

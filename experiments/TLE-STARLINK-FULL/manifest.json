@@ -1,0 +1,32 @@
+{
+  "experiment": "TLE-trained-MAPPO",
+  "mode": "full",
+  "links": "F:\\leo-routing-preliminary-matlab\\data\\starlink_24_links.csv",
+  "links_sha256": "82780919288151d675c0c9ccc06818571b08d0b2b22f4d7c74083f2a7ed5555a",
+  "train_topology_name": "tle_starlink_24",
+  "cross_links": "F:\\leo-routing-preliminary-matlab\\data\\oneweb_24_links.csv",
+  "cross_links_sha256": "1fe2f740fcc37bc50b12ce34d6d9e8361d51586424f0ec14d10e97ab43398721",
+  "cross_topology_name": "tle_oneweb_24",
+  "cross_validation": "zero-shot: Starlink-trained checkpoints are evaluated on the cross topology without fine-tuning",
+  "config": {
+    "timesteps": 20000,
+    "validation_episodes": 50,
+    "test_episodes": 50,
+    "eval_every": 20,
+    "batch_size": 4
+  },
+  "policy_seeds": [
+    7,
+    42,
+    1024
+  ],
+  "test_seed_range": [
+    14001,
+    14050
+  ],
+  "checkpoints": {
+    "7": "F:\\leo-routing-preliminary-matlab\\experiments\\TLE-STARLINK-FULL\\checkpoints\\seed_7\\leo_tle__medium_load__seed-7__2026-07-15_16-31-27__TLE-TRAINED\\validation_best.pt",
+    "42": "F:\\leo-routing-preliminary-matlab\\experiments\\TLE-STARLINK-FULL\\checkpoints\\seed_42\\leo_tle__medium_load__seed-42__2026-07-15_17-08-16__TLE-TRAINED\\validation_best.pt",
+    "1024": "F:\\leo-routing-preliminary-matlab\\experiments\\TLE-STARLINK-FULL\\checkpoints\\seed_1024\\leo_tle__medium_load__seed-1024__2026-07-15_17-42-09__TLE-TRAINED\\validation_best.pt"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/leo-routing/ns3-policy-protocol-v1.schema.json",
+  "title": "LEO routing ns-3 slot-state message",
+  "type": "object",
+  "required": ["schema_version", "type", "episode_id", "time_slot", "agents"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "type": {"const": "slot_state"},
+    "episode_id": {"type": ["string", "integer"]},
+    "time_slot": {"type": "integer", "minimum": 0},
+    "agents": {
+      "type": "array",
+      "minItems": 24,
+      "maxItems": 24,
+      "items": {
+        "type": "object",
+        "required": [
+          "agent_id",
+          "packet_id",
+          "candidate_features",
+          "action_mask",
+          "candidate_next_hops"
+        ],
+        "properties": {
+          "agent_id": {"type": "integer", "minimum": 1, "maximum": 24},
+          "packet_id": {"type": ["integer", "null"]},
+          "candidate_features": {
+            "type": "array",
+            "minItems": 7,
+            "maxItems": 7,
+            "items": {
+              "type": "array",
+              "minItems": 26,
+              "maxItems": 26,
+              "items": {"type": "number"}
+            }
+          },
+          "action_mask": {
+            "type": "array",
+            "minItems": 7,
+            "maxItems": 7,
+            "items": {"type": ["boolean", "integer"]}
+          },
+          "candidate_next_hops": {
+            "type": "array",
+            "minItems": 7,
+            "maxItems": 7,
+            "items": {"type": "integer", "minimum": 0, "maximum": 24}
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

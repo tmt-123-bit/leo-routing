@@ -1,0 +1,182 @@
+{
+  "source_tle": "F:\\leo-routing-preliminary-matlab\\data\\starlink_2026-07-15.tle",
+  "source_url": "https://celestrak.org/NORAD/elements/gp.php?GROUP=starlink&FORMAT=tle",
+  "selected_satellites": [
+    {
+      "environment_id": 1,
+      "name": "STARLINK-2190",
+      "norad_id": 48564,
+      "plane": 0,
+      "local_index": 0
+    },
+    {
+      "environment_id": 2,
+      "name": "STARLINK-32377",
+      "norad_id": 61888,
+      "plane": 0,
+      "local_index": 1
+    },
+    {
+      "environment_id": 3,
+      "name": "STARLINK-37248",
+      "norad_id": 68527,
+      "plane": 0,
+      "local_index": 2
+    },
+    {
+      "environment_id": 4,
+      "name": "STARLINK-3795",
+      "norad_id": 52264,
+      "plane": 0,
+      "local_index": 3
+    },
+    {
+      "environment_id": 5,
+      "name": "STARLINK-3740",
+      "norad_id": 52265,
+      "plane": 0,
+      "local_index": 4
+    },
+    {
+      "environment_id": 6,
+      "name": "STARLINK-32489",
+      "norad_id": 61893,
+      "plane": 0,
+      "local_index": 5
+    },
+    {
+      "environment_id": 7,
+      "name": "STARLINK-36294",
+      "norad_id": 68531,
+      "plane": 1,
+      "local_index": 0
+    },
+    {
+      "environment_id": 8,
+      "name": "STARLINK-3784",
+      "norad_id": 52275,
+      "plane": 1,
+      "local_index": 1
+    },
+    {
+      "environment_id": 9,
+      "name": "STARLINK-32859",
+      "norad_id": 62861,
+      "plane": 1,
+      "local_index": 2
+    },
+    {
+      "environment_id": 10,
+      "name": "STARLINK-32276",
+      "norad_id": 60944,
+      "plane": 1,
+      "local_index": 3
+    },
+    {
+      "environment_id": 11,
+      "name": "STARLINK-3739",
+      "norad_id": 52266,
+      "plane": 1,
+      "local_index": 4
+    },
+    {
+      "environment_id": 12,
+      "name": "STARLINK-36285",
+      "norad_id": 68530,
+      "plane": 1,
+      "local_index": 5
+    },
+    {
+      "environment_id": 13,
+      "name": "STARLINK-3867",
+      "norad_id": 52587,
+      "plane": 2,
+      "local_index": 0
+    },
+    {
+      "environment_id": 14,
+      "name": "STARLINK-33638",
+      "norad_id": 63436,
+      "plane": 2,
+      "local_index": 1
+    },
+    {
+      "environment_id": 15,
+      "name": "STARLINK-32574",
+      "norad_id": 61954,
+      "plane": 2,
+      "local_index": 2
+    },
+    {
+      "environment_id": 16,
+      "name": "STARLINK-32583",
+      "norad_id": 61955,
+      "plane": 2,
+      "local_index": 3
+    },
+    {
+      "environment_id": 17,
+      "name": "STARLINK-33659",
+      "norad_id": 63445,
+      "plane": 2,
+      "local_index": 4
+    },
+    {
+      "environment_id": 18,
+      "name": "STARLINK-32566",
+      "norad_id": 61958,
+      "plane": 2,
+      "local_index": 5
+    },
+    {
+      "environment_id": 19,
+      "name": "STARLINK-33796",
+      "norad_id": 63515,
+      "plane": 3,
+      "local_index": 0
+    },
+    {
+      "environment_id": 20,
+      "name": "STARLINK-35936",
+      "norad_id": 66620,
+      "plane": 3,
+      "local_index": 1
+    },
+    {
+      "environment_id": 21,
+      "name": "STARLINK-33792",
+      "norad_id": 63506,
+      "plane": 3,
+      "local_index": 2
+    },
+    {
+      "environment_id": 22,
+      "name": "STARLINK-35902",
+      "norad_id": 66626,
+      "plane": 3,
+      "local_index": 3
+    },
+    {
+      "environment_id": 23,
+      "name": "STARLINK-35972",
+      "norad_id": 66638,
+      "plane": 3,
+      "local_index": 4
+    },
+    {
+      "environment_id": 24,
+      "name": "STARLINK-32351",
+      "norad_id": 61529,
+      "plane": 3,
+      "local_index": 5
+    }
+  ],
+  "start_utc": "2026-07-15T00:00:02.000160+00:00",
+  "slot_seconds": 10,
+  "slots": 30,
+  "model_limits": [
+    "SGP4 propagation uses the frozen TLE epoch.",
+    "ISLs are constructed as same-plane rings plus nearest adjacent-plane links.",
+    "Capacity and reliability are experiment assumptions, not TLE measurements."
+  ]
+}

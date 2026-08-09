@@ -1,0 +1,85 @@
+{
+  "experiment": "controlled_ablation",
+  "mode": "full",
+  "one_factor_at_a_time": true,
+  "variants": [
+    "full",
+    "no_queue",
+    "no_lifetime",
+    "no_credit",
+    "no_packet_context",
+    "flat_critic",
+    "no_ppo_protection"
+  ],
+  "scenarios": [
+    "medium_load",
+    "frequent_break"
+  ],
+  "policy_seeds": [
+    7,
+    42,
+    1024
+  ],
+  "train_workload_seeds": [
+    9001,
+    9020
+  ],
+  "validation_seed_start": 10001,
+  "test_seed_range": [
+    13001,
+    13050
+  ],
+  "config": {
+    "timesteps": 5000,
+    "validation_episodes": 50,
+    "test_episodes": 50,
+    "eval_every_rollouts": 10,
+    "save_every_steps": 1000,
+    "batch_size": 4
+  },
+  "max_parallel": 4,
+  "checkpoints": {
+    "medium_load/full/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\medium_load\\seed_7\\leo_multi__medium_load__seed-7__2026-07-15_15-53-01__EXP-004\\validation_best.pt",
+    "medium_load/full/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\medium_load\\seed_42\\leo_multi__medium_load__seed-42__2026-07-15_16-04-09__EXP-004\\validation_best.pt",
+    "medium_load/full/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\medium_load\\seed_1024\\leo_multi__medium_load__seed-1024__2026-07-15_16-16-21__EXP-004\\validation_best.pt",
+    "medium_load/no_queue/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\medium_load\\no_queue\\seed_7\\leo_multi__medium_load__seed-7__2026-07-15_16-29-00__EXP-004\\validation_best.pt",
+    "medium_load/no_lifetime/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\medium_load\\no_lifetime\\seed_7\\leo_multi__medium_load__seed-7__2026-07-15_17-03-13__EXP-004\\validation_best.pt",
+    "medium_load/no_queue/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\medium_load\\no_queue\\seed_1024\\leo_multi__medium_load__seed-1024__2026-07-15_16-52-32__EXP-004\\validation_best.pt",
+    "medium_load/no_lifetime/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\medium_load\\no_lifetime\\seed_42\\leo_multi__medium_load__seed-42__2026-07-15_17-13-48__EXP-004\\validation_best.pt",
+    "medium_load/no_queue/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\medium_load\\no_queue\\seed_42\\leo_multi__medium_load__seed-42__2026-07-15_16-40-42__EXP-004\\validation_best.pt",
+    "medium_load/no_lifetime/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\medium_load\\no_lifetime\\seed_1024\\leo_multi__medium_load__seed-1024__2026-07-15_17-23-55__EXP-004\\validation_best.pt",
+    "medium_load/no_credit/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\medium_load\\no_credit\\seed_42\\leo_multi__medium_load__seed-42__2026-07-15_17-44-49__EXP-004\\validation_best.pt",
+    "medium_load/no_credit/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\medium_load\\no_credit\\seed_1024\\leo_multi__medium_load__seed-1024__2026-07-15_17-55-52__EXP-004\\validation_best.pt",
+    "medium_load/no_credit/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\medium_load\\no_credit\\seed_7\\leo_multi__medium_load__seed-7__2026-07-15_17-34-02__EXP-004\\validation_best.pt",
+    "medium_load/no_packet_context/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\medium_load\\no_packet_context\\seed_7\\leo_multi__medium_load__seed-7__2026-07-15_18-05-42__EXP-004\\validation_best.pt",
+    "medium_load/no_packet_context/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\medium_load\\no_packet_context\\seed_42\\leo_multi__medium_load__seed-42__2026-07-15_18-15-55__EXP-004\\validation_best.pt",
+    "medium_load/flat_critic/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\medium_load\\flat_critic\\seed_7\\leo_multi__medium_load__seed-7__2026-07-15_18-07-09__EXP-004\\validation_best.pt",
+    "medium_load/flat_critic/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\medium_load\\flat_critic\\seed_42\\leo_multi__medium_load__seed-42__2026-07-15_18-15-13__EXP-004\\validation_best.pt",
+    "medium_load/flat_critic/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\medium_load\\flat_critic\\seed_1024\\leo_multi__medium_load__seed-1024__2026-07-15_18-23-24__EXP-004\\validation_best.pt",
+    "medium_load/no_packet_context/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\medium_load\\no_packet_context\\seed_1024\\leo_multi__medium_load__seed-1024__2026-07-15_20-09-53__EXP-004\\validation_best.pt",
+    "frequent_break/full/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\frequent_break\\seed_7\\leo_multi__frequent_break__seed-7__2026-07-15_16-36-08__EXP-004\\validation_best.pt",
+    "frequent_break/full/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\frequent_break\\seed_42\\leo_multi__frequent_break__seed-42__2026-07-15_16-52-54__EXP-004\\validation_best.pt",
+    "frequent_break/full/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\frequent_break\\seed_1024\\leo_multi__frequent_break__seed-1024__2026-07-15_17-03-44__EXP-004\\validation_best.pt",
+    "frequent_break/no_queue/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\frequent_break\\no_queue\\seed_7\\leo_multi__frequent_break__seed-7__2026-07-15_17-14-21__EXP-004\\validation_best.pt",
+    "frequent_break/no_queue/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\frequent_break\\no_queue\\seed_42\\leo_multi__frequent_break__seed-42__2026-07-15_17-24-45__EXP-004\\validation_best.pt",
+    "frequent_break/no_queue/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\frequent_break\\no_queue\\seed_1024\\leo_multi__frequent_break__seed-1024__2026-07-15_17-34-51__EXP-004\\validation_best.pt",
+    "frequent_break/no_lifetime/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\frequent_break\\no_lifetime\\seed_7\\leo_multi__frequent_break__seed-7__2026-07-15_17-45-34__EXP-004\\validation_best.pt",
+    "frequent_break/no_lifetime/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\frequent_break\\no_lifetime\\seed_42\\leo_multi__frequent_break__seed-42__2026-07-15_17-56-03__EXP-004\\validation_best.pt",
+    "frequent_break/no_lifetime/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\frequent_break\\no_lifetime\\seed_1024\\leo_multi__frequent_break__seed-1024__2026-07-15_18-05-40__EXP-004\\validation_best.pt",
+    "frequent_break/no_credit/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\frequent_break\\no_credit\\seed_7\\leo_multi__frequent_break__seed-7__2026-07-15_18-15-44__EXP-004\\validation_best.pt",
+    "medium_load/no_ppo_protection/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\medium_load\\no_ppo_protection\\seed_42\\leo_multi__medium_load__seed-42__2026-07-15_20-09-52__EXP-004\\validation_best.pt",
+    "medium_load/no_ppo_protection/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\medium_load\\no_ppo_protection\\seed_1024\\leo_multi__medium_load__seed-1024__2026-07-15_20-09-52__EXP-004\\validation_best.pt",
+    "medium_load/no_ppo_protection/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\medium_load\\no_ppo_protection\\seed_7\\leo_multi__medium_load__seed-7__2026-07-15_20-09-53__EXP-004\\validation_best.pt",
+    "frequent_break/no_packet_context/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\frequent_break\\no_packet_context\\seed_7\\leo_multi__frequent_break__seed-7__2026-07-15_20-19-10__EXP-004\\validation_best.pt",
+    "frequent_break/no_credit/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\frequent_break\\no_credit\\seed_1024\\leo_multi__frequent_break__seed-1024__2026-07-15_20-19-08__EXP-004\\validation_best.pt",
+    "frequent_break/flat_critic/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\frequent_break\\flat_critic\\seed_7\\leo_multi__frequent_break__seed-7__2026-07-15_17-59-06__EXP-004\\validation_best.pt",
+    "frequent_break/flat_critic/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\frequent_break\\flat_critic\\seed_42\\leo_multi__frequent_break__seed-42__2026-07-15_18-06-39__EXP-004\\validation_best.pt",
+    "frequent_break/flat_critic/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\frequent_break\\flat_critic\\seed_1024\\leo_multi__frequent_break__seed-1024__2026-07-15_18-14-44__EXP-004\\validation_best.pt",
+    "frequent_break/no_packet_context/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\frequent_break\\no_packet_context\\seed_42\\leo_multi__frequent_break__seed-42__2026-07-15_20-19-16__EXP-004\\validation_best.pt",
+    "frequent_break/no_credit/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\frequent_break\\no_credit\\seed_42\\leo_multi__frequent_break__seed-42__2026-07-15_20-19-08__EXP-004\\validation_best.pt",
+    "frequent_break/no_packet_context/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\frequent_break\\no_packet_context\\seed_1024\\leo_multi__frequent_break__seed-1024__2026-07-15_20-28-13__EXP-004\\validation_best.pt",
+    "frequent_break/no_ppo_protection/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\frequent_break\\no_ppo_protection\\seed_42\\leo_multi__frequent_break__seed-42__2026-07-15_20-28-20__EXP-004\\validation_best.pt",
+    "frequent_break/no_ppo_protection/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\frequent_break\\no_ppo_protection\\seed_7\\leo_multi__frequent_break__seed-7__2026-07-15_20-28-20__EXP-004\\validation_best.pt",
+    "frequent_break/no_ppo_protection/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\ABLATION-FULL\\checkpoints\\frequent_break\\no_ppo_protection\\seed_1024\\leo_multi__frequent_break__seed-1024__2026-07-15_20-28-30__EXP-004\\validation_best.pt"
+  }
+}

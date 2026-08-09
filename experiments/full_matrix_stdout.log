@@ -1,0 +1,15 @@
+completed low_load/seed_42
+completed low_load/seed_7
+completed low_load/seed_1024
+completed medium_load/seed_7
+failed medium_load/seed_1024: training failed for medium_load/seed=1024; see F:\leo-routing-preliminary-matlab\experiments\EXP-004-FULL\checkpoints\medium_load\seed_1024\trainer_stdout.log
+completed hotspot_high_load/seed_7
+failed medium_load/seed_42: training failed for medium_load/seed=42; see F:\leo-routing-preliminary-matlab\experiments\EXP-004-FULL\checkpoints\medium_load\seed_42\trainer_stdout.log
+completed hotspot_high_load/seed_1024
+completed hotspot_high_load/seed_42
+completed frequent_break/seed_7
+completed frequent_break/seed_42
+completed fault_links/seed_7
+completed frequent_break/seed_1024
+completed fault_links/seed_42
+failed fault_links/seed_1024: training failed for fault_links/seed=1024; see F:\leo-routing-preliminary-matlab\experiments\EXP-004-FULL\checkpoints\fault_links\seed_1024\trainer_stdout.log

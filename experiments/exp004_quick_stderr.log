@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "F:\leo-routing-preliminary-matlab\run_exp004_mappo.py", line 306, in <module>
+    main()
+    ~~~~^^
+  File "F:\leo-routing-preliminary-matlab\run_exp004_mappo.py", line 252, in main
+    checkpoint = train_one(args, config, scenario, policy_seed)
+  File "F:\leo-routing-preliminary-matlab\run_exp004_mappo.py", line 148, in train_one
+    raise RuntimeError(f"training produced no validation-best checkpoint: {run_root}")
+RuntimeError: training produced no validation-best checkpoint: experiments\EXP-004\checkpoints\medium_load\seed_7
