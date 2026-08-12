@@ -2,11 +2,19 @@
 % Distributed Next-Hop Routing for LEO Satellite Networks via MAPPO
 % IEEEtran conference/journal submission draft.
 %
-% NOTE: headline numbers in Table I / Fig. 2 are from the full-variant run
-% (IEEE-REPRO-CHECK). The ablation identified the link-lifetime subsystem as
-% net-harmful; the mask-free headline re-run refreshes these numbers. Prose,
-% method, and structure are final; only "X pp" magnitudes in the Results
-% section are subject to a numbers pass.
+% NOTE (updated 2026-08-12): Table I refreshed to the no_lifetime headline run
+% (experiments/IEEE-NOLIFE-full). no_lifetime STRENGTHENS the headline: MAPPO
+% now BEATS the Dijkstra/ECMP oracle on delivery in medium_load (+4.8pp,
+% p=1.1e-9), fault_links (+4.3pp, p=1.2e-9) and frequent_break (+2.5pp,
+% p=1.1e-6); ties low_load (dz=-0.23, p=0.051); trails only hotspot_high_load
+% (-1.1pp). ALL PROSE IS UNCHANGED (paper parked; user declined a prose pass):
+% the abstract, contributions, and Results paragraphs (incl. inline decimals,
+% the C1-C5 "X pp" magnitudes, and the C2 claim that frequent_break is a TIE)
+% still reflect the full-variant run and are therefore STALE / UNDERSTATED.
+% The C2 paragraph cannot be mechanically number-refreshed because no_lifetime
+% flips its qualitative claim (frequent_break: tie -> significant MAPPO win),
+% which is a prose change. Treat Table I as authoritative current data; all
+% prose awaits a future pass IF the paper is revived.
 % =============================================================================
 \documentclass[conference,10pt]{IEEEtran}
 \usepackage{cite}
@@ -175,35 +183,35 @@ Table~\ref{tab:main} reports delivery, drop rate, P95 delay, mean queue, and rou
 Scenario & Policy & Delivery $\uparrow$ & Drop $\downarrow$ & P95 delay $\downarrow$ & Queue $\downarrow$ & Switches $\downarrow$ \\
 \midrule
 \multirow{4}{*}{\texttt{low\_load}}
- & \textbf{MAPPO (ours)} & \textbf{0.902} & \textbf{0.003} & \textbf{6.72} & \textbf{0.27} & \textbf{1.75} \\
+ & \textbf{MAPPO (ours)} & \textbf{0.904} & \textbf{0.003} & \textbf{6.61} & \textbf{0.27} & \textbf{1.4} \\
  & Dijkstra (oracle) & \underline{0.907} & \underline{0.000} & \underline{6.40} & \underline{0.26} & 2.46 \\
  & OSPF/ECMP (oracle) & 0.906 & \underline{0.000} & 6.40 & 0.26 & 2.54 \\
  & Q-routing & 0.640 & 0.103 & 13.6 & 0.59 & 25.8 \\
  & heuristic & 0.592 & 0.116 & 12.3 & 0.59 & 18.5 \\
 \midrule
 \multirow{4}{*}{\texttt{medium\_load}}
- & \textbf{MAPPO (ours)} & \textbf{0.736} & \textbf{0.020} & \textbf{11.0} & \textbf{1.35} & 37.3 \\
+ & \textbf{MAPPO (ours)} & \textbf{0.774} & \textbf{0.007} & \textbf{10.57} & \textbf{1.28} & 31.0 \\
  & Dijkstra (oracle) & 0.726 & 0.026 & 12.6 & 1.41 & \underline{38.7} \\
  & OSPF/ECMP (oracle) & 0.726 & 0.024 & 12.5 & 1.42 & 38.5 \\
  & Q-routing & 0.438 & 0.137 & 18.8 & 2.25 & 139.9 \\
  & heuristic & 0.346 & 0.160 & 19.4 & 2.45 & 152.5 \\
 \midrule
 \multirow{4}{*}{\texttt{hotspot\_high\_load}}
- & \textbf{MAPPO (ours)} & \textbf{0.275} & \textbf{0.174} & \textbf{20.5} & \textbf{6.84} & 136.5 \\
+ & \textbf{MAPPO (ours)} & \textbf{0.284} & \textbf{0.168} & \textbf{20.66} & \textbf{6.82} & 118.5 \\
  & Dijkstra (oracle) & \underline{0.295} & \underline{0.164} & 21.0 & \underline{6.75} & \underline{86.1} \\
  & OSPF/ECMP (oracle) & 0.295 & 0.164 & 21.0 & 6.75 & 85.7 \\
  & Q-routing & 0.237 & 0.193 & 20.1 & 7.15 & 216.8 \\
  & heuristic & 0.145 & 0.230 & 21.5 & 7.82 & 183.6 \\
 \midrule
 \multirow{4}{*}{\texttt{frequent\_break}}
- & \textbf{MAPPO (ours)} & \textbf{0.418} & \textbf{0.229} & \textbf{16.0} & \textbf{1.89} & \textbf{49.2} \\
+ & \textbf{MAPPO (ours)} & \textbf{0.439} & \textbf{0.225} & \textbf{15.87} & \textbf{1.84} & \textbf{63.1} \\
  & Dijkstra (oracle) & 0.414 & \underline{0.214} & 16.9 & 1.97 & 60.4 \\
  & OSPF/ECMP (oracle) & 0.415 & 0.215 & 17.0 & 1.97 & 60.7 \\
  & Q-routing & 0.278 & 0.312 & 17.2 & 2.18 & 107.5 \\
  & heuristic & 0.231 & 0.328 & 17.1 & 2.29 & 107.6 \\
 \midrule
 \multirow{4}{*}{\texttt{fault\_links}}
- & \textbf{MAPPO (ours)} & \textbf{0.713} & \textbf{0.028} & \textbf{11.8} & \textbf{1.43} & 47.2 \\
+ & \textbf{MAPPO (ours)} & \textbf{0.747} & \textbf{0.017} & \textbf{11.13} & \textbf{1.36} & 41.0 \\
  & Dijkstra (oracle) & 0.704 & 0.036 & 13.1 & 1.48 & \underline{44.6} \\
  & OSPF/ECMP (oracle) & 0.705 & 0.035 & 13.1 & 1.48 & 44.5 \\
  & Q-routing & 0.426 & 0.144 & 18.7 & 2.28 & 142.2 \\
