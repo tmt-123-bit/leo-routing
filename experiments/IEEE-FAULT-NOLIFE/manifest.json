@@ -1,0 +1,40 @@
+{
+  "experiment": "link_fault_robustness_sweep",
+  "source_scenario": "medium_load",
+  "traffic_scenario": "medium_load",
+  "fault_rates": [
+    0.0,
+    0.04,
+    0.08,
+    0.12,
+    0.16,
+    0.2
+  ],
+  "policy_seeds": [
+    1024,
+    123,
+    2024,
+    314,
+    42,
+    456,
+    7,
+    789
+  ],
+  "workload_seeds": [
+    19001,
+    19002,
+    19003,
+    19004,
+    19005,
+    19006,
+    19007,
+    19008,
+    19009,
+    19010,
+    19011,
+    19012,
+    19013,
+    19014,
+    19015
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "experiment": "EXP-004",
+  "mode": "x10k",
+  "config": {
+    "scenarios": [
+      "low_load",
+      "medium_load",
+      "hotspot_high_load",
+      "frequent_break",
+      "fault_links"
+    ],
+    "timesteps": 10000,
+    "validation_episodes": 50,
+    "test_episodes": 50,
+    "eval_every_rollouts": 20,
+    "save_every_steps": 2500,
+    "batch_size": 4,
+    "q_routing_train_episodes": 400
+  },
+  "policy_seeds": [
+    7,
+    42,
+    1024,
+    123,
+    456,
+    789,
+    2024,
+    314
+  ],
+  "train_workload_seeds": [
+    9001,
+    9020
+  ],
+  "validation_workload_seeds": [
+    10001,
+    10050
+  ],
+  "test_workload_seeds": [
+    11001,
+    11050
+  ],
+  "checkpoints": {
+    "low_load/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\low_load\\seed_7\\leo_multi__low_load__seed-7__2026-08-11_12-09-02__EXP-004\\validation_best.pt",
+    "low_load/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\low_load\\seed_42\\leo_multi__low_load__seed-42__2026-08-11_12-11-29__EXP-004\\validation_best.pt",
+    "low_load/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\low_load\\seed_1024\\leo_multi__low_load__seed-1024__2026-08-11_12-13-55__EXP-004\\validation_best.pt",
+    "low_load/seed_123": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\low_load\\seed_123\\leo_multi__low_load__seed-123__2026-08-11_12-16-22__EXP-004\\validation_best.pt",
+    "low_load/seed_456": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\low_load\\seed_456\\leo_multi__low_load__seed-456__2026-08-11_12-18-49__EXP-004\\validation_best.pt",
+    "low_load/seed_789": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\low_load\\seed_789\\leo_multi__low_load__seed-789__2026-08-11_12-21-15__EXP-004\\validation_best.pt",
+    "low_load/seed_2024": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\low_load\\seed_2024\\leo_multi__low_load__seed-2024__2026-08-11_12-23-43__EXP-004\\validation_best.pt",
+    "low_load/seed_314": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\low_load\\seed_314\\leo_multi__low_load__seed-314__2026-08-11_12-26-11__EXP-004\\validation_best.pt",
+    "medium_load/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\medium_load\\seed_7\\leo_multi__medium_load__seed-7__2026-08-11_12-36-12__EXP-004\\validation_best.pt",
+    "medium_load/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\medium_load\\seed_42\\leo_multi__medium_load__seed-42__2026-08-11_12-39-11__EXP-004\\validation_best.pt",
+    "medium_load/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\medium_load\\seed_1024\\leo_multi__medium_load__seed-1024__2026-08-11_12-42-13__EXP-004\\validation_best.pt",
+    "medium_load/seed_123": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\medium_load\\seed_123\\leo_multi__medium_load__seed-123__2026-08-11_12-45-13__EXP-004\\validation_best.pt",
+    "medium_load/seed_456": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\medium_load\\seed_456\\leo_multi__medium_load__seed-456__2026-08-11_12-48-13__EXP-004\\validation_best.pt",
+    "medium_load/seed_789": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\medium_load\\seed_789\\leo_multi__medium_load__seed-789__2026-08-11_12-51-13__EXP-004\\validation_best.pt",
+    "medium_load/seed_2024": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\medium_load\\seed_2024\\leo_multi__medium_load__seed-2024__2026-08-11_12-54-12__EXP-004\\validation_best.pt",
+    "medium_load/seed_314": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\medium_load\\seed_314\\leo_multi__medium_load__seed-314__2026-08-11_12-57-12__EXP-004\\validation_best.pt",
+    "hotspot_high_load/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\hotspot_high_load\\seed_7\\leo_multi__hotspot_high_load__seed-7__2026-08-11_13-09-45__EXP-004\\validation_best.pt",
+    "hotspot_high_load/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\hotspot_high_load\\seed_42\\leo_multi__hotspot_high_load__seed-42__2026-08-11_13-13-09__EXP-004\\validation_best.pt",
+    "hotspot_high_load/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\hotspot_high_load\\seed_1024\\leo_multi__hotspot_high_load__seed-1024__2026-08-11_13-16-34__EXP-004\\validation_best.pt",
+    "hotspot_high_load/seed_123": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\hotspot_high_load\\seed_123\\leo_multi__hotspot_high_load__seed-123__2026-08-11_13-19-58__EXP-004\\validation_best.pt",
+    "hotspot_high_load/seed_456": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\hotspot_high_load\\seed_456\\leo_multi__hotspot_high_load__seed-456__2026-08-11_13-23-21__EXP-004\\validation_best.pt",
+    "hotspot_high_load/seed_789": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\hotspot_high_load\\seed_789\\leo_multi__hotspot_high_load__seed-789__2026-08-11_13-26-46__EXP-004\\validation_best.pt",
+    "hotspot_high_load/seed_2024": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\hotspot_high_load\\seed_2024\\leo_multi__hotspot_high_load__seed-2024__2026-08-11_13-30-10__EXP-004\\validation_best.pt",
+    "hotspot_high_load/seed_314": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\hotspot_high_load\\seed_314\\leo_multi__hotspot_high_load__seed-314__2026-08-11_13-33-34__EXP-004\\validation_best.pt",
+    "frequent_break/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\frequent_break\\seed_7\\leo_multi__frequent_break__seed-7__2026-08-11_13-48-04__EXP-004\\validation_best.pt",
+    "frequent_break/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\frequent_break\\seed_42\\leo_multi__frequent_break__seed-42__2026-08-11_13-51-12__EXP-004\\validation_best.pt",
+    "frequent_break/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\frequent_break\\seed_1024\\leo_multi__frequent_break__seed-1024__2026-08-11_13-54-24__EXP-004\\validation_best.pt",
+    "frequent_break/seed_123": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\frequent_break\\seed_123\\leo_multi__frequent_break__seed-123__2026-08-11_13-57-50__EXP-004\\validation_best.pt",
+    "frequent_break/seed_456": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\frequent_break\\seed_456\\leo_multi__frequent_break__seed-456__2026-08-11_14-01-14__EXP-004\\validation_best.pt",
+    "frequent_break/seed_789": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\frequent_break\\seed_789\\leo_multi__frequent_break__seed-789__2026-08-11_14-04-23__EXP-004\\validation_best.pt",
+    "frequent_break/seed_2024": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\frequent_break\\seed_2024\\leo_multi__frequent_break__seed-2024__2026-08-11_14-07-32__EXP-004\\validation_best.pt",
+    "frequent_break/seed_314": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\frequent_break\\seed_314\\leo_multi__frequent_break__seed-314__2026-08-11_14-10-40__EXP-004\\validation_best.pt",
+    "fault_links/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\fault_links\\seed_7\\leo_multi__fault_links__seed-7__2026-08-11_14-23-30__EXP-004\\validation_best.pt",
+    "fault_links/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\fault_links\\seed_42\\leo_multi__fault_links__seed-42__2026-08-11_14-26-32__EXP-004\\validation_best.pt",
+    "fault_links/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\fault_links\\seed_1024\\leo_multi__fault_links__seed-1024__2026-08-11_14-29-35__EXP-004\\validation_best.pt",
+    "fault_links/seed_123": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\fault_links\\seed_123\\leo_multi__fault_links__seed-123__2026-08-11_14-32-35__EXP-004\\validation_best.pt",
+    "fault_links/seed_456": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\fault_links\\seed_456\\leo_multi__fault_links__seed-456__2026-08-11_14-35-38__EXP-004\\validation_best.pt",
+    "fault_links/seed_789": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\fault_links\\seed_789\\leo_multi__fault_links__seed-789__2026-08-11_14-38-39__EXP-004\\validation_best.pt",
+    "fault_links/seed_2024": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\fault_links\\seed_2024\\leo_multi__fault_links__seed-2024__2026-08-11_14-41-41__EXP-004\\validation_best.pt",
+    "fault_links/seed_314": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-BUDGET-x10k\\checkpoints\\fault_links\\seed_314\\leo_multi__fault_links__seed-314__2026-08-11_14-44-43__EXP-004\\validation_best.pt"
+  },
+  "code_fingerprint": {
+    "trainer": "fc69e6cc1f83be87826f21a5aaca79f7adcc5a1bb453f5dde1c76a383ab28500",
+    "environment": "15a2973a11a0bea16a01f0633c15d7ba302e6d96b9e6e724d030a6631966e7b2",
+    "wrapper": "d3c08983763cb7eb68a9370c9c3a7dafec072307805ce48d96f9edcd7a731584",
+    "design": "40f2b484225cbe05d5321e723c88a64294c68624bf5947432d0c2606d2cf445a",
+    "evaluation": "00c94839531154cad9939d73f77f8774f0e97646ac6505cd54365fd94c6d17e9"
+  }
+}

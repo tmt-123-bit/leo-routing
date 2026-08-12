@@ -1,0 +1,19 @@
+realism transfer: 8 synthetic source seeds -> 2 real topologies, 20 workload seeds, device=cpu
+  loaded synthetic seed=1024 <- validation_best.pt (variant=full)
+  loaded synthetic seed=123 <- validation_best.pt (variant=full)
+  loaded synthetic seed=2024 <- validation_best.pt (variant=full)
+  loaded synthetic seed=314 <- validation_best.pt (variant=full)
+  loaded synthetic seed=42 <- validation_best.pt (variant=full)
+  loaded synthetic seed=456 <- validation_best.pt (variant=full)
+  loaded synthetic seed=7 <- validation_best.pt (variant=full)
+  loaded synthetic seed=789 <- validation_best.pt (variant=full)
+
+=== real topology starlink_24 (data\starlink_24_links.csv) ===
+  delivery: MAPPO-transfer=0.364  Dijkstra=0.396  heuristic=0.112
+  thru/slot ratio MAPPO/Dijkstra=0.919
+
+=== real topology oneweb_24 (data\oneweb_24_links.csv) ===
+  delivery: MAPPO-transfer=0.281  Dijkstra=0.312  heuristic=0.200
+  thru/slot ratio MAPPO/Dijkstra=0.901
+
+=> wrote experiments\IEEE-REALISM\realism_matrix.csv + experiments\IEEE-REALISM\aggregate_realism.csv

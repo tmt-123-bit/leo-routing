@@ -1,0 +1,42 @@
+{
+  "experiment": "TLE-trained-MAPPO",
+  "mode": "full",
+  "links": "F:\\leo-routing-preliminary-matlab\\data\\starlink_24_links.csv",
+  "links_sha256": "82780919288151d675c0c9ccc06818571b08d0b2b22f4d7c74083f2a7ed5555a",
+  "train_topology_name": "tle_starlink_24",
+  "cross_links": "F:\\leo-routing-preliminary-matlab\\data\\oneweb_24_links.csv",
+  "cross_links_sha256": "1fe2f740fcc37bc50b12ce34d6d9e8361d51586424f0ec14d10e97ab43398721",
+  "cross_topology_name": "tle_oneweb_24",
+  "cross_validation": "zero-shot: Starlink-trained checkpoints are evaluated on the cross topology without fine-tuning",
+  "config": {
+    "timesteps": 50000,
+    "validation_episodes": 50,
+    "test_episodes": 50,
+    "eval_every": 20,
+    "batch_size": 4
+  },
+  "policy_seeds": [
+    7,
+    42,
+    123,
+    314,
+    456,
+    789,
+    1024,
+    2024
+  ],
+  "test_seed_range": [
+    14001,
+    14050
+  ],
+  "checkpoints": {
+    "7": "experiments\\TLE-NOLIFE-FULL\\checkpoints\\seed_7\\leo_tle__medium_load__seed-7__2026-08-12_09-01-21__TLE-TRAINED\\validation_best.pt",
+    "42": "experiments\\TLE-NOLIFE-FULL\\checkpoints\\seed_42\\leo_tle__medium_load__seed-42__2026-08-12_09-01-21__TLE-TRAINED\\validation_best.pt",
+    "123": "experiments\\TLE-NOLIFE-FULL\\checkpoints\\seed_123\\leo_tle__medium_load__seed-123__2026-08-12_09-19-07__TLE-TRAINED\\validation_best.pt",
+    "314": "experiments\\TLE-NOLIFE-FULL\\checkpoints\\seed_314\\leo_tle__medium_load__seed-314__2026-08-12_09-19-15__TLE-TRAINED\\validation_best.pt",
+    "456": "experiments\\TLE-NOLIFE-FULL\\checkpoints\\seed_456\\leo_tle__medium_load__seed-456__2026-08-12_09-35-42__TLE-TRAINED\\validation_best.pt",
+    "789": "experiments\\TLE-NOLIFE-FULL\\checkpoints\\seed_789\\leo_tle__medium_load__seed-789__2026-08-12_09-36-02__TLE-TRAINED\\validation_best.pt",
+    "1024": "experiments\\TLE-NOLIFE-FULL\\checkpoints\\seed_1024\\leo_tle__medium_load__seed-1024__2026-08-12_09-49-47__TLE-TRAINED\\validation_best.pt",
+    "2024": "experiments\\TLE-NOLIFE-FULL\\checkpoints\\seed_2024\\leo_tle__medium_load__seed-2024__2026-08-12_09-50-11__TLE-TRAINED\\validation_best.pt"
+  }
+}

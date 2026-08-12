@@ -43,7 +43,7 @@ SCENARIOS: Dict[str, ScenarioConfig] = {
     "medium_load": ScenarioConfig("medium_load", background_packets_per_slot=6, hotspot_packets_per_slot=12, hotspot_ratio=0.65),
     "hotspot_high_load": ScenarioConfig("hotspot_high_load", background_packets_per_slot=8, hotspot_packets_per_slot=24, hotspot_ratio=0.8),
     "frequent_break": ScenarioConfig("frequent_break", background_packets_per_slot=6, hotspot_packets_per_slot=12, shorten_trem_ratio=0.35),
-    "fault_links": ScenarioConfig("fault_links", background_packets_per_slot=6, hotspot_packets_per_slot=12, fault_link_ratio=0.08, reliability_penalty=0.25),
+    "fault_links": ScenarioConfig("fault_links", background_packets_per_slot=6, hotspot_packets_per_slot=12, fault_link_ratio=0.08, reliability_penalty=0.10),
 }
 
 
@@ -57,8 +57,8 @@ class EnvConfig:
 
     q_max: int = 45
     service_packets_per_slot: int = 3
-    capacity_mbps: float = 100.0
-    packet_demand_mbps: float = 1.0
+    capacity_mbps: float = 30.0
+    packet_demand_mbps: float = 10.0
     d_ref_ms: float = 20.0
 
     t_safe: float = 3.0
@@ -475,9 +475,27 @@ class LeoRoutingEnv:
             "switch_count": self.switch_count,
         }
 
+    @staticmethod
+    def _break_uniform(t: int, u: int, v: int) -> float:
+        """Deterministic U[0,1) drawn from (slot, u, v).
+
+        Stable across the multiple ``_build_topology`` calls that happen within
+        a single slot (step/observe/global_state), so a link that breaks for
+        slot *t* stays broken for the whole slot and heals deterministically at
+        *t+1*. Without this, breaks would flicker inconsistently within a slot.
+        """
+        x = (int(t) * 2654435761) & 0xFFFFFFFF
+        x ^= (int(u) * 40503 + 1) & 0xFFFFFFFF
+        x ^= (int(v) * 91283 + 1) & 0xFFFFFFFF
+        x = ((x ^ (x >> 13)) * 0x45D9F3B) & 0xFFFFFFFF
+        x = ((x ^ (x >> 16)) * 0x45D9F3B) & 0xFFFFFFFF
+        return (x & 0xFFFFFFFF) / 4294967296.0
+
     def _build_topology(self, t: int) -> Dict[Tuple[int, int], LinkState]:
         if self.cfg.topology_provider is not None:
             return self.cfg.topology_provider(t, self)
+        # Current slot, used by _add_directed_link for deterministic breaks.
+        self._topology_t = t
         graph: Dict[Tuple[int, int], LinkState] = {}
         for p in range(1, self.cfg.n_planes + 1):
             for s in range(1, self.cfg.sats_per_plane + 1):
@@ -504,6 +522,19 @@ class LeoRoutingEnv:
         t_rem = self._remaining_time_seconds_for_link(is_cross, plane, pos)
         if key in self.short_trem_links:
             t_rem = min(t_rem, max(1.0, self.cfg.t_safe - 0.5))
+        # Real link break for short-T_rem links: a link whose remaining ISL
+        # lifetime is below t_safe physically fails with probability
+        # 1 - t_rem/t_safe each slot (deterministic per (slot,u,v) so the graph
+        # is consistent within a slot). Previously available was hardcoded True,
+        # so frequent_break had ZERO physical effect (verified: 300/300 ablation
+        # runs byte-identical to medium_load) and the link-lifetime mask removed
+        # usable links. Now the mask is proactive (avoid soon-to-fail links) and
+        # the failure is real, making the ablation meaningful.
+        available = True
+        if key in self.short_trem_links and t_rem < self.cfg.t_safe:
+            p_break = 1.0 - (t_rem / self.cfg.t_safe)
+            if self._break_uniform(getattr(self, "_topology_t", 0), u, v) < p_break:
+                available = False
         graph[key] = LinkState(
             delay_ms=delay,
             capacity_mbps=self.cfg.capacity_mbps,
@@ -512,7 +543,7 @@ class LeoRoutingEnv:
             reliability=reliability,
             p_out=1.0 - reliability,
             t_rem=t_rem,
-            available=True,
+            available=available,
             is_cross=is_cross,
             shell_src=self.cfg.shell_id,
             shell_dst=self.cfg.shell_id,

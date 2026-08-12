@@ -1,0 +1,51 @@
+=== TRAIN 21 jobs (7 configs x 3 seeds), 50000 steps, parallel=2, device=cuda ===
+  [skip] baseline seed=7 (exists)
+  [skip] baseline seed=42 (exists)
+  [skip] baseline seed=123 (exists)
+  [start] deliver_lo seed=7 pid=1340 overrides={'w_deliver': 1.0}
+  [start] deliver_lo seed=42 pid=8044 overrides={'w_deliver': 1.0}
+  [done 4/21] deliver_lo seed=7 OK
+  [done 5/21] deliver_lo seed=42 OK
+  [start] deliver_lo seed=123 pid=11548 overrides={'w_deliver': 1.0}
+  [start] deliver_hi seed=7 pid=5856 overrides={'w_deliver': 4.0}
+  [done 6/21] deliver_hi seed=7 OK
+  [start] deliver_hi seed=42 pid=19492 overrides={'w_deliver': 4.0}
+  [done 7/21] deliver_lo seed=123 OK
+  [start] deliver_hi seed=123 pid=5244 overrides={'w_deliver': 4.0}
+  [done 8/21] deliver_hi seed=42 OK
+  [start] load_lo seed=7 pid=14068 overrides={'w_load': 0.5}
+  [done 9/21] deliver_hi seed=123 OK
+  [start] load_lo seed=42 pid=5256 overrides={'w_load': 0.5}
+  [done 10/21] load_lo seed=7 OK
+  [start] load_lo seed=123 pid=13996 overrides={'w_load': 0.5}
+  [done 11/21] load_lo seed=42 OK
+  [start] load_hi seed=7 pid=5460 overrides={'w_load': 2.0}
+  [done 12/21] load_lo seed=123 OK
+  [start] load_hi seed=42 pid=13292 overrides={'w_load': 2.0}
+  [done 13/21] load_hi seed=7 OK
+  [start] load_hi seed=123 pid=7608 overrides={'w_load': 2.0}
+  [done 14/21] load_hi seed=42 OK
+  [start] switch_lo seed=7 pid=16320 overrides={'w_switch': 0.1}
+  [done 15/21] load_hi seed=123 OK
+  [start] switch_lo seed=42 pid=2964 overrides={'w_switch': 0.1}
+  [done 16/21] switch_lo seed=7 OK
+  [start] switch_lo seed=123 pid=21848 overrides={'w_switch': 0.1}
+  [done 17/21] switch_lo seed=42 OK
+  [start] switch_hi seed=7 pid=6172 overrides={'w_switch': 1.0}
+  [done 18/21] switch_lo seed=123 OK
+  [start] switch_hi seed=42 pid=19768 overrides={'w_switch': 1.0}
+  [done 19/21] switch_hi seed=7 OK
+  [start] switch_hi seed=123 pid=21272 overrides={'w_switch': 1.0}
+  [done 20/21] switch_hi seed=42 OK
+  [done 21/21] switch_hi seed=123 OK
+
+=== EVAL 7 configs x 3 seeds x 20 wl seeds ===
+  baseline     delivery MAPPO=0.789 Dij=0.723 gap=+0.066
+  deliver_lo   delivery MAPPO=0.790 Dij=0.723 gap=+0.067
+  deliver_hi   delivery MAPPO=0.790 Dij=0.723 gap=+0.067
+  load_lo      delivery MAPPO=0.784 Dij=0.723 gap=+0.061
+  load_hi      delivery MAPPO=0.795 Dij=0.723 gap=+0.072
+  switch_lo    delivery MAPPO=0.796 Dij=0.723 gap=+0.073
+  switch_hi    delivery MAPPO=0.774 Dij=0.723 gap=+0.051
+
+=> wrote sensitivity_matrix.csv + aggregate_sensitivity.csv + summary.csv

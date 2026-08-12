@@ -1,0 +1,39 @@
+# =============================================================================
+# Lean dependency set for reproducing the IEEE results
+# (headline / ablation / budget experiments + figures + statistical analysis).
+#
+# These are the ONLY third-party packages the main experiment path imports:
+#   run_exp004_mappo.py, run_ablation_experiments.py, compute_mde.py,
+#   make_figures.py, mappo_evaluation.py, leo_multiagent_env.py,
+#   cleanmarl/cleanmarl/mappo.py
+# Verified by `import torch,numpy,scipy,matplotlib,tyro` (+ SummaryWriter).
+#
+# jax / flax / optax are NOT required (only the stale *_jax.py baseline
+# variants use them; our MAPPO path is pure torch).
+# wandb is optional (imported only behind --use-wnb, which we never set).
+# =============================================================================
+
+# --- torch: install the CUDA build matching your NVIDIA driver. ---
+# Driver >= 525 supports the cu128 wheel. CPU-only works but is ~20x slower
+# (the 50k-step headline takes ~8 h on an RTX 3070, far longer on CPU).
+#   pip install torch==2.11.0+cu128 --index-url https://download.pytorch.org/whl/cu128
+# China mirror:  https://mirrors.aliyun.com/pytorch-wheels/cu128/
+torch==2.11.0+cu128
+
+# --- numerical / statistical core ---
+numpy==2.3.4
+scipy==1.17.1
+
+# --- figures (make_figures.py) ---
+matplotlib==3.10.9
+
+# --- CLI parsing (cleanmarl/mappo.py main) ---
+tyro==1.0.15
+
+# --- training logging (cleanmarl/mappo.py opens a SummaryWriter unconditionally) ---
+tensorboard==2.21.0
+
+# =============================================================================
+# Optional — only for the cross-constellation transfer study (Sec. VI-D, C3):
+#   sgp4            # SGP4 propagation for real TLE satellite positions
+# =============================================================================

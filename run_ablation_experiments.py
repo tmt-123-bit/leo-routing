@@ -26,7 +26,13 @@ VARIANTS = [
     "flat_critic",
     "no_ppo_protection",
 ]
-SCENARIOS = ["medium_load", "frequent_break"]
+SCENARIOS = [
+    "low_load",
+    "medium_load",
+    "hotspot_high_load",
+    "frequent_break",
+    "fault_links",
+]
 PRIMARY_METRICS = [
     "delivery_ratio",
     "drop_rate",

@@ -1,0 +1,13 @@
+{
+  "run_name": "leo_multi__medium_load__seed-42__2026-08-12_11-18-04__REW-SENS",
+  "final_checkpoint": "experiments\\IEEE-REWARD-SENSITIVITY\\baseline\\seed_42\\leo_multi__medium_load__seed-42__2026-08-12_11-18-04__REW-SENS\\final.pt",
+  "validation_best_checkpoint": "experiments\\IEEE-REWARD-SENSITIVITY\\baseline\\seed_42\\leo_multi__medium_load__seed-42__2026-08-12_11-18-04__REW-SENS\\validation_best.pt",
+  "best_validation_score": [
+    0.7878125,
+    11.002347025612405,
+    -0.004583333333333333,
+    -5.834180082546904
+  ],
+  "environment_steps": 50040,
+  "optimizer_updates": 5004
+}

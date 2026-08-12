@@ -1,0 +1,107 @@
+### [1/4] scale NOLIFE Wed Aug 12 08:59:07     2026
+transfer mode: 8 source seeds from experiments\IEEE-NOLIFE-full (medium_load), -> 4 scales, 20 workload seeds each, device=cpu
+  loaded source seed=1024 <- validation_best.pt (variant=no_lifetime)
+  loaded source seed=123 <- validation_best.pt (variant=no_lifetime)
+  loaded source seed=2024 <- validation_best.pt (variant=no_lifetime)
+  loaded source seed=314 <- validation_best.pt (variant=no_lifetime)
+  loaded source seed=42 <- validation_best.pt (variant=no_lifetime)
+  loaded source seed=456 <- validation_best.pt (variant=no_lifetime)
+  loaded source seed=7 <- validation_best.pt (variant=no_lifetime)
+  loaded source seed=789 <- validation_best.pt (variant=no_lifetime)
+
+=== target scale n24 (n=24, pl=4x6) ===
+  delivery: MAPPO-transfer=0.787  Dijkstra=0.733  heuristic=0.345
+  thru/slot: MAPPO=5.04  Dijkstra=4.69  ratio=1.074
+
+=== target scale n66 (n=66, pl=6x11) ===
+  delivery: MAPPO-transfer=0.388  Dijkstra=0.325  heuristic=0.121
+  thru/slot: MAPPO=6.63  Dijkstra=5.56  ratio=1.193
+
+=== target scale n110 (n=110, pl=10x11) ===
+  delivery: MAPPO-transfer=0.251  Dijkstra=0.238  heuristic=0.072
+  thru/slot: MAPPO=7.49  Dijkstra=7.10  ratio=1.055
+
+=== target scale n132 (n=132, pl=6x22) ===
+  delivery: MAPPO-transfer=0.179  Dijkstra=0.189  heuristic=0.059
+  thru/slot: MAPPO=6.30  Dijkstra=6.66  ratio=0.945
+
+=> wrote experiments\IEEE-SCALE-NOLIFE\transfer_matrix.csv + experiments\IEEE-SCALE-NOLIFE\aggregate_scale.csv
+### [2/4] realism NOLIFE Wed Aug 12 09:23:05     2026
+realism transfer: 8 synthetic source seeds -> 2 real topologies, 20 workload seeds, device=cpu
+  loaded synthetic seed=1024 <- validation_best.pt (variant=no_lifetime)
+  loaded synthetic seed=123 <- validation_best.pt (variant=no_lifetime)
+  loaded synthetic seed=2024 <- validation_best.pt (variant=no_lifetime)
+  loaded synthetic seed=314 <- validation_best.pt (variant=no_lifetime)
+  loaded synthetic seed=42 <- validation_best.pt (variant=no_lifetime)
+  loaded synthetic seed=456 <- validation_best.pt (variant=no_lifetime)
+  loaded synthetic seed=7 <- validation_best.pt (variant=no_lifetime)
+  loaded synthetic seed=789 <- validation_best.pt (variant=no_lifetime)
+
+=== real topology starlink_24 (data\starlink_24_links.csv) ===
+  delivery: MAPPO-transfer=0.368  Dijkstra=0.396  heuristic=0.112
+  thru/slot ratio MAPPO/Dijkstra=0.928
+
+=== real topology oneweb_24 (data\oneweb_24_links.csv) ===
+  delivery: MAPPO-transfer=0.292  Dijkstra=0.312  heuristic=0.200
+  thru/slot ratio MAPPO/Dijkstra=0.935
+
+=> wrote experiments\IEEE-REALISM-NOLIFE\realism_matrix.csv + experiments\IEEE-REALISM-NOLIFE\aggregate_realism.csv
+### [3/4] load NOLIFE Wed Aug 12 09:24:39     2026
+load sweep: 8 seeds x 8 load points, 15 workload seeds, device=cpu
+
+=== load exo2 (initial=4, exo/slot=2) ===
+  delivery: MAPPO=0.904  Dijkstra=0.908  heuristic=0.558  gap(M-D)=-0.0042
+  Dijkstra mean_queue=0.25
+
+=== load exo4 (initial=8, exo/slot=4) ===
+  delivery: MAPPO=0.876  Dijkstra=0.836  heuristic=0.428  gap(M-D)=+0.0393
+  Dijkstra mean_queue=0.70
+
+=== load exo6 (initial=12, exo/slot=6) ===
+  delivery: MAPPO=0.783  Dijkstra=0.733  heuristic=0.336  gap(M-D)=+0.0508
+  Dijkstra mean_queue=1.42
+
+=== load exo8 (initial=16, exo/slot=8) ===
+  delivery: MAPPO=0.655  Dijkstra=0.595  heuristic=0.270  gap(M-D)=+0.0599
+  Dijkstra mean_queue=2.37
+
+=== load exo10 (initial=20, exo/slot=10) ===
+  delivery: MAPPO=0.546  Dijkstra=0.511  heuristic=0.226  gap(M-D)=+0.0348
+  Dijkstra mean_queue=3.41
+
+=== load exo14 (initial=28, exo/slot=14) ===
+  delivery: MAPPO=0.397  Dijkstra=0.379  heuristic=0.169  gap(M-D)=+0.0176
+  Dijkstra mean_queue=5.48
+
+=== load exo20 (initial=40, exo/slot=20) ===
+  delivery: MAPPO=0.266  Dijkstra=0.258  heuristic=0.126  gap(M-D)=+0.0073
+  Dijkstra mean_queue=8.72
+
+=== load exo28 (initial=56, exo/slot=28) ===
+  delivery: MAPPO=0.221  Dijkstra=0.215  heuristic=0.111  gap(M-D)=+0.0063
+  Dijkstra mean_queue=10.82
+
+=> wrote experiments\IEEE-LOAD-NOLIFE\load_matrix.csv + experiments\IEEE-LOAD-NOLIFE\aggregate_load.csv
+### [4/4] fault NOLIFE Wed Aug 12 09:30:05     2026
+fault sweep: 8 seeds (source=medium_load) x 6 fault rates, traffic=medium_load (ini=12,exo=6), device=cpu
+
+=== fault_rate=0.00 (reliability_penalty=0.000) ===
+  delivery: MAPPO=0.790  Dijkstra=0.728  heuristic=0.325  gap(M-D)=+0.0615
+
+=== fault_rate=0.04 (reliability_penalty=0.050) ===
+  delivery: MAPPO=0.784  Dijkstra=0.726  heuristic=0.334  gap(M-D)=+0.0579
+
+=== fault_rate=0.08 (reliability_penalty=0.100) ===
+  delivery: MAPPO=0.762  Dijkstra=0.711  heuristic=0.327  gap(M-D)=+0.0509
+
+=== fault_rate=0.12 (reliability_penalty=0.150) ===
+  delivery: MAPPO=0.681  Dijkstra=0.616  heuristic=0.295  gap(M-D)=+0.0646
+
+=== fault_rate=0.16 (reliability_penalty=0.200) ===
+  delivery: MAPPO=0.655  Dijkstra=0.590  heuristic=0.290  gap(M-D)=+0.0651
+
+=== fault_rate=0.20 (reliability_penalty=0.250) ===
+  delivery: MAPPO=0.598  Dijkstra=0.532  heuristic=0.266  gap(M-D)=+0.0655
+
+=> wrote experiments\IEEE-FAULT-NOLIFE\fault_matrix.csv + experiments\IEEE-FAULT-NOLIFE\aggregate_fault.csv
+### ALL NOLIFE RE-RUNS DONE Wed Aug 12 09:33:57     2026

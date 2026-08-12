@@ -1,0 +1,8 @@
+﻿config,mappo_delivery_ratio,mappo_throughput_packets_per_slot,mappo_p95_delay_slots,mappo_mean_queue_packets,mappo_global_load_imbalance,delivery_delta_vs_baseline
+baseline,0.7891,5.0506,10.3325,1.2297,0.7074,0.0
+deliver_lo,0.7905,5.0589,10.1792,1.2229,0.7002,0.0013
+deliver_hi,0.7905,5.0589,10.3567,1.2284,0.6965,0.0013
+load_lo,0.7839,5.0172,10.5975,1.2367,0.7085,-0.0052
+load_hi,0.7951,5.0883,10.0108,1.2218,0.6914,0.0059
+switch_lo,0.796,5.0944,9.9533,1.2091,0.6973,0.0069
+switch_hi,0.7744,4.9561,10.7325,1.2636,0.7108,-0.0148

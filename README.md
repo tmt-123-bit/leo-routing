@@ -90,6 +90,8 @@ credit 总和为 0，所以平均 Agent reward 仍等于团队奖励。
 - [聚合指标和 95% CI](experiments/EXP-004-FULL/aggregate_metrics.csv)
 - [配对检验](experiments/EXP-004-FULL/paired_tests.csv)
 
+> **复现命令（重要）**：`run_exp004_mappo.py` 默认 `--mode quick`（300 步，仅供开发快速验证），**论文级结果必须用 `--mode full`（50,000 步）**。一键复现/重跑见 [`run_ieee_reproduction.sh`](run_ieee_reproduction.sh)（含区分"代码漂移 vs 训练预算"的复现核查）。本仓库经过一次系统优化（trainer Critic 根因修复 + 真实断链 + 拥塞激活等），所有环境/奖励改动会使旧实验表作废，详见 [`OPTIMIZATION_CHANGES.md`](OPTIMIZATION_CHANGES.md)。
+
 ## 4. 受控消融
 
 消融使用 medium 和 frequent 两个场景、3 个 policy seed、每 run 5,000 slots、每组 50 个 test workload，共 2,100 episode。它只判断模块方向，不与 50,000-step 主表直接比较绝对值。
@@ -144,7 +146,17 @@ Critic 尾段原始梯度约为 7.87–283.76，说明裁剪是必要的，Criti
 
 使用正式 checkpoint 的 smoke test 中，bridge 与直接 Actor 的 24 个动作完全一致，全部满足 mask，其中 12 个为非 `NO_OP` 决策。
 
-本机有 WSL2 Ubuntu 22.04，但还没有安装 ns-3/Hypatia。因此当前只完成控制桥，不代表已经完成 packet-level 仿真。后续计划是：
+本机有 WSL2 Ubuntu 22.04，**Hypatia 已安装在 `F:/third_party/hypatia`**（更正：早期版本曾写"未安装"，与实际不符）。当前的 ns-3 集成有两个阶段：
+
+1. **v1.0 控制桥（离线 JSONL）**：`ns3_policy_bridge.py` + `ns3_policy_protocol.schema.json`（24-Agent、26 维特征）。正式 checkpoint 的 smoke test 中，bridge 与直接 Actor 的 24 个动作完全一致，全部满足 mask，其中 12 个为非 `NO_OP` 决策。
+2. **v3.0 真实 packet-level 闭环（TCP-jsonl，per-lookup policy 拦截）**：位于 `leo-routing-current-results/NS3-CLOSED-LOOP-33/`。已编译的 closed-loop 可执行文件以 exit 0 跑通，v3.0 在 3 个 seed × 2 个 variant（full vs no_lifetime）上运行了真实数据面仿真，使用 fixture 注入的 ISL 中断（`attempt5_overlay_success`）。
+
+**当前 ns-3 验证的边界（诚实说明）**：
+- fixture 是 33 星 Kuiper integration-test 子集（42 条 ISL），**与训练用的 Starlink 24 星（4×6）拓扑不同**——需生成匹配的 starlink_24 fixture 才能做干净的部署测试；
+- 观测是 **domain-adapted**（队列占用由 NetDevice 实时队列归一化、负载由排队字节计算等，与训练 env 的逻辑队列/累计 used_rate 不同）——是部署验证，不是同语义迁移；
+- 统计功效不足：仅 1 条 ISL 中断、2 个 UDP burst、5s，no_lifetime 仅 5 个 drop / 5004 包（差 0.1pp）。**扩到 100+ drop 才能做统计声明**（见 `run_ieee_reproduction.sh` 的 ns-3 阶段）。
+
+后续计划仍是完整的动态星座闭环：
 
 ```text
 Hypatia/轨道模块生成动态星座

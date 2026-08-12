@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+import os
 from typing import Dict, Optional, Sequence, Tuple
 import numpy as np
 
@@ -11,6 +13,26 @@ from leo_multiagent_env import (
     MultiAgentConfig,
     SynchronousLeoMultiAgentEnv,
 )
+
+
+def _apply_reward_overrides(env_cfg: EnvConfig) -> None:
+    """Apply reward-weight overrides from the LEO_REWARD_OVERRIDES env var.
+
+    The var holds a JSON object mapping EnvConfig reward-weight field names
+    (w_deliver, w_delay, w_load, w_queue, w_switch, ...) to numeric values.
+    Backward-compatible: unset / empty -> no change. Used by the reward-sensitivity
+    sweep; training-only (eval metrics are reward-independent).
+    """
+    raw = os.environ.get("LEO_REWARD_OVERRIDES", "").strip()
+    if not raw:
+        return
+    try:
+        overrides = json.loads(raw)
+    except json.JSONDecodeError as e:
+        raise ValueError(f"LEO_REWARD_OVERRIDES is not valid JSON: {e}") from e
+    for k, v in overrides.items():
+        if hasattr(env_cfg, k) and isinstance(v, (int, float)) and not isinstance(v, bool):
+            setattr(env_cfg, k, float(v))
 
 
 class CleanMARLLeoMultiAgentWrapper:
@@ -25,6 +47,7 @@ class CleanMARLLeoMultiAgentWrapper:
         if cfg is None:
             effective_seed = 11 if seed is None else seed
             env_cfg = EnvConfig(seed=effective_seed, scenario=SCENARIOS[scenario])
+            _apply_reward_overrides(env_cfg)
             initial_packets, exogenous_packets = MULTIAGENT_LOADS[scenario]
             cfg = MultiAgentConfig(
                 env=env_cfg,

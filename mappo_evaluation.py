@@ -183,6 +183,95 @@ class GlobalDijkstraPolicy:
         return actions
 
 
+class OspfEcmpPolicy:
+    """OSPF/ECMP baseline — the realistic distributed incumbent.
+
+    Each node forwards along the delay-weighted shortest path (SPF on its
+    flooded link-state database), breaking ties across the equal-cost multi-path
+    (ECMP) next-hop set by seeded random split. This is the canonical LEO/IP
+    routing protocol and a required baseline: it tells the reviewer how much of
+    MAPPO's gain is "learning" versus "having a sensible shortest-path policy at
+    all". Uses full current link state (same information set as
+    GlobalDijkstraPolicy), so it sits in the centralized-oracle column; the
+    difference from Dijkstra is ECMP load splitting, which helps under
+    multipath/hotspot traffic.
+    """
+
+    def __init__(self, seed: int = 0):
+        self.wrapper: Optional[CleanMARLLeoMultiAgentWrapper] = None
+        self.rng = random.Random(seed)
+        self._cache_key: tuple = (-1, -1)
+        self._cached_dist: Dict[int, float] = {}
+
+    def bind(self, wrapper: CleanMARLLeoMultiAgentWrapper) -> None:
+        self.wrapper = wrapper
+        self._cache_key = (-1, -1)
+        self._cached_dist = {}
+
+    def _dist_to_destination(self, dst: int) -> Dict[int, float]:
+        """Forward distance dist(node -> dst) for every node, via one reverse
+        Dijkstra from dst. Cached per (slot, dst): the topology is frozen within
+        a slot, so all agents in the same slot sharing a destination reuse it."""
+        assert self.wrapper is not None
+        slot = self.wrapper.env.slot
+        key = (slot, dst)
+        if key != self._cache_key:
+            self._cache_key = key
+            self._cached_dist = self._reverse_dijkstra(dst)
+        return self._cached_dist
+
+    def _reverse_dijkstra(self, dst: int) -> Dict[int, float]:
+        graph = self.wrapper.env.graph  # type: ignore[union-attr]
+        dist: Dict[int, float] = {dst: 0.0}
+        queue = [(0.0, dst)]
+        while queue:
+            distance, node = heapq.heappop(queue)
+            if distance != dist.get(node):
+                continue
+            for (source, neighbor), edge in graph.items():
+                # reversed edge: neighbor -> source, so this relaxes source
+                if neighbor != node or not edge.available:
+                    continue
+                candidate = distance + edge.delay_ms
+                if candidate < dist.get(source, float("inf")):
+                    dist[source] = candidate
+                    heapq.heappush(queue, (candidate, source))
+        return dist
+
+    def __call__(self, observation: np.ndarray, mask: np.ndarray) -> np.ndarray:
+        assert self.wrapper is not None
+        actions = np.zeros(self.wrapper.n_agents, dtype=np.int64)
+        for external_index, internal_sat in enumerate(
+            self.wrapper.external_to_internal
+        ):
+            feasible = np.flatnonzero(mask[external_index] > 0.5)
+            if len(feasible) <= 1:
+                actions[external_index] = int(feasible[0]) if len(feasible) else 0
+                continue
+            obs = self.wrapper._obs[internal_sat - 1]
+            packet = self.wrapper.env.packets[obs["hol_packet_id"]]
+            dist_to_dst = self._dist_to_destination(packet.dst)
+            best = float("inf")
+            totals: Dict[int, float] = {}
+            for action in feasible:
+                if action == 0:  # NO_OP never helps a forwarder
+                    totals[int(action)] = float("inf")
+                    continue
+                neighbor = obs["neighbor_ids"][int(action) - 1]
+                edge = self.wrapper.env.graph[(internal_sat, neighbor)]
+                total = edge.delay_ms + dist_to_dst.get(neighbor, float("inf"))
+                totals[int(action)] = total
+                if total < best:
+                    best = total
+            if best == float("inf"):
+                actions[external_index] = 0
+                continue
+            # ECMP set: all equal-cost next-hops within a tight tolerance
+            ecmp = [a for a, t in totals.items() if t <= best + 1e-6]
+            actions[external_index] = int(self.rng.choice(ecmp))
+        return actions
+
+
 class QRoutingPolicy:
     """Tabular distributed Q-routing baseline indexed by node/destination/neighbor."""
 

@@ -25,7 +25,7 @@ from mappo_evaluation import (
 from run_exp004_mappo import METRICS, aggregate_rows
 
 
-SEEDS = [7, 42, 1024]
+SEEDS = [7, 42, 123, 314, 456, 789, 1024, 2024]
 
 
 def find_checkpoint(root: Path) -> Path | None:
@@ -131,10 +131,12 @@ def main():
     parser.add_argument("--project", type=Path, default=Path(__file__).resolve().parent)
     parser.add_argument("--max-parallel", type=int, default=2)
     parser.add_argument("--device", default="cpu")
+    parser.add_argument("--variant", default="no_lifetime",
+                        help="leo variant for TLE training (full/no_lifetime/no_credit/...)")
     args = parser.parse_args()
     config = (
         {
-            "timesteps": 20000,
+            "timesteps": 50000,
             "validation_episodes": 50,
             "test_episodes": 50,
             "eval_every": 20,
@@ -171,6 +173,7 @@ def main():
             "--env-name", "medium_load",
             "--leo-project-path", str(args.project),
             "--leo-topology-csv", str(args.links.resolve()),
+            "--leo-variant", args.variant,
             "--seed", str(seed),
             "--batch-size", str(config["batch_size"]),
             "--total-timesteps", str(config["timesteps"]),

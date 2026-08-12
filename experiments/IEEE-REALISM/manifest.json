@@ -1,0 +1,50 @@
+{
+  "experiment": "realism_transfer_synthetic_to_TLE",
+  "mode": "transfer",
+  "source_dir": "experiments\\IEEE-REPRO-CHECK",
+  "source_topology": "synthetic_4x6_grid",
+  "topologies": [
+    {
+      "label": "starlink_24",
+      "links_csv": "data\\starlink_24_links.csv"
+    },
+    {
+      "label": "oneweb_24",
+      "links_csv": "data\\oneweb_24_links.csv"
+    }
+  ],
+  "scenario": "medium_load",
+  "policy_seeds": [
+    1024,
+    123,
+    2024,
+    314,
+    42,
+    456,
+    7,
+    789
+  ],
+  "workload_seeds": [
+    17001,
+    17002,
+    17003,
+    17004,
+    17005,
+    17006,
+    17007,
+    17008,
+    17009,
+    17010,
+    17011,
+    17012,
+    17013,
+    17014,
+    17015,
+    17016,
+    17017,
+    17018,
+    17019,
+    17020
+  ],
+  "workload": "identical to synthetic headline (medium_load), only topology varies"
+}

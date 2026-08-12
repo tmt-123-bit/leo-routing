@@ -45,7 +45,7 @@ class MultiAgentConfig:
     max_queue_packets: int = 45
     exogenous_packets_per_slot: int = 0
     initial_packets: int = 8
-    link_capacity_packets: int = 1
+    link_capacity_packets: int = 3
     shared_reward: bool = True
     seed: int = 11
     packet_class_probabilities: Tuple[float, ...] = (0.50, 0.30, 0.20)
@@ -56,7 +56,7 @@ class MultiAgentConfig:
     credit_weight: float = 0.25
     global_delay_weight: float = 1.0
     global_queue_weight: float = 0.8
-    global_imbalance_weight: float = 0.5
+    global_imbalance_weight: float = 0.1
     global_switch_weight: float = 0.2
     global_throughput_weight: float = 2.0
     global_control_weight: float = 0.1
@@ -297,8 +297,13 @@ class SynchronousLeoMultiAgentEnv:
 
         deadline_dropped = self._expire_deadline_packets()
         for packet_id in deadline_dropped:
-            owner = self.packets[packet_id].owner
-            local_rewards[owner - 1] -= self.cfg.env.w_invalid
+            packet = self.packets[packet_id]
+            # Attribute a deadline drop to the agent that made the final routing
+            # decision (previous_node), not the current owner, which may have
+            # just received the packet this slot with no chance to act. Fall
+            # back to owner for packets never forwarded (still at source).
+            blame = packet.previous_node if packet.previous_node is not None else packet.owner
+            local_rewards[blame - 1] -= self.cfg.env.w_invalid
 
         exogenous_admitted: List[int] = []
         exogenous_dropped: List[int] = []
@@ -329,7 +334,12 @@ class SynchronousLeoMultiAgentEnv:
         )
         global_reward = reward_components["team_reward"]
         policy_active = [
-            obs["hol_packet_id"] is not None and any(obs["action_mask"][1:])
+            # Active = holding a HOL packet. Agents in a no_route state (HOL
+            # packet but no feasible candidate) are included so their no_route
+            # penalty receives centered credit; previously the any(...) guard
+            # zeroed their credit via the float(policy_active) factor, so they
+            # faced no individual consequence for dead-end routing.
+            obs["hol_packet_id"] is not None
             for obs in frozen_obs
         ]
         active_local = [
@@ -664,7 +674,7 @@ class SynchronousLeoMultiAgentEnv:
             edge.reliability,
             min(1.0, edge.t_rem / self.cfg.env.t_safe)
             * float(self.cfg.variant != "no_lifetime"),
-            0.0,
+            self.previous_contention[v] / max(1, self.max_degree),
             self.base._progress_value(u, v, packet.dst),
             vu,
             vw,
@@ -753,7 +763,10 @@ class SynchronousLeoMultiAgentEnv:
                 for item in accepted
             ) / len(accepted)
         else:
-            delay_cost = 1.0
+            # No traffic this slot: no delay penalty (was 1.0, which spuriously
+            # penalized idle slots and caused a reward discontinuity vs the
+            # delivered/accepted branches).
+            delay_cost = 0.0
 
         queue_cost = sum(len(queue) for queue in self.queues.values()) / max(
             1, self.n_agents * self.cfg.max_queue_packets

@@ -1,0 +1,35 @@
+load sweep: 8 seeds x 8 load points, 15 workload seeds, device=cpu
+
+=== load exo2 (initial=4, exo/slot=2) ===
+  delivery: MAPPO=0.885  Dijkstra=0.908  heuristic=0.558  gap(M-D)=-0.0232
+  Dijkstra mean_queue=0.25
+
+=== load exo4 (initial=8, exo/slot=4) ===
+  delivery: MAPPO=0.827  Dijkstra=0.836  heuristic=0.428  gap(M-D)=-0.0095
+  Dijkstra mean_queue=0.70
+
+=== load exo6 (initial=12, exo/slot=6) ===
+  delivery: MAPPO=0.735  Dijkstra=0.733  heuristic=0.336  gap(M-D)=+0.0019
+  Dijkstra mean_queue=1.42
+
+=== load exo8 (initial=16, exo/slot=8) ===
+  delivery: MAPPO=0.613  Dijkstra=0.595  heuristic=0.270  gap(M-D)=+0.0182
+  Dijkstra mean_queue=2.37
+
+=== load exo10 (initial=20, exo/slot=10) ===
+  delivery: MAPPO=0.510  Dijkstra=0.511  heuristic=0.226  gap(M-D)=-0.0007
+  Dijkstra mean_queue=3.41
+
+=== load exo14 (initial=28, exo/slot=14) ===
+  delivery: MAPPO=0.370  Dijkstra=0.379  heuristic=0.169  gap(M-D)=-0.0087
+  Dijkstra mean_queue=5.48
+
+=== load exo20 (initial=40, exo/slot=20) ===
+  delivery: MAPPO=0.249  Dijkstra=0.258  heuristic=0.126  gap(M-D)=-0.0099
+  Dijkstra mean_queue=8.72
+
+=== load exo28 (initial=56, exo/slot=28) ===
+  delivery: MAPPO=0.208  Dijkstra=0.215  heuristic=0.111  gap(M-D)=-0.0067
+  Dijkstra mean_queue=10.82
+
+=> wrote experiments\IEEE-LOAD\load_matrix.csv + experiments\IEEE-LOAD\aggregate_load.csv

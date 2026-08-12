@@ -16,6 +16,10 @@ models/
 *.stderr.log
 *.stdout.log
 
+# Training-run telemetry (regenerable; aggregated metrics live in experiments/*.csv)
+runs/
+**/tensorboard/
+
 # OS / editor
 .DS_Store
 Thumbs.db

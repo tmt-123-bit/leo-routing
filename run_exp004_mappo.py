@@ -18,6 +18,7 @@ from scipy import stats
 from mappo_evaluation import (
     EpisodeMetrics,
     GlobalDijkstraPolicy,
+    OspfEcmpPolicy,
     evaluate_policy,
     heuristic_policy,
     load_checkpoint_policy,
@@ -32,7 +33,7 @@ ALL_SCENARIOS = [
     "frequent_break",
     "fault_links",
 ]
-POLICY_SEEDS = [7, 42, 1024]
+POLICY_SEEDS = [7, 42, 1024, 123, 456, 789, 2024, 314]
 METRICS = [
     "delivery_ratio",
     "drop_rate",
@@ -54,12 +55,23 @@ METRICS = [
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--mode", choices=["quick", "full"], default="quick")
+    parser.add_argument(
+        "--mode",
+        choices=["quick", "x2k", "x10k", "full"],
+        default="quick",
+    )
     parser.add_argument("--output", type=Path, default=Path("experiments/EXP-004"))
     parser.add_argument("--cleanmarl", type=Path, default=Path("F:/cleanmarl"))
     parser.add_argument("--project", type=Path, default=Path(__file__).resolve().parent)
     parser.add_argument("--skip-training", action="store_true")
     parser.add_argument("--device", default="cpu")
+    parser.add_argument(
+        "--variant",
+        default="full",
+        help="leo-variant for training (full/no_queue/no_lifetime/no_credit/"
+             "no_packet_context/flat_critic). Default full = headline architecture. "
+             "Use no_lifetime for the mask-free headline (ablation showed the mask hurts).",
+    )
     return parser.parse_args()
 
 
@@ -74,6 +86,31 @@ def mode_config(mode: str) -> Dict:
             "save_every_steps": 5000,
             "batch_size": 4,
             "q_routing_train_episodes": 500,
+        }
+    if mode == "x10k":
+        # Budget-sensitivity preset: 10k steps, all scenarios. Sits between
+        # quick and full; used for the delivery-vs-steps crossover figure.
+        return {
+            "scenarios": ALL_SCENARIOS,
+            "timesteps": 10000,
+            "validation_episodes": 50,
+            "test_episodes": 50,
+            "eval_every_rollouts": 20,
+            "save_every_steps": 2500,
+            "batch_size": 4,
+            "q_routing_train_episodes": 400,
+        }
+    if mode == "x2k":
+        # Budget-sensitivity preset: 2k steps, all scenarios.
+        return {
+            "scenarios": ALL_SCENARIOS,
+            "timesteps": 2000,
+            "validation_episodes": 30,
+            "test_episodes": 30,
+            "eval_every_rollouts": 5,
+            "save_every_steps": 500,
+            "batch_size": 4,
+            "q_routing_train_episodes": 200,
         }
     return {
         "scenarios": ["medium_load", "frequent_break"],
@@ -178,7 +215,7 @@ def train_one(
         "--checkpoint-dir", str(run_root),
         "--run-tag", "EXP-004",
         "--train-seed-start", "9001",
-        "--train-seed-count", "20",
+        "--train-seed-count", "200",
         "--validation-seed-start", "10001",
         "--device", args.device,
     ]
@@ -274,6 +311,7 @@ def paired_tests(rows: list[EpisodeMetrics]) -> list[Dict]:
             "delay_only",
             "full_heuristic",
             "global_dijkstra",
+            "ospf_ecmp",
             "q_routing",
         ]:
             for metric in METRICS:
@@ -345,7 +383,7 @@ def main():
 
     for scenario in config["scenarios"]:
         for policy_seed in POLICY_SEEDS:
-            checkpoint = train_one(args, config, scenario, policy_seed)
+            checkpoint = train_one(args, config, scenario, policy_seed, variant=args.variant)
             checkpoints[f"{scenario}/seed_{policy_seed}"] = str(checkpoint)
             policy, _ = load_checkpoint_policy(checkpoint, device=args.device)
             all_rows.extend(
@@ -372,6 +410,18 @@ def main():
                 scenario,
                 "global_dijkstra",
                 GlobalDijkstraPolicy(),
+                -1,
+                workload_seeds,
+            )
+        )
+        # OSPF/ECMP: the realistic distributed incumbent (shortest-path + ECMP
+        # load split). Same information set as Dijkstra; required baseline for
+        # isolating "learning" gain from "having a sensible SPF policy".
+        all_rows.extend(
+            evaluate_policy(
+                scenario,
+                "ospf_ecmp",
+                OspfEcmpPolicy(seed=1234),
                 -1,
                 workload_seeds,
             )

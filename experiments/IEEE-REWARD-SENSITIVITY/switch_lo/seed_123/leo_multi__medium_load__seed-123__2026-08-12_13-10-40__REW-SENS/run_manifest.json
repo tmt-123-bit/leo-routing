@@ -1,0 +1,13 @@
+{
+  "run_name": "leo_multi__medium_load__seed-123__2026-08-12_13-10-40__REW-SENS",
+  "final_checkpoint": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-REWARD-SENSITIVITY\\switch_lo\\seed_123\\leo_multi__medium_load__seed-123__2026-08-12_13-10-40__REW-SENS\\final.pt",
+  "validation_best_checkpoint": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-REWARD-SENSITIVITY\\switch_lo\\seed_123\\leo_multi__medium_load__seed-123__2026-08-12_13-10-40__REW-SENS\\validation_best.pt",
+  "best_validation_score": [
+    0.7944791666666667,
+    10.629404135946356,
+    -0.005208333333333332,
+    -5.7400246534578
+  ],
+  "environment_steps": 50040,
+  "optimizer_updates": 5004
+}

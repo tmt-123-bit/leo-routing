@@ -1,0 +1,56 @@
+{
+  "experiment": "constellation_scale_transfer",
+  "mode": "transfer",
+  "source_dir": "experiments\\IEEE-REPRO-CHECK",
+  "source_scale": "n24",
+  "scales": [
+    {
+      "label": "n24",
+      "n_planes": 4,
+      "sats_per_plane": 6,
+      "n_sats": 24
+    },
+    {
+      "label": "n66",
+      "n_planes": 6,
+      "sats_per_plane": 11,
+      "n_sats": 66
+    },
+    {
+      "label": "n110",
+      "n_planes": 10,
+      "sats_per_plane": 11,
+      "n_sats": 110
+    },
+    {
+      "label": "n132",
+      "n_planes": 6,
+      "sats_per_plane": 22,
+      "n_sats": 132
+    }
+  ],
+  "scenario": "medium_load",
+  "policy_seeds": [
+    1024,
+    123,
+    2024,
+    314,
+    42,
+    456,
+    7,
+    789
+  ],
+  "workload_seeds": [
+    16001,
+    16002,
+    16003,
+    16004,
+    16005,
+    16006,
+    16007,
+    16008,
+    16009,
+    16010
+  ],
+  "workload": "constant per-sat load (proportional exogenous), episode~sqrt(n) diameter"
+}

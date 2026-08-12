@@ -1,0 +1,73 @@
+{
+  "experiment": "traffic_load_sweep",
+  "scenario": "medium_load",
+  "load_points": [
+    {
+      "label": "exo2",
+      "initial": 4,
+      "exogenous": 2
+    },
+    {
+      "label": "exo4",
+      "initial": 8,
+      "exogenous": 4
+    },
+    {
+      "label": "exo6",
+      "initial": 12,
+      "exogenous": 6
+    },
+    {
+      "label": "exo8",
+      "initial": 16,
+      "exogenous": 8
+    },
+    {
+      "label": "exo10",
+      "initial": 20,
+      "exogenous": 10
+    },
+    {
+      "label": "exo14",
+      "initial": 28,
+      "exogenous": 14
+    },
+    {
+      "label": "exo20",
+      "initial": 40,
+      "exogenous": 20
+    },
+    {
+      "label": "exo28",
+      "initial": 56,
+      "exogenous": 28
+    }
+  ],
+  "policy_seeds": [
+    1024,
+    123,
+    2024,
+    314,
+    42,
+    456,
+    7,
+    789
+  ],
+  "workload_seeds": [
+    18001,
+    18002,
+    18003,
+    18004,
+    18005,
+    18006,
+    18007,
+    18008,
+    18009,
+    18010,
+    18011,
+    18012,
+    18013,
+    18014,
+    18015
+  ]
+}
