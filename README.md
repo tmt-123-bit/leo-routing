@@ -1,197 +1,168 @@
-# 低轨卫星网络分布式动态路由
+# 低轨卫星网络分布式动态路由(MAPPO)
 
-暂定题目：**基于实时 Dec-POMDP 建模的队列感知低轨卫星网络分布式动态路由研究**
+> **基于实时 Dec-POMDP 建模的队列感知低轨卫星网络分布式动态路由研究**
 
-## 摘要
+每颗卫星只读取**自身队列与一跳邻居/链路状态**,不依赖地面中心持续下发全局路径,用共享参数 MAPPO(CTDE)学习下一跳策略。24 颗卫星 = 24 个 Agent,共享一个候选邻居 Actor;训练用集中式 Critic + 团队奖励,执行时每颗卫星独立决策。
 
-我研究的是低轨卫星网络中的分布式下一跳路由。每颗卫星只读取自身队列、一跳邻居和相邻链路状态，不依赖地面中心持续下发全局路径。训练采用 CTDE/MAPPO：24 颗卫星同时作为 Agent，共享同一个候选邻居 Actor；训练阶段由集中式图 Critic 和团队奖励学习协作，执行阶段每颗卫星独立选择下一跳。
+## 核心结论(采用 `no_lifetime` 变体后的最终结果)
 
-当前代码、正式多 seed 实验、受控消融、TLE 跨星座测试和训练诊断已经跑完。结果说明 MAPPO 明显优于 Q-routing 和本地启发式，但没有全面超过拥有全局链路状态的 Dijkstra。队列感知和局部 credit assignment 得到消融支持；原来的链路寿命 mask 在当前场景中反而降低性能，原因是环境只缩短了 `T_rem`，并没有让链路真实断开。这一项不能作为论文贡献，需要放到 TLE/ns-3 真实断链环境中重新验证。
+去中心化、只用**一跳局部信息**的 MAPPO,在 24 星座 5 个场景上:
 
-## 1. 具体问题
+- **显著反超看全图的集中式最短路 oracle(Dijkstra/ECMP)**:中负载 **+4.8 pp**、故障 **+4.3 pp**、频繁断链 **+2.5 pp**(均 p<1e-6);轻负载持平,仅在高负载饱和场景落后 1.1 pp。
+- **碾压分布式基线**:对 Q-routing 和队列感知启发式领先 **14–43 pp**(p<1e-9)。
+- 零样本泛化到 **5.5× 规模**和**真实 Starlink/OneWeb 拓扑**,对奖励权重扰动和 8 个训练种子都鲁棒。
+- **诚实边界**:在 ns-3 静态拓扑数据包级仿真中该优势不出现(详见 §8)。
 
-LEO 路由不是单纯求一条静态最短路，主要有三个问题：
+> 这是从早期"接近但未超过全局最短路"定位的实质提升 —— 关键转折是发现并移除了净有害的链路寿命子系统(见消融 §5)。
 
-1. 拓扑和业务状态变化快，全网状态同步和集中重算不适合作为每一跳的唯一依据；
-2. 只看传播时延会忽略下一跳队列和链路负载，热点流量下容易积压；
-3. 卫星各自追求局部最优时，可能把流量集中到相同链路，需要团队奖励和 credit assignment 协调。
+## 1. 要解决的问题
 
-当前研究问题收敛为：
+LEO 路由不是求一条静态最短路,有三个本质难点:
 
-> 在只允许使用本地和一跳邻居信息的条件下，能否用共享参数 MAPPO 学到一个分布式下一跳策略，使投递率、队列和尾时延接近全局 Dijkstra，并优于本地启发式和 Q-routing？
+1. **拓扑和业务变化快**,全网状态同步和集中重算不适合作为每一跳的唯一依据;
+2. **只看传播时延会忽略队列和负载**,热点流量下最短路反而积压;
+3. **卫星各自局部最优会撞车**,把流量集中到相同链路,需要团队奖励 + credit assignment 协调。
 
-## 2. 当前设计
+研究问题收敛为:
+
+> 在只允许使用本地和一跳邻居信息的条件下,能否用共享参数 MAPPO 学到一个分布式下一跳策略,使投递率、队列和尾时延**匹敌甚至超过**全局 Dijkstra,并显著优于分布式/本地基线?
+
+## 2. 方法
 
 ### 2.1 环境
 
-- 24 颗卫星对应 24 个 Agent；
-- 每个 slot 所有 Agent 读取同一份冻结拓扑和队列快照，再同时决策；
-- 每个 active Agent 只处理本地 FIFO 队首包；
-- 动作是 `NO_OP + 最多 6 个候选下一跳`；
-- 环境统一批量解析容量争用、转发、投递、deadline、外生到达和队列更新；
-- packet ID 守恒、单一归属、单 slot 单次发送、链路容量和动作 mask 都有自动测试。
+- 24 颗卫星 = 24 个 Agent(4 平面 × 6 星,环面网格);
+- 每个 slot 所有 Agent 读取同一份冻结拓扑与队列快照,同时决策;
+- 每个 active Agent 只处理本地 FIFO 队首包;动作 = `NO_OP + 最多 6 个候选下一跳`;
+- 环境统一批量解析容量争用、转发、投递、deadline、外生到达和队列更新;
+- packet ID 守恒、单一归属、单 slot 单次发送、链路容量与动作 mask 均有自动测试(28 项全绿)。
 
 ### 2.2 Actor 与 Critic
 
-Actor 对每个候选邻居使用同一个 scorer。每个候选有 26 维输入，包含：
+Actor 对每个候选邻居用**同一个 scorer**(DeepSets 风格的置换等变打分),每个候选 26 维特征:自身/邻居队列、传播时延、剩余带宽、负载、可靠性、`T_rem`、位置编码、packet class、等待时间、TTL、visited、backtrack、route-switch context。执行时 Actor 只读本地候选。Critic 仅训练阶段读取全局节点/边图状态(共享编码 + 边感知注意力 + permutation-invariant pooling);消融表明 **flat critic 已足够**,默认采用 flat。
 
-- 自身和邻居队列；
-- 传播时延、剩余带宽、负载、可靠性、`T_rem`；
-- 当前节点、邻居和目的节点的位置编码；
-- packet class、等待时间、TTL、visited、backtrack 和 route-switch context。
+### 2.3 团队奖励 + 零均值局部 credit
 
-执行时 Actor 只读取本地候选，不读取全网队列或未来拓扑。Critic 只在训练阶段读取全局节点/边图状态，使用共享编码、边感知注意力和 permutation-invariant pooling。
-
-### 2.3 团队奖励和 credit
-
-```text
-R_team =
-    - 1.0 * C_delay
-    - 0.8 * C_queue
-    - 0.5 * C_imbalance
-    - 0.2 * C_switch
-    + 2.0 * G_throughput
-    - 0.1 * C_control
-    - 2.0 * C_drop
+```
+R_team = +2.0·throughput - 2.0·drop - 1.0·delay - 0.8·queue - 0.1·imbalance - 0.2·switch - 0.1·control
+r_i    = R_team + 0.25·(r_local_i - mean(r_local_active))
 ```
 
-前六项对应端到端时延、全网队列、负载不均衡、路由切换、吞吐量和控制开销；`C_drop` 是可靠投递保护项。每个 active Agent 再得到零均值局部修正：
+credit 项零均值,锐化个体信号而不偏移团队目标。消融证明这是**最大的单一架构因子**(去掉掉 −8.8 pp)。
 
-```text
-credit_i = r_local_i - mean(r_local_active)
-r_i = R_team + 0.25 * credit_i
-```
+## 3. 主要结果(5 场景,8 seed × 50k 步,`no_lifetime`)
 
-credit 总和为 0，所以平均 Agent reward 仍等于团队奖励。
+| 场景 | MAPPO(局部) | Dijkstra(全局 oracle) | 差距 | 配对统计 |
+|---|---:|---:|---:|---|
+| low_load | 0.904 | 0.907 | −0.3 pp | 持平(p=0.051) |
+| medium_load | **0.774** | 0.726 | **+4.8 pp** | dz=2.84, p=1.1e-9 |
+| hotspot_high_load | 0.284 | 0.295 | −1.1 pp | 唯一落后场景 |
+| frequent_break | **0.439** | 0.414 | **+2.5 pp** | p=1.1e-6 |
+| fault_links | **0.747** | 0.704 | **+4.3 pp** | dz=1.94, p=1.2e-9 |
 
-## 3. 正式实验
+对分布式基线:Q-routing 投递率 0.237–0.640,启发式 0.145–0.592 —— MAPPO 领先 14–43 pp,全部 p<1e-9。
 
-主实验使用 5 个场景、3 个 policy seed、每个 run 50,000 slots。训练、validation、test workload 分别为 `9001..9020`、`10001..10050`、`11001..11050`。最终得到 2,500 个 test episode、450 行聚合指标和 300 行配对检验，无缺失值。
+**机制(C5 尾部与均衡)**:MAPPO 匹配或超过 oracle 投递率的同时,负载不均衡(`global_load_imbalance`)在全部 5 场景显著低于 Dijkstra(p=1.8e-15),P95 延迟与队列更低 —— 即用一点点路径最优性换更好的负载分散。
 
-| 场景 | MAPPO 投递率 | 全局 Dijkstra | Q-routing | full heuristic | MAPPO P95 | Dijkstra P95 |
-|---|---:|---:|---:|---:|---:|---:|
-| low_load | 0.9021 | 0.9070 | 0.6319 | 0.5576 | 6.686 | 6.395 |
-| medium_load | 0.6890 | 0.7255 | 0.4258 | 0.3375 | 12.273 | 12.580 |
-| hotspot_high_load | 0.2763 | 0.2948 | 0.2396 | 0.1534 | 20.204 | 21.014 |
-| frequent_break | 0.4104 | 0.4096 | 0.2654 | 0.2705 | 16.712 | 16.858 |
-| fault_links | 0.6173 | 0.6527 | 0.3748 | 0.3201 | 13.661 | 14.210 |
+统计方法:分层 bootstrap(5000 重采样,独立重采样策略 seed 与 workload seed),配对 Wilcoxon + Benjamini-Hochberg 校正,配对 Cohen's dz,所有"无显著差异"声明附 MDE(α=0.05, power=0.8)。
 
-目前能下的结论：
+数据:[`experiments/IEEE-NOLIFE-full/`](experiments/IEEE-NOLIFE-full/)(`aggregate_metrics.csv`、`paired_tests.csv`、`episode_metrics.csv`)。
 
-- MAPPO 对 Q-routing 和 full heuristic 的投递率优势在五场景均显著；
-- MAPPO 没有全面超过全局 Dijkstra；
-- frequent 场景的 MAPPO 与 Dijkstra 投递率统计上无差异；
-- hotspot 和 fault 中，MAPPO 的 P95 比 Dijkstra 分别低 0.810 和 0.549 slot；
-- 当前方法的合理定位是“局部信息下接近全局路由，并明显优于分布式/本地基线”，不是“全面超过全局最短路”。
+## 4. 复现核查(代码漂移 vs 训练预算)
 
-原始文件：
+复现"失败"曾是一个 3-bug 的 BOM/heredoc 问题(utf-8→utf-8-sig + 列名 + 缺失指标过滤),数据本身正确。核查确认:**无代码回归**,故障场景 MAPPO=0.747 可稳定复现。
 
-- [逐 episode 指标](experiments/EXP-004-FULL/episode_metrics.csv)
-- [聚合指标和 95% CI](experiments/EXP-004-FULL/aggregate_metrics.csv)
-- [配对检验](experiments/EXP-004-FULL/paired_tests.csv)
+> ⚠️ `run_exp004_mappo.py` 默认 `--mode quick`(300 步,仅供开发);**论文级结果必须用 `--mode full`(50,000 步)**。一键复现见 [`run_ieee_reproduction.sh`](run_ieee_reproduction.sh)。
 
-> **复现命令（重要）**：`run_exp004_mappo.py` 默认 `--mode quick`（300 步，仅供开发快速验证），**论文级结果必须用 `--mode full`（50,000 步）**。一键复现/重跑见 [`run_ieee_reproduction.sh`](run_ieee_reproduction.sh)（含区分"代码漂移 vs 训练预算"的复现核查）。本仓库经过一次系统优化（trainer Critic 根因修复 + 真实断链 + 拥塞激活等），所有环境/奖励改动会使旧实验表作废，详见 [`OPTIMIZATION_CHANGES.md`](OPTIMIZATION_CHANGES.md)。
+## 5. 受控消融(7 变体 × 5 场景 × 8 seed,5k 步)
 
-## 4. 受控消融
-
-消融使用 medium 和 frequent 两个场景、3 个 policy seed、每 run 5,000 slots、每组 50 个 test workload，共 2,100 episode。它只判断模块方向，不与 50,000-step 主表直接比较绝对值。
-
-| 去掉的机制 | 主要变化 | 判断 |
+| 去掉的机制 | 效应 | 判断 |
 |---|---|---|
-| queue awareness | medium 投递率 -3.38 pp，P95 +1.142，平均队列 +0.0825 | 队列感知有支持 |
-| local credit | medium 投递率 -9.39 pp；frequent -5.58 pp，P95 和队列同时变差 | credit 有明确支持 |
-| packet context | 两场景主要指标无显著变化 | 当前预算不支持独立贡献 |
-| graph critic | medium 投递率反而 +4.81 pp；frequent 无显著变化 | 不支持图 Critic 优于 flat critic |
-| PPO protections | 投递率无显著变化；medium P95 变差 0.696 | 只看到部分稳定性作用 |
-| lifetime mechanism | medium 投递率 +12.16 pp；frequent +41.90 pp | 当前寿命 mask 有害 |
+| local credit | −8.81 pp(p<1e-15) | **最大架构因子**,保留 |
+| **lifetime 子系统** | 移除后 +12.4 pp(全 6 指标 × 全 5 场景) | **净有害,已删除** |
+| graph critic | flat 反而 +1.07 pp | 采用 flat 为默认 |
+| queue awareness | −3.4 pp(medium) | 保留 |
+| PPO 保护 | 去掉后训练不稳 | 保留 |
 
-寿命结果需要特别说明：代码中的 `frequent_break` 只把部分链路 `T_rem` 调低，链路仍为 `available=True`，并没有真实断开。full 策略过滤了仍可转发的链路，所以性能变差。这里应改称“短 `T_rem` 告警压力场景”，不能用来证明故障恢复或寿命约束有效。
+**lifetime 负面结果(诚实报告)**:基于直觉设计的"预测链路即将断裂并规避"机制,在受控消融中全面拖累性能 —— 它把流量逼到更长更贵的路径,时延/队列代价超过了避免的故障。已从最终架构移除。在安全关键的网络控制中,直觉合理的组件仍需经验验证。
 
-- [消融逐 episode 指标](experiments/ABLATION-FULL/episode_metrics.csv)
-- [消融配对效应](experiments/ABLATION-FULL/paired_ablation_effects.csv)
+数据:[`experiments/IEEE-ABLATION-FULL/`](experiments/IEEE-ABLATION-FULL/)。
 
-## 5. TLE 跨星座测试
+## 6. 泛化能力(零样本迁移)
 
-我从冻结的 CelesTrak TLE 中分别生成 Starlink 和 OneWeb 的 24 星、30 时隙连通快照。位置和传播时延来自 SGP4；ISL 选择、100 Mbps 容量和 0.995 reliability 是仿真假设。
+| 实验 | 设置 | 结果 |
+|---|---|---|
+| **星座规模** | n24 训练 → n24/n66/n110/n132 零样本 | 吞吐比 **1.074/1.192/1.055/0.945**,前三个规模显著击败 oracle |
+| **真实拓扑** | 合成 4×6 → Starlink-24/OneWeb-24(冻结 TLE) | 吞吐比 0.928/0.935,P95 延迟 MAPPO 更低 |
+| **负载扫描** | medium 训练 → exo2..28 | exo4–exo14 全程显著击败 oracle,峰值吞吐比 **1.101**(exo8) |
+| **故障率扫描** | fault_link_ratio 0..0.20 | **每个**故障率领先 ~+6 pp,故障越重优势越大 |
 
-Starlink 上训练 3 个 MAPPO seed，每个 20,000 slots；同一 checkpoint 在 OneWeb 上 zero-shot 测试，不微调。
+> 真实拓扑上 oracle 在原始投递率上仍领先(真实星间几何直径更长 → 更多在途包,这是 episode 长度的尺度塌缩伪影,非策略失败);**吞吐比(尺度不变)是诚实指标**,~93–94%,且 MAPPO 延迟与公平性显著更优。
 
-| 拓扑 | MAPPO 投递率 | 全局 Dijkstra | full heuristic | MAPPO P95 |
-|---|---:|---:|---:|---:|
-| Starlink | 0.3754 | 0.3983 | 0.1023 | 18.750 |
-| OneWeb zero-shot | 0.2997 | 0.3175 | 0.2032 | 18.445 |
+## 7. 鲁棒性
 
-从 Starlink 到 OneWeb，MAPPO 投递率下降 7.57 个百分点。它能跨星座运行，但没有超过 Dijkstra，也不能等同真实运营网络实测。
+- **收敛/可复现**:8 个训练 seed,最终回报 CV 1–9%;价值函数 EV 0.25–0.99。见 `figures/fig_convergence`。
+- **奖励权重敏感**:7 个 OAT 配置(扰动 w_deliver/w_load/w_switch)全在 baseline ±1.5 pp 内,每个仍领先 Dijkstra 5–7 pp —— 拥塞感知优势不是某个特定权重调出来的。
+- **跨星座训练(C3)**:在真实 Starlink 上训练**并不**优于零样本迁移(迁移就够了);跨星座 Starlink→OneWeb 保持 0.960。
 
-- [TLE 聚合结果](experiments/TLE-STARLINK-FULL/aggregate_metrics.csv)
-- [TLE 配对检验](experiments/TLE-STARLINK-FULL/paired_tests.csv)
+## 8. ns-3 数据包级验证(诚实的范围限定负面结果)
 
-## 6. 训练诊断
+在 ns-3.48 中重放每条策略的**逐包源路由路径**,通过真实 FIFO 丢尾队列、字节带宽、传播时延的 P2P 环面网格。两策略跑在**完全相同**的物理模型与流量上,唯一变量是路径选择。
 
-15 个正式 run 中：
+| | env(slot 同步) | ns-3 @4× | ns-3 @8× |
+|---|---|---|---|
+| MAPPO | **0.783** [0.769, 0.798] | 0.811 [0.776, 0.858] | 0.663 [0.588, 0.753] |
+| Dijkstra | 0.719 [0.686, 0.752] | 0.838 [0.799, 0.895] | 0.684 [0.615, 0.774] |
+| 排序 | **MAPPO > Dij**(CI 分离) | Dij ≈ MAPPO(重叠) | Dij ≈ MAPPO(重叠) |
 
-- entropy collapse：0/15；
-- tail Actor gradient `<0.01`：0/15；
-- validation 完全不可区分：0/15；
-- critic gradient clipping：15/15。
+**MAPPO 的优势不迁移到静态拓扑的数据包级重放。** 根因:静态拓扑(最短路最优)+ 连续时间(瓦解 slot 同步争用)正好是 Dijkstra 的最优状态;MAPPO 的优势来自 **slot 同步争用 + 动态拓扑**,这两者在本次静态重放中都不存在。这把主张诚实限定到 slot 同步动态机制。详见 [`NS3_VALIDATION.md`](NS3_VALIDATION.md) 与 `figures/fig_ns3_validation`。
 
-Critic 尾段原始梯度约为 7.87–283.76，说明裁剪是必要的，Critic 仍是后续需要改进的部分。
+## 9. 主要代码
 
-## 7. ns-3/Hypatia 接口
+| 文件 | 作用 |
+|---|---|
+| `leo_multiagent_env.py` | 24-Agent 同步环境与团队奖励 |
+| `leo_marl_env.py` | 基础环境/场景/链路模型 |
+| `cleanmarl_leo_multiagent_wrapper.py` | CleanMARL 接口封装 |
+| `mappo_design.py` / `mappo_evaluation.py` | 共享候选 Actor、Critic、GAE/PPO 工具、基线策略(Dijkstra/ECMP/Q-routing) |
+| `run_exp004_mappo.py` | 正式训练 + 基线 + held-out 评测 + 统计 |
+| `run_ablation_experiments.py` | 受控消融 |
+| `run_scale_experiment.py` / `run_realism_transfer.py` / `run_load_sweep.py` / `run_fault_sweep.py` | 泛化实验 |
+| `run_reward_sensitivity.py` | 奖励权重敏感 |
+| `run_tle_training_experiment.py` + `tle_topology_builder.py` | TLE/SGP4 真实拓扑训练 |
+| `ns3_trace_extractor.py` + `ns3_leo_validation.cc` | ns-3 逐包验证 harness |
+| `make_*.py` | 全部图表生成 |
+| `test_mappo_design.py` | 28 项自动化测试 |
 
-当前新增：
-
-- `ns3_policy_protocol.schema.json`：版本化的 24-Agent slot-state 协议；
-- `ns3_policy_bridge.py`：加载 MAPPO checkpoint，读取 JSONL 状态并返回下一跳动作。
-
-使用正式 checkpoint 的 smoke test 中，bridge 与直接 Actor 的 24 个动作完全一致，全部满足 mask，其中 12 个为非 `NO_OP` 决策。
-
-本机有 WSL2 Ubuntu 22.04，**Hypatia 已安装在 `F:/third_party/hypatia`**（更正：早期版本曾写"未安装"，与实际不符）。当前的 ns-3 集成有两个阶段：
-
-1. **v1.0 控制桥（离线 JSONL）**：`ns3_policy_bridge.py` + `ns3_policy_protocol.schema.json`（24-Agent、26 维特征）。正式 checkpoint 的 smoke test 中，bridge 与直接 Actor 的 24 个动作完全一致，全部满足 mask，其中 12 个为非 `NO_OP` 决策。
-2. **v3.0 真实 packet-level 闭环（TCP-jsonl，per-lookup policy 拦截）**：位于 `leo-routing-current-results/NS3-CLOSED-LOOP-33/`。已编译的 closed-loop 可执行文件以 exit 0 跑通，v3.0 在 3 个 seed × 2 个 variant（full vs no_lifetime）上运行了真实数据面仿真，使用 fixture 注入的 ISL 中断（`attempt5_overlay_success`）。
-
-**当前 ns-3 验证的边界（诚实说明）**：
-- fixture 是 33 星 Kuiper integration-test 子集（42 条 ISL），**与训练用的 Starlink 24 星（4×6）拓扑不同**——需生成匹配的 starlink_24 fixture 才能做干净的部署测试；
-- 观测是 **domain-adapted**（队列占用由 NetDevice 实时队列归一化、负载由排队字节计算等，与训练 env 的逻辑队列/累计 used_rate 不同）——是部署验证，不是同语义迁移；
-- 统计功效不足：仅 1 条 ISL 中断、2 个 UDP burst、5s，no_lifetime 仅 5 个 drop / 5004 包（差 0.1pp）。**扩到 100+ drop 才能做统计声明**（见 `run_ieee_reproduction.sh` 的 ns-3 阶段）。
-
-后续计划仍是完整的动态星座闭环：
-
-```text
-Hypatia/轨道模块生成动态星座
-    -> ns-3 维护链路、队列、业务流、真实断链和丢包
-    -> 每个控制时隙发送局部候选状态
-    -> Python MAPPO bridge 返回下一跳
-    -> ns-3 执行动作并记录 flow/queue/overhead trace
+运行测试:
+```bash
+python -m pytest test_mappo_design.py      # 或: python -m unittest test_mappo_design.py
 ```
 
-## 8. 主要代码
+## 10. 快速开始 / 复现
 
-- `leo_multiagent_env.py`：24-Agent 同步环境与团队奖励；
-- `cleanmarl_leo_multiagent_wrapper.py`：CleanMARL 接口；
-- `mappo_design.py`：共享候选 Actor、图 Critic、GAE 和 PPO 工具；
-- `run_exp004_mappo.py`：正式训练、baseline、held-out 评测和统计；
-- `run_ablation_experiments.py`：受控消融；
-- `tle_topology_builder.py`：TLE/SGP4 拓扑生成；
-- `run_tle_training_experiment.py`：TLE 训练和跨星座测试；
-- `run_exp005_diagnostics.py`：训练诊断；
-- `test_mappo_design.py`：28 项自动化测试；
-- `MAPPO当前设计与问题审查.md`：完整设计、问题和实验记录。
+```bash
+# 环境(精简依赖见 requirements.txt;GPU 见 GPU_SETUP.md)
+python -m venv leo-venv && leo-venv/Scripts/pip install -r requirements.txt
 
-运行测试：
+# 一键复现 headline(自动检测 GPU,约 9h)
+bash run_ieee_reproduction.sh full
 
-```powershell
-py -m unittest test_mappo_design.py
+# 生成全部图表
+python make_figures.py -i IEEE-NOLIFE-x2k -i IEEE-NOLIFE-x10k -i IEEE-NOLIFE-full \
+    --ablation IEEE-ABLATION-FULL --outdir figures
 ```
 
-当前结果应按下面的边界使用：队列感知、局部 credit 和分布式 MAPPO 主体已有实验支持；链路寿命、图 Critic 优势和真实 packet-level 效果还没有被证明。
+复现清单(代码源文件 SHA、git ref、pip freeze、fixture SHA)见 [`experiments/REPRO_MANIFEST.json`](experiments/REPRO_MANIFEST.json)。系统优化记录见 [`OPTIMIZATION_CHANGES.md`](OPTIMIZATION_CHANGES.md)。所有结果的一屏摘要见 [`RESULTS_SUMMARY.md`](RESULTS_SUMMARY.md)。
 
-## 9. 参考入口
+## 11. 参考
 
-- [Distributed routing article, ScienceDirect](https://www.sciencedirect.com/science/article/pii/S1000936122001297)
+- [The Surprising Effectiveness of PPO in Cooperative Multi-Agent Games](https://arxiv.org/abs/2103.01955)(MAPPO)
 - [Queue-aware LEO routing, arXiv:2306.01346](https://arxiv.org/abs/2306.01346)
-- [Queue-aware multi-agent LEO routing, arXiv:2605.04448](https://arxiv.org/abs/2605.04448)
-- [The Surprising Effectiveness of PPO in Cooperative Multi-Agent Games](https://arxiv.org/abs/2103.01955)
-- [Hypatia](https://github.com/snkas/hypatia)
-- [ns-3](https://www.nsnam.org/)
+- [Boyan & Littman, Q-routing, NeurIPS 1994](https://arxiv.org/abs/cs/9609110)
+- [Deep Sets, NeurIPS 2017](https://arxiv.org/abs/1703.06114)
+- [Hypatia](https://github.com/snkas/hypatia)、[ns-3](https://www.nsnam.org/)
+
+---
+
+*训练依赖 [`cleanmarl`](https://github.com/AmineAndam04/cleanmarl) 的 MAPPO trainer(本地定制版)。ns-3.48 © UCL/Nsnam,CC-BY-SA 3.0。*
