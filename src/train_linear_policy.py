@@ -26,8 +26,8 @@ from leo_marl_env import LeoRoutingEnv, SCENARIOS
 
 
 FEATURE_DIM = LeoRoutingEnv.candidate_feature_dim
-MODEL_DIR = Path(__file__).resolve().parent / "models"
-OUTPUT_DIR = Path(__file__).resolve().parent / "outputs"
+MODEL_DIR = Path(__file__).resolve().parent.parent / "models"
+OUTPUT_DIR = Path(__file__).resolve().parent.parent / "outputs"
 MODEL_PATH = MODEL_DIR / "linear_policy_weights.npz"
 LOG_PATH = OUTPUT_DIR / "linear_policy_training_log.csv"
 

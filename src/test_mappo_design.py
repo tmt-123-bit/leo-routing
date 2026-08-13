@@ -438,7 +438,7 @@ class MultiAgentEnvironmentTests(unittest.TestCase):
 
 class RealTopologyTests(unittest.TestCase):
     def test_selected_tle_builds_connected_snapshots(self):
-        path = Path(__file__).resolve().parent / "data" / "starlink_24_selected.tle"
+        path = Path(__file__).resolve().parent.parent / "data" / "starlink_24_selected.tle"
         if not path.exists():
             self.skipTest("selected TLE fixture is not present")
         satellites = read_three_line_tle(path)
@@ -453,7 +453,7 @@ class RealTopologyTests(unittest.TestCase):
         self.assertTrue(all(row["delay_ms"] > 0 for row in rows))
 
     def test_oneweb_selection_uses_configurable_altitude(self):
-        path = Path(__file__).resolve().parent / "data" / "oneweb_2026-07-15.tle"
+        path = Path(__file__).resolve().parent.parent / "data" / "oneweb_2026-07-15.tle"
         if not path.exists():
             self.skipTest("OneWeb TLE fixture is not present")
         selected = select_four_by_six(

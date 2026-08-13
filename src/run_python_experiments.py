@@ -210,7 +210,7 @@ def main() -> None:
                 results.append(run_episode(scenario, policy, ep))
 
     rows = aggregate(results)
-    out_dir = Path(__file__).resolve().parent / "outputs"
+    out_dir = Path(__file__).resolve().parent.parent / "outputs"
     write_csv(out_dir / "python_policy_eval_metrics.csv", rows)
 
     print("Generated:", out_dir / "python_policy_eval_metrics.csv")

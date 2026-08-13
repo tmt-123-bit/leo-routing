@@ -41,6 +41,6 @@ echo "### [4/4] verify"
 "$PY" -c "import torch; print('torch', torch.__version__, '| cuda build', torch.version.cuda, '| cuda_available', torch.cuda.is_available(), '| gpu_count', torch.cuda.device_count())"
 echo "### project imports + 28 tests"
 cd /f/leo-routing-preliminary-matlab
-"$PY" -c "import cleanmarl_leo_multiagent_wrapper, mappo_design, mappo_evaluation; print('project imports OK')"
-"$PY" -m unittest test_mappo_design.py 2>&1 | tail -5
+(cd src && "$PY" -c "import cleanmarl_leo_multiagent_wrapper, mappo_design, mappo_evaluation; print('project imports OK')")
+(cd src && "$PY" -m unittest test_mappo_design) 2>&1 | tail -5
 echo "### DONE. cuda_available flips True after the NVIDIA driver update (512.36 -> 610.88) + reboot."

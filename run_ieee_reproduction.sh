@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # =============================================================================
 # IEEE experiment suite — reproduction check + full re-run with the optimized
-# trainer/env/training config. Read OPTIMIZATION_CHANGES.md first.
+# trainer/env/training config.
 #
 # WHY THIS EXISTS: every env/reward change in the optimization pass INVALIDATES
 # prior tables (EXP-004-FULL etc.). They must be regenerated as ONE batch.
@@ -29,11 +29,11 @@ if [[ -z "${PY:-}" ]]; then
   fi
 fi
 STAGE=${1:-all}
-PROJ="F:/leo-routing-preliminary-matlab"
+PROJ="F:/leo-routing-preliminary-matlab/src"
 CLEANMARL="F:/cleanmarl"
 DEVICE=${DEVICE:-cpu}   # set DEVICE=cuda if a GPU is available -> large speedup
 
-run_exp004() { $PY run_exp004_mappo.py --cleanmarl "$CLEANMARL" --project "$PROJ" --device "$DEVICE" "$@"; }
+run_exp004() { $PY src/run_exp004_mappo.py --cleanmarl "$CLEANMARL" --project "$PROJ" --device "$DEVICE" "$@"; }
 
 # -----------------------------------------------------------------------------
 # STEP 0 — smoke: does the optimized code train at all? (~1 min)
@@ -94,7 +94,7 @@ fi
 # -----------------------------------------------------------------------------
 if [[ "$STAGE" == "all" ]]; then
   echo "### STEP 3 ablation (all 5 scenarios, FULL) -> experiments/IEEE-ABLATION-FULL"
-  $PY run_ablation_experiments.py --scenarios low_load medium_load hotspot_high_load frequent_break fault_links \
+  $PY src/run_ablation_experiments.py --scenarios low_load medium_load hotspot_high_load frequent_break fault_links \
      --mode full --output experiments/IEEE-ABLATION-FULL --cleanmarl "$CLEANMARL" --project "$PROJ" --device "$DEVICE" || \
   echo "NOTE: if --scenarios flag differs, edit the command (run_ablation_experiments.py default = 2 scenarios)"
 fi
@@ -126,7 +126,7 @@ if [[ "$STAGE" == "mde" || "$STAGE" == "all" ]]; then
   FULL="experiments/IEEE-EXP-004-FULL/episode_metrics.csv"
   if [[ -f "$FULL" ]]; then
     echo "### STEP 5 MDE report -> experiments/IEEE-EXP-004-FULL/mde_report.csv"
-    $PY compute_mde.py --episodes "$FULL" || echo "NOTE: MDE step failed (non-fatal)"
+    $PY src/compute_mde.py --episodes "$FULL" || echo "NOTE: MDE step failed (non-fatal)"
   else
     echo "### STEP 5 skipped — $FULL not found (run STEP 2 full first)"
   fi

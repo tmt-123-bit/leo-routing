@@ -30,7 +30,7 @@ import numpy as np
 from cleanmarl_leo_wrapper import CleanMARLLeoWrapper
 
 
-OUTPUT_DIR = Path(__file__).resolve().parent / "outputs"
+OUTPUT_DIR = Path(__file__).resolve().parent.parent / "outputs"
 ROLLOUT_PREVIEW_PATH = OUTPUT_DIR / "cleanmarl_rollout_preview.csv"
 
 

@@ -156,7 +156,7 @@ def _to_bool(x) -> bool:
 
 
 if __name__ == "__main__":
-    demo_path = Path(__file__).resolve().parent / "outputs" / "hypatia_topology_demo.csv"
+    demo_path = Path(__file__).resolve().parent.parent / "outputs" / "hypatia_topology_demo.csv"
     write_demo_csv(demo_path)
     provider = HypatiaTopologyProvider.from_csv(demo_path)
     print("Wrote demo CSV:", demo_path)

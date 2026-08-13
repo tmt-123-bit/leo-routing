@@ -119,6 +119,8 @@ credit 项零均值,锐化个体信号而不偏移团队目标。消融证明这
 
 ## 9. 主要代码
 
+所有源代码均在 [`src/`](src/) 目录下。脚本以 `python src/<脚本>.py` 运行(Python 会自动把 `src/` 加入路径);测试在 `src/` 内用 `unittest` 运行。
+
 | 文件 | 作用 |
 |---|---|
 | `leo_multiagent_env.py` | 24-Agent 同步环境与团队奖励 |
@@ -136,7 +138,7 @@ credit 项零均值,锐化个体信号而不偏移团队目标。消融证明这
 
 运行测试:
 ```bash
-python -m pytest test_mappo_design.py      # 或: python -m unittest test_mappo_design.py
+cd src && python -m unittest test_mappo_design -v      # 28 项自动化测试
 ```
 
 ## 10. 快速开始 / 复现
@@ -149,8 +151,8 @@ python -m venv leo-venv && leo-venv/Scripts/pip install -r requirements.txt
 bash run_ieee_reproduction.sh full
 
 # 生成全部图表
-python make_figures.py -i IEEE-NOLIFE-x2k -i IEEE-NOLIFE-x10k -i IEEE-NOLIFE-full \
-    --ablation IEEE-ABLATION-FULL --outdir figures
+python src/make_figures.py -i experiments/IEEE-NOLIFE-x2k -i experiments/IEEE-NOLIFE-x10k -i experiments/IEEE-NOLIFE-full \
+    --ablation experiments/IEEE-ABLATION-FULL --outdir figures
 ```
 
 复现清单(代码源文件 SHA、git ref、pip freeze、fixture SHA)见 [`experiments/REPRO_MANIFEST.json`](experiments/REPRO_MANIFEST.json)。
