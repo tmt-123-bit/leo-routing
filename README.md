@@ -115,7 +115,7 @@ credit 项零均值,锐化个体信号而不偏移团队目标。消融证明这
 | Dijkstra | 0.719 [0.686, 0.752] | 0.838 [0.799, 0.895] | 0.684 [0.615, 0.774] |
 | 排序 | **MAPPO > Dij**(CI 分离) | Dij ≈ MAPPO(重叠) | Dij ≈ MAPPO(重叠) |
 
-**MAPPO 的优势不迁移到静态拓扑的数据包级重放。** 根因:静态拓扑(最短路最优)+ 连续时间(瓦解 slot 同步争用)正好是 Dijkstra 的最优状态;MAPPO 的优势来自 **slot 同步争用 + 动态拓扑**,这两者在本次静态重放中都不存在。这把主张诚实限定到 slot 同步动态机制。详见 [`NS3_VALIDATION.md`](NS3_VALIDATION.md) 与 `figures/fig_ns3_validation`。
+**MAPPO 的优势不迁移到静态拓扑的数据包级重放。** 根因:静态拓扑(最短路最优)+ 连续时间(瓦解 slot 同步争用)正好是 Dijkstra 的最优状态;MAPPO 的优势来自 **slot 同步争用 + 动态拓扑**,这两者在本次静态重放中都不存在。这把主张诚实限定到 slot 同步动态机制。详见 `figures/fig_ns3_validation`。
 
 ## 9. 主要代码
 
@@ -142,7 +142,7 @@ python -m pytest test_mappo_design.py      # 或: python -m unittest test_mappo_
 ## 10. 快速开始 / 复现
 
 ```bash
-# 环境(精简依赖见 requirements.txt;GPU 见 GPU_SETUP.md)
+# 环境(精简依赖见 requirements.txt;启用 GPU 需安装对应 CUDA 版本的 PyTorch)
 python -m venv leo-venv && leo-venv/Scripts/pip install -r requirements.txt
 
 # 一键复现 headline(自动检测 GPU,约 9h)
@@ -153,7 +153,7 @@ python make_figures.py -i IEEE-NOLIFE-x2k -i IEEE-NOLIFE-x10k -i IEEE-NOLIFE-ful
     --ablation IEEE-ABLATION-FULL --outdir figures
 ```
 
-复现清单(代码源文件 SHA、git ref、pip freeze、fixture SHA)见 [`experiments/REPRO_MANIFEST.json`](experiments/REPRO_MANIFEST.json)。系统优化记录见 [`OPTIMIZATION_CHANGES.md`](OPTIMIZATION_CHANGES.md)。所有结果的一屏摘要见 [`RESULTS_SUMMARY.md`](RESULTS_SUMMARY.md)。
+复现清单(代码源文件 SHA、git ref、pip freeze、fixture SHA)见 [`experiments/REPRO_MANIFEST.json`](experiments/REPRO_MANIFEST.json)。
 
 ## 11. 参考
 
