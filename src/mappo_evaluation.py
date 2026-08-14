@@ -342,11 +342,14 @@ def train_q_routing(
     episodes: int = 200,
     workload_seed_start: int = 9001,
     workload_seed_count: int = 20,
+    variant: str = "full",
 ) -> QRoutingPolicy:
     policy = QRoutingPolicy(seed=seed)
     for episode in range(episodes):
         workload_seed = workload_seed_start + episode % workload_seed_count
-        wrapper = CleanMARLLeoMultiAgentWrapper(scenario=scenario, seed=workload_seed)
+        wrapper = CleanMARLLeoMultiAgentWrapper(
+            scenario=scenario, seed=workload_seed, variant=variant
+        )
         observation, _ = wrapper.reset(seed=workload_seed)
         policy.bind(wrapper)
         terminated = truncated = False

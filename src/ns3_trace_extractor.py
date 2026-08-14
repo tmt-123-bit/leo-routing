@@ -15,7 +15,16 @@ Outputs (args.outdir / experiments/IEEE-NS3/):
   topology.csv            u,v,is_cross,delay_ms  (static 4x6 torus, avg delays)
   packets_<policy>.csv    episode,packet_id,src,dst,class,created_slot,delivered,
                           delivery_slot,hop_count,delay_ms,path,drop_reason
+  links_<policy>.csv      episode,slot,u,v  (per-slot DOWN directed links; only
+                          non-empty for break scenarios e.g. frequent_break.
+                          Reconstructed post-episode via base._build_topology(t),
+                          which is deterministic in t given the seed-initialized
+                          fault sets -> exactly the availability the policy saw)
   env_summary_<policy>.csv  per-episode slot-sim numbers (ground truth to compare)
+
+main() prints the episode horizon (cfg.episode_slots) and the per-class deadline
+slots (cfg.packet_class_deadlines) so the ns-3 run gets matching --episode-slots
+/ --deadline-slots arguments.
 """
 from __future__ import annotations
 import argparse, csv
@@ -89,7 +98,7 @@ def run_episode(wrapper, policy, seed: int) -> None:
 def dump_policy_traces(policy, policy_name: str, variant: str, scenario: str,
                        workload_seeds: list[int], outdir: Path) -> None:
     fct = make_wrapper_factory(variant, scenario)
-    pkt_rows, ep_rows = [], []
+    pkt_rows, ep_rows, link_rows = [], [], []
     binder = getattr(policy, "bind", None)
     for ep, wl in enumerate(workload_seeds):
         wrapper = fct(wl)
@@ -97,6 +106,15 @@ def dump_policy_traces(policy, policy_name: str, variant: str, scenario: str,
             binder(wrapper)
         run_episode(wrapper, policy, wl)
         env = wrapper.env
+        # Reconstruct the per-slot link-availability schedule the policy actually
+        # faced (availability is deterministic in t given the per-seed fault sets;
+        # used_rate feeds only features, not `available`). Dump DOWN entries only.
+        horizon = env.cfg.episode_slots
+        for s in range(1, horizon + 1):
+            topo = env.base._build_topology(s)
+            for (u, v), link in sorted(topo.items()):
+                if not link.available:
+                    link_rows.append({"episode": ep, "slot": s, "u": u, "v": v})
         for pid in sorted(env.generated):
             p = env.packets[pid]
             delivered = int(pid in env.delivered)
@@ -137,7 +155,12 @@ def dump_policy_traces(policy, policy_name: str, variant: str, scenario: str,
     with open(sk, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=list(ep_rows[0].keys()))
         w.writeheader(); w.writerows(ep_rows)
-    print(f"=> wrote {pk} ({len(pkt_rows)} packets) + {sk} ({len(ep_rows)} eps)")
+    lk = outdir / f"links_{policy_name}.csv"
+    with open(lk, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=["episode", "slot", "u", "v"])
+        w.writeheader(); w.writerows(link_rows)
+    print(f"=> wrote {pk} ({len(pkt_rows)} packets) + {sk} ({len(ep_rows)} eps) "
+          f"+ {lk} ({len(link_rows)} down-link entries)")
 
 
 def main():
@@ -156,6 +179,10 @@ def main():
     tw = make_wrapper_factory("no_lifetime", args.scenario)(wl[0])
     tw.reset(seed=wl[0])
     dump_topology(tw.env, args.outdir / "topology.csv")
+    # horizon + per-class deadline slots -> pass to the ns-3 run as
+    # --episode-slots / --deadline-slots (must match the env clock exactly)
+    print(f"=> episode_slots={tw.env.cfg.episode_slots} "
+          f"packet_class_deadlines={tw.env.cfg.packet_class_deadlines}")
     tw.close()
     print(f"=> wrote topology.csv ({sum(1 for _ in open(args.outdir/'topology.csv'))-1} links)")
 

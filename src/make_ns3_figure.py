@@ -1,11 +1,14 @@
-"""ns-3 packet-level validation figure.
+"""ns-3 packet-level validation figure (STATIC topology, corrected).
 
-Honest finding: in a static-topology continuous-time ns-3 model, the MAPPO
-congestion-awareness advantage observed in the slot-synchronous env (MAPPO 0.783
-> Dijkstra 0.719, +6.4pp) does NOT transfer — Dijkstra edges ahead on delivery
-under load (within ~noise). Static topology + continuous time is shortest-path's
-optimal regime; the env's advantage lives in slot-synchronized contention +
-dynamic topology, absent here.
+Finding (after the partial-path harness fix, 2026-08-14): in the static-topology
+continuous-time ns-3 replay, MAPPO's slot-sim advantage (medium_load env: MAPPO
+0.783 > Dijkstra 0.719, +6.4pp) PERSISTS at every offered load (+7.2/+5.1/+4.3/
++2.6 pp at 1x/2x/4x/8x compression), shrinking toward saturation. The earlier
+reported negative result ("Dijkstra edges ahead") was an artifact of counting
+env-dropped partial-path packets as delivered at their mid-network end node —
+Dijkstra, with more env drops, was inflated more. See make_ns3_dynamic_figure.py
+for the dynamic-topology replay, where the env's +33pp frequent_break advantage
+also transfers.
 
 Panels:
   L: delivery vs offered load (ns-3, CI bands) + env reference (dashed).
@@ -100,11 +103,11 @@ def main():
     axL.set_ylabel("delivery ratio")
     axR.set_xlabel("offered load (× medium_load)")
     axR.set_ylabel("P95 delay (ms)")
-    axL.set_ylim(0.55, 1.02)
+    axL.set_ylim(0.4, 1.02)
     axL.grid(True, ls=":", alpha=0.5); axR.grid(True, ls=":", alpha=0.5)
     axL.legend(fontsize=6.5, loc="lower left", ncol=2)
     fig.suptitle("ns-3 packet-level replay (static topology, 36 kb/s ISL, drop-tail q=8): "
-                 "MAPPO's slot-model advantage does not transfer", fontsize=8.5, y=0.99)
+                 "MAPPO's slot-model advantage persists", fontsize=8.5, y=0.99)
     fig.tight_layout(rect=(0, 0, 1, 0.95))
     for ext in ("png", "pdf"):
         fig.savefig(outdir / f"fig_ns3_validation.{ext}", dpi=300)

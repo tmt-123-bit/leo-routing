@@ -393,6 +393,7 @@ def main():
                     policy,
                     policy_seed,
                     workload_seeds,
+                    variant=args.variant,
                 )
             )
         for baseline in ["delay_only", "full_heuristic", "random"]:
@@ -403,6 +404,7 @@ def main():
                     heuristic_policy(baseline, seed=1234),
                     -1,
                     workload_seeds,
+                    variant=args.variant,
                 )
             )
         all_rows.extend(
@@ -412,6 +414,7 @@ def main():
                 GlobalDijkstraPolicy(),
                 -1,
                 workload_seeds,
+                variant=args.variant,
             )
         )
         # OSPF/ECMP: the realistic distributed incumbent (shortest-path + ECMP
@@ -424,6 +427,7 @@ def main():
                 OspfEcmpPolicy(seed=1234),
                 -1,
                 workload_seeds,
+                variant=args.variant,
             )
         )
         q_model_dir = args.output / "q_routing_models"
@@ -433,6 +437,7 @@ def main():
                 scenario,
                 seed=policy_seed,
                 episodes=config["q_routing_train_episodes"],
+                variant=args.variant,
             )
             np.savez_compressed(
                 q_model_dir / f"{scenario}_seed_{policy_seed}.npz",
@@ -445,6 +450,7 @@ def main():
                     q_policy,
                     policy_seed,
                     workload_seeds,
+                    variant=args.variant,
                 )
             )
 

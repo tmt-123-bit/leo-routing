@@ -15,6 +15,16 @@
  * queue is full, Send() returns false -> packet dropped (the packet-level
  * realism we are validating against).
  *
+ * DYNAMIC-TOPOLOGY MODE (pass --links=links_<policy>.csv): links go down per the
+ * env's real per-slot break schedule (episode,slot,u,v = DOWN directed link). A
+ * packet that reaches a node whose outgoing link is currently down WAITS at that
+ * node and retries at the next slot boundary (matches the env, where a broken
+ * link simply isn't actionable that slot and waiting costs deadline). A packet
+ * whose age reaches its class deadline (env rule: slot - created + 1 >= deadline
+ * -> drop) is dropped as deadline_exceeded; delivery also only counts within the
+ * deadline. Without --links the run is fully static (original behavior; only the
+ * 3 extra header bytes differ, which shifts delays by <1 ms).
+ *
  * Build:  ./ns3 build   (this file lives in scratch/)
  * Run:    ./ns3 run "scratch/leo-validation --input=...packets_mappo.csv
  *                     --output=...ns3_result_mappo.csv --bw-mbps=10 --qsize-pkts=64"
@@ -31,6 +41,7 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <tuple>
 #include <cmath>
 #include <algorithm>
 
@@ -57,6 +68,9 @@ public:
   uint64_t sendTimeNs = 0;
   uint8_t nextIdx = 0;        // index of the node that should next receive
   uint8_t pathLen = 0;
+  uint8_t cls = 0;            // traffic class (indexes deadlineSlots)
+  uint8_t episode = 0;        // episode id (slot clock offset)
+  uint8_t createdSlot = 0;    // 1-based env slot the packet was created in
   uint32_t path[MAXHOPS] = {0};
 
   LeoHeader() = default;
@@ -70,7 +84,7 @@ public:
   TypeId GetInstanceTypeId() const override { return GetTypeId(); }
   void Print(std::ostream& os) const override { os << "leo[" << pktId << "]"; }
   uint32_t GetSerializedSize() const override {
-    return 4 + 4 + 8 + 1 + 1 + 4 * MAXHOPS;
+    return 4 + 4 + 8 + 1 + 1 + 1 + 1 + 1 + 4 * MAXHOPS;
   }
   void Serialize(Buffer::Iterator start) const override {
     start.WriteU32(pktId);
@@ -78,6 +92,9 @@ public:
     start.WriteU64(sendTimeNs);
     start.WriteU8(nextIdx);
     start.WriteU8(pathLen);
+    start.WriteU8(cls);
+    start.WriteU8(episode);
+    start.WriteU8(createdSlot);
     for (uint32_t i = 0; i < MAXHOPS; ++i) start.WriteU32(path[i]);
   }
   uint32_t Deserialize(Buffer::Iterator start) override {
@@ -86,6 +103,9 @@ public:
     sendTimeNs = start.ReadU64();
     nextIdx = start.ReadU8();
     pathLen = start.ReadU8();
+    cls = start.ReadU8();
+    episode = start.ReadU8();
+    createdSlot = start.ReadU8();
     for (uint32_t i = 0; i < MAXHOPS; ++i) path[i] = start.ReadU32();
     return GetSerializedSize();
   }
@@ -101,6 +121,7 @@ struct Sim {
   std::string policyName;
   // metrics
   uint64_t sent = 0, delivered = 0, queueDrops = 0, macTx = 0, onRx = 0;
+  uint64_t arrived = 0, deadlineDrops = 0, waitEvents = 0, stranded = 0, partialEnd = 0;
   std::vector<double> delaysMs;        // delivered delays
   std::vector<uint32_t> deliveredPkts; // pkt ids delivered
   std::vector<std::pair<uint32_t,double>> perPkt; // (pktId, delayMs) delivered; undelivered added later
@@ -108,6 +129,13 @@ struct Sim {
   std::map<std::pair<uint32_t,uint32_t>, uint64_t> linkTx;
   // undelivered tracking: pktId -> sent?
   std::set<uint32_t> allSent;
+  // dynamic-topology mode state
+  bool dynamic = false;
+  double slotSec = 1.0;
+  uint32_t episodeSlots = 30;
+  uint32_t deadlineSlots[3] = {30, 12, 20};  // per traffic class
+  // (episode, slot, u, v) -> link is DOWN that slot
+  std::set<std::tuple<uint32_t,uint32_t,uint32_t,uint32_t>> downLinks;
 } g;
 
 static std::pair<uint32_t,uint32_t> satPlanePos(uint32_t id) {
@@ -118,6 +146,57 @@ static uint32_t satId(uint32_t plane, uint32_t pos) {
 }
 static bool isCross(uint32_t u, uint32_t v) {
   return satPlanePos(u).first != satPlanePos(v).first;
+}
+
+// ---- dynamic-topology helpers ----
+// 1-based env slot a packet is in at wall-clock time t (episodes are staggered
+// by episodeSlots so their traffic windows don't overlap).
+static uint32_t CurSlot(const LeoHeader& h)
+{
+  int64_t s = (int64_t)std::floor(Simulator::Now().GetSeconds() / g.slotSec + 1e-9);
+  s -= (int64_t)h.episode * (int64_t)g.episodeSlots;
+  return (uint32_t)std::max<int64_t>(s, 1);
+}
+// env deadline rule (leo_multiagent_env._expire_deadline_packets): a packet is
+// dropped once slot - created_slot + 1 >= deadline[class]; usable through
+// slot created + deadline - 2.
+static bool DeadlineExceeded(uint32_t slot, const LeoHeader& h)
+{
+  if (!g.dynamic) return false;
+  return (int64_t)slot - (int64_t)h.createdSlot + 1 >= (int64_t)g.deadlineSlots[h.cls % 3];
+}
+static bool LinkDown(const LeoHeader& h, uint32_t slot, uint32_t u, uint32_t v)
+{
+  return g.downLinks.count({h.episode, slot, u, v}) > 0;
+}
+
+// shared send path for BOTH injection and forwarding: transmit p (headerless,
+// header carried in h) from nodeId toward h.path[h.nextIdx]. In dynamic mode a
+// currently-down link makes the packet WAIT at the node and retry at the next
+// slot boundary (link may heal); waits are bounded by the class deadline.
+static void AttemptSend(uint32_t nodeId, LeoHeader h, Ptr<Packet> p)
+{
+  uint32_t nxt = h.path[h.nextIdx];
+  auto it = g.devOf.find({nodeId, nxt});
+  if (it == g.devOf.end()) { g.stranded++; return; }   // no such link
+  if (g.dynamic) {
+    uint32_t s = CurSlot(h);
+    if (DeadlineExceeded(s, h)) { g.deadlineDrops++; return; }
+    if (LinkDown(h, s, nodeId, nxt)) {
+      uint32_t ns = s + 1;                             // retry slot
+      if (DeadlineExceeded(ns, h)) { g.deadlineDrops++; return; }
+      g.waitEvents++;
+      double now = Simulator::Now().GetSeconds();
+      double nextBoundary = (std::floor(now / g.slotSec + 1e-9) + 1.0) * g.slotSec;
+      Simulator::Schedule(Seconds(std::max(nextBoundary - now, 1e-9)),
+                          &AttemptSend, nodeId, h, p);
+      return;
+    }
+  }
+  p->AddHeader(h);
+  Ptr<PointToPointNetDevice> outDev = it->second;
+  bool ok = outDev->Send(p, outDev->GetBroadcast(), LEO_PROTO);
+  if (!ok) g.queueDrops++;
 }
 
 // promiscuous protocol handler: receives every LEO_PROTO packet on a node
@@ -134,24 +213,26 @@ void OnRx(Ptr<Node> node, uint32_t nodeId,
   if (h.nextIdx >= h.pathLen) return;  // malformed
   uint32_t here = h.path[h.nextIdx];
   if (here != nodeId) return;          // not for us (shouldn't happen on p2p)
-  // delivered?
+  // delivered? Two conditions must hold: this is the last node of the path AND
+  // it is the actual final destination. Env-dropped packets carry PARTIAL paths
+  // (visited stops mid-network) -> they must NOT count as delivered just because
+  // they walked off the end of their partial path.
   if (h.nextIdx == h.pathLen - 1) {
-    g.delivered++;
-    double dMs = (Simulator::Now().GetNanoSeconds() - (int64_t)h.sendTimeNs) / 1e6;
-    g.delaysMs.push_back(dMs);
-    g.perPkt.emplace_back(h.pktId, dMs);
+    if (here != h.finalDst) { g.partialEnd++; return; }  // partial path ran out
+    g.arrived++;
+    if (!DeadlineExceeded(CurSlot(h), h)) {
+      g.delivered++;
+      double dMs = (Simulator::Now().GetNanoSeconds() - (int64_t)h.sendTimeNs) / 1e6;
+      g.delaysMs.push_back(dMs);
+      g.perPkt.emplace_back(h.pktId, dMs);
+    } else {
+      g.deadlineDrops++;
+    }
     return;
   }
   // forward toward path[nextIdx+1]
-  uint8_t nIdx = h.nextIdx + 1;
-  uint32_t nxt = h.path[nIdx];
-  auto it = g.devOf.find({nodeId, nxt});
-  if (it == g.devOf.end()) return;     // no such link -> stranded
-  h.nextIdx = nIdx;
-  p->AddHeader(h);
-  Ptr<PointToPointNetDevice> outDev = it->second;
-  bool ok = outDev->Send(p, outDev->GetBroadcast(), LEO_PROTO);
-  if (!ok) g.queueDrops++;
+  h.nextIdx = h.nextIdx + 1;
+  AttemptSend(nodeId, h, p);
 }
 
 void PhyTxCallback(uint32_t u, uint32_t v, Ptr<const Packet>) {
@@ -165,35 +246,29 @@ void PhyTxLink(uint32_t a, uint32_t b, Ptr<const Packet>) {
 void MacTxInc(Ptr<const Packet>) { g.macTx++; }
 
 // inject one packet at its source toward path[1]
-void InjectPacket(uint32_t pktId, uint32_t src, std::vector<uint32_t> path)
+void InjectPacket(uint32_t pktId, uint32_t episode, uint32_t cls, uint32_t createdSlot,
+                  uint32_t src, uint32_t dst, std::vector<uint32_t> path)
 {
-  static bool dbg = true;
   if (path.size() < 2) return;             // src==dst / unrouted: not a routing decision
+  uint32_t firstHop = path[1];
+  if (g.devOf.find({src, firstHop}) == g.devOf.end()) return;  // source lacks that link
   g.sent++;
   g.allSent.insert(pktId);
-  uint32_t firstHop = path[1];
-  auto it = g.devOf.find({src, firstHop});
-  if (dbg) {
-    std::cerr << "DBG inject pkt=" << pktId << " src=" << src << " firstHop=" << firstHop
-              << " pathLen=" << path.size() << " devFound=" << (it != g.devOf.end())
-              << " t=" << Simulator::Now().GetSeconds() << "s\n";
-    dbg = false;
-  }
-  if (it == g.devOf.end()) return;     // source lacks that link
   LeoHeader h;
   h.pktId = pktId;
-  h.finalDst = path.back();
+  // TRUE destination (from the CSV), NOT path.back(): env-dropped packets carry
+  // partial paths, and path.back() would be whatever mid-network node they
+  // stopped at -> delivery must only count at the real dst.
+  h.finalDst = dst;
   h.sendTimeNs = Simulator::Now().GetNanoSeconds();
   h.nextIdx = 1;
+  h.cls = (uint8_t)cls;
+  h.episode = (uint8_t)episode;
+  h.createdSlot = (uint8_t)createdSlot;
   h.pathLen = (uint8_t)std::min((size_t)MAXHOPS, path.size());
   for (uint32_t i = 0; i < h.pathLen; ++i) h.path[i] = path[i];
   Ptr<Packet> p = Create<Packet>(1500 - h.GetSerializedSize());
-  p->AddHeader(h);
-  Ptr<PointToPointNetDevice> outDev = it->second;
-  bool ok = outDev->Send(p, outDev->GetBroadcast(), LEO_PROTO);
-  static bool dbg2 = true;
-  if (dbg2) { std::cerr << "DBG send ok=" << ok << " pktSize=" << p->GetSize() << "\n"; dbg2 = false; }
-  if (!ok) g.queueDrops++;
+  AttemptSend(src, h, p);
 }
 
 // split "a b c" -> ints
@@ -205,9 +280,9 @@ std::vector<uint32_t> parseIntList(const std::string& s) {
 
 int main(int argc, char* argv[])
 {
-  std::string inputFile, outputFile, policyName = "mappo";
+  std::string inputFile, outputFile, linksFile, deadlineStr = "30,12,20", policyName = "mappo";
   double slotSec = 1.0, intraMs = INTRA_DELAY_MS, crossMs = CROSS_DELAY_MS;
-  uint32_t bwKbps = 36, qsize = 64, pktBytes = 1500, episodeSlots = 40;
+  uint32_t bwKbps = 36, qsize = 64, pktBytes = 1500, episodeSlots = 30;
   CommandLine cmd;
   cmd.AddValue("input", "packets_<policy>.csv from extractor", inputFile);
   cmd.AddValue("output", "per-packet results csv path", outputFile);
@@ -218,9 +293,39 @@ int main(int argc, char* argv[])
   cmd.AddValue("episode-slots", "env slots per episode (stagger offset)", episodeSlots);
   cmd.AddValue("intra-ms", "intra-plane propagation delay (ms)", intraMs);
   cmd.AddValue("cross-ms", "cross-plane propagation delay (ms)", crossMs);
+  cmd.AddValue("links", "links_<policy>.csv (episode,slot,u,v DOWN entries); "
+               "absent = fully static topology (original behavior)", linksFile);
+  cmd.AddValue("deadline-slots", "per-class deadline in slots, comma-separated "
+               "(env packet_class_deadlines, e.g. 30,12,20)", deadlineStr);
   cmd.Parse(argc, argv);
   if (inputFile.empty() || outputFile.empty()) {
     std::cerr << "need --input and --output\n"; return 1;
+  }
+
+  // ---- dynamic-topology mode state ----
+  g.slotSec = slotSec;
+  g.episodeSlots = episodeSlots;
+  {
+    std::stringstream ss(deadlineStr); std::string cell;
+    uint32_t i = 0;
+    while (std::getline(ss, cell, ',') && i < 3) {
+      g.deadlineSlots[i++] = (uint32_t)std::stoul(cell);
+    }
+  }
+  if (!linksFile.empty()) {
+    g.dynamic = true;
+    std::ifstream lin(linksFile);
+    if (!lin) { std::cerr << "cannot open " << linksFile << "\n"; return 1; }
+    std::string lline; std::getline(lin, lline); // header
+    while (std::getline(lin, lline)) {
+      if (lline.empty()) continue;
+      std::vector<std::string> f; std::stringstream ls(lline); std::string cell;
+      while (std::getline(ls, cell, ',')) f.push_back(cell);
+      if (f.size() < 4) continue;
+      g.downLinks.insert({std::stoul(f[0]), std::stoul(f[1]), std::stoul(f[2]), std::stoul(f[3])});
+    }
+    std::cerr << "dynamic mode: " << g.downLinks.size() << " down-link slot entries from "
+              << linksFile << "\n";
   }
 
   // ---- build the 24-node torus mesh ----
@@ -287,11 +392,13 @@ int main(int argc, char* argv[])
     // 880 packets (5 episodes) down to ~192. Figure decodes ep = gid/1e6.
     uint32_t gid = episode * 1000000u + pktId;
     uint32_t src = std::stoul(f[2]);
+    uint32_t dst = std::stoul(f[3]);
+    uint32_t cls = std::stoul(f[4]);
     uint32_t createdSlot = std::stoul(f[5]);
     std::vector<uint32_t> path = parseIntList(f[11]);
     // stagger episodes so their traffic windows do not overlap
     double t = (createdSlot + episode * episodeSlots) * slotSec;
-    Simulator::Schedule(Seconds(t), &InjectPacket, gid, src, path);
+    Simulator::Schedule(Seconds(t), &InjectPacket, gid, episode, cls, createdSlot, src, dst, path);
     npkts++;
     maxInjectT = std::max(maxInjectT, t);
   }
@@ -344,7 +451,13 @@ int main(int argc, char* argv[])
             << ",p50_delay_ms=" << pct(0.50)
             << ",p95_delay_ms=" << pct(0.95)
             << ",load_imbalance=" << imb
-            << ",links_active=" << g.linkTx.size() << "\n";
+            << ",links_active=" << g.linkTx.size()
+            << ",dynamic=" << (g.dynamic ? 1 : 0)
+            << ",arrived=" << g.arrived
+            << ",deadline_drops=" << g.deadlineDrops
+            << ",wait_events=" << g.waitEvents
+            << ",stranded=" << g.stranded
+            << ",partial_end=" << g.partialEnd << "\n";
 
   Simulator::Destroy();
   return 0;
