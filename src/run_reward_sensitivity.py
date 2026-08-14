@@ -227,8 +227,11 @@ def main():
         for sd, policy in actors:
             all_rows.extend(evaluate_policy(name, "mappo", policy, sd, wseeds,
                                             wrapper_factory=fct, variant="no_lifetime"))
+        # mask parity: the oracle must run under the SAME variant as the
+        # no_lifetime checkpoints (mask-following baselines are constrained by
+        # the action mask; a mismatch silently handicaps them).
         all_rows.extend(evaluate_policy(name, "global_dijkstra", GlobalDijkstraPolicy(), -1, wseeds,
-                                        wrapper_factory=medium_wrapper_factory("full")))
+                                        wrapper_factory=medium_wrapper_factory("no_lifetime")))
         md = np.mean([float(r.delivery_ratio) for r in all_rows if r.scenario == name and r.policy == "mappo"])
         dd = np.mean([float(r.delivery_ratio) for r in all_rows if r.scenario == name and r.policy == "global_dijkstra"])
         print(f"  {name:<12} delivery MAPPO={md:.3f} Dij={dd:.3f} gap={md-dd:+.3f}", flush=True)

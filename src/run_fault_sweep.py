@@ -121,7 +121,11 @@ def main():
             rows = evaluate_policy(label, "mappo", policy, seed, wseeds,
                                    wrapper_factory=wrapper_factory(fr, ini, exo, variant), variant=variant)
             all_rows.extend(rows)
-        fct = wrapper_factory(fr, ini, exo, "full")
+        # mask parity: oracles/heuristics must run under the SAME env variant
+        # as the transferred checkpoints — mask-following baselines are
+        # constrained by the action mask, so a variant mismatch silently
+        # handicaps one side (see ns3_trace_extractor factory note).
+        fct = wrapper_factory(fr, ini, exo, actors[0][2])
         all_rows.extend(evaluate_policy(label, "global_dijkstra", GlobalDijkstraPolicy(), -1, wseeds, wrapper_factory=fct))
         all_rows.extend(evaluate_policy(label, "full_heuristic", heuristic_policy("full_heuristic", seed=1234), -1, wseeds, wrapper_factory=fct))
 

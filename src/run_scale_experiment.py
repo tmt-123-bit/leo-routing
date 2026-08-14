@@ -189,8 +189,10 @@ def run_transfer(args):
                 wrapper_factory=wrapper_factory(npl, spp, scenario, variant), variant=variant,
             )
             all_rows.extend(rows)
-        # oracles / baselines at this scale (variant-agnostic)
-        fct = wrapper_factory(npl, spp, scenario, "full")
+        # mask parity: oracles/heuristics must run under the SAME env variant
+        # as the transferred checkpoints (mask-following baselines are
+        # constrained by the action mask; a mismatch silently handicaps them).
+        fct = wrapper_factory(npl, spp, scenario, actors[0][2])
         all_rows.extend(evaluate_policy(label, "global_dijkstra", GlobalDijkstraPolicy(), -1, wseeds, wrapper_factory=fct))
         all_rows.extend(evaluate_policy(label, "full_heuristic", heuristic_policy("full_heuristic", seed=1234), -1, wseeds, wrapper_factory=fct))
         # quick interim readout
