@@ -3,44 +3,44 @@
 \hline
 Scenario & Policy & Delivery ratio & Drop rate & P95 delay & Mean queue \\
 \hline
-Low load & \textbf{MAPPO} & 90.4 & 0.3 & 6.61 & 0.27 \\
- & Dijkstra (oracle) & 90.7 & 0.0 & 6.39 & 0.26 \\
- & OSPF/ECMP & 90.6 & 0.0 & 6.40 & 0.26 \\
- & Q-routing & 64.0 & 10.3 & 13.62 & 0.59 \\
- & Heuristic & 59.2 & 11.6 & 12.30 & 0.59 \\
- & Delay-only & 35.1 & 28.5 & 15.05 & 0.81 \\
- & Random & 31.6 & 29.3 & 15.27 & 0.83 \\
+Low load & \textbf{MAPPO} & 91.3 & 0.1 & 6.04 & 0.25 \\
+ & Dijkstra (oracle) & 91.1 & 0.0 & 6.05 & 0.25 \\
+ & OSPF/ECMP & 91.1 & 0.0 & 6.02 & 0.25 \\
+ & Q-routing & 91.2 & 0.1 & 6.09 & 0.25 \\
+ & Heuristic & 64.3 & 8.2 & 12.23 & 0.55 \\
+ & Delay-only & 36.2 & 27.3 & 15.34 & 0.81 \\
+ & Random & 30.9 & 29.0 & 15.64 & 0.84 \\
 \hline
-Medium load & \textbf{MAPPO} & 77.4 & 0.8 & 10.57 & 1.28 \\
- & Dijkstra (oracle) & 72.6 & 2.6 & 12.58 & 1.41 \\
- & OSPF/ECMP & 72.6 & 2.4 & 12.55 & 1.42 \\
- & Q-routing & 43.8 & 13.7 & 18.75 & 2.25 \\
- & Heuristic & 34.6 & 16.0 & 19.45 & 2.45 \\
- & Delay-only & 18.0 & 24.6 & 21.53 & 2.99 \\
- & Random & 16.9 & 24.9 & 20.23 & 3.00 \\
+Medium load & \textbf{MAPPO} & 78.8 & 0.6 & 10.25 & 1.23 \\
+ & Dijkstra (oracle) & 73.5 & 2.2 & 12.30 & 1.38 \\
+ & OSPF/ECMP & 73.6 & 2.3 & 12.22 & 1.38 \\
+ & Q-routing & 78.5 & 0.5 & 10.27 & 1.22 \\
+ & Heuristic & 38.1 & 14.1 & 18.54 & 2.34 \\
+ & Delay-only & 18.0 & 24.4 & 21.67 & 2.99 \\
+ & Random & 16.3 & 24.7 & 20.37 & 3.02 \\
 \hline
-Hotspot & \textbf{MAPPO} & 28.4 & 16.8 & 20.66 & 6.82 \\
- & Dijkstra (oracle) & 29.5 & 16.4 & 21.01 & 6.75 \\
- & OSPF/ECMP & 29.5 & 16.4 & 20.97 & 6.75 \\
- & Q-routing & 23.7 & 19.3 & 20.08 & 7.15 \\
- & Heuristic & 14.5 & 23.0 & 21.52 & 7.82 \\
- & Delay-only & 6.6 & 27.2 & 20.19 & 8.42 \\
- & Random & 6.3 & 27.4 & 21.21 & 8.46 \\
+Hotspot & \textbf{MAPPO} & 29.0 & 16.6 & 20.41 & 6.76 \\
+ & Dijkstra (oracle) & 29.9 & 16.2 & 20.66 & 6.72 \\
+ & OSPF/ECMP & 29.9 & 16.2 & 20.63 & 6.72 \\
+ & Q-routing & 30.9 & 16.1 & 20.95 & 6.67 \\
+ & Heuristic & 16.0 & 22.2 & 21.71 & 7.71 \\
+ & Delay-only & 6.6 & 27.2 & 20.17 & 8.43 \\
+ & Random & 6.5 & 27.4 & 20.77 & 8.43 \\
 \hline
-Frequent break & \textbf{MAPPO} & 43.9 & 22.5 & 15.87 & 1.84 \\
- & Dijkstra (oracle) & 41.4 & 21.4 & 16.86 & 1.97 \\
- & OSPF/ECMP & 41.5 & 21.5 & 17.00 & 1.97 \\
- & Q-routing & 27.8 & 31.2 & 17.16 & 2.18 \\
- & Heuristic & 23.1 & 32.8 & 17.13 & 2.29 \\
- & Delay-only & 14.1 & 36.6 & 18.48 & 2.57 \\
- & Random & 14.6 & 36.0 & 18.40 & 2.56 \\
+Frequent break & \textbf{MAPPO} & 75.9 & 1.4 & 10.95 & 1.33 \\
+ & Dijkstra (oracle) & 70.7 & 3.2 & 12.87 & 1.48 \\
+ & OSPF/ECMP & 70.6 & 3.2 & 12.82 & 1.49 \\
+ & Q-routing & 75.2 & 1.4 & 11.30 & 1.35 \\
+ & Heuristic & 36.6 & 15.4 & 18.12 & 2.37 \\
+ & Delay-only & 17.3 & 25.1 & 20.73 & 3.01 \\
+ & Random & 16.3 & 25.7 & 20.77 & 3.02 \\
 \hline
-Fault links & \textbf{MAPPO} & 74.7 & 1.7 & 11.13 & 1.36 \\
- & Dijkstra (oracle) & 70.4 & 3.6 & 13.07 & 1.48 \\
- & OSPF/ECMP & 70.5 & 3.5 & 13.09 & 1.48 \\
- & Q-routing & 42.6 & 14.4 & 18.69 & 2.28 \\
- & Heuristic & 32.8 & 17.2 & 18.99 & 2.50 \\
- & Delay-only & 17.8 & 24.9 & 20.95 & 2.99 \\
- & Random & 17.0 & 24.8 & 20.26 & 2.99 \\
+Fault links & \textbf{MAPPO} & 76.3 & 1.4 & 10.79 & 1.30 \\
+ & Dijkstra (oracle) & 71.4 & 3.2 & 12.86 & 1.45 \\
+ & OSPF/ECMP & 71.6 & 3.2 & 12.81 & 1.45 \\
+ & Q-routing & 76.2 & 1.3 & 10.86 & 1.30 \\
+ & Heuristic & 37.3 & 14.7 & 18.39 & 2.38 \\
+ & Delay-only & 17.7 & 24.8 & 21.11 & 2.99 \\
+ & Random & 17.1 & 25.0 & 20.04 & 3.00 \\
 \hline
 \end{tabular}

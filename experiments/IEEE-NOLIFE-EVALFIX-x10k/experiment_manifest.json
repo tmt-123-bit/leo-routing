@@ -1,0 +1,91 @@
+{
+  "experiment": "EXP-004",
+  "mode": "x10k",
+  "config": {
+    "scenarios": [
+      "low_load",
+      "medium_load",
+      "hotspot_high_load",
+      "frequent_break",
+      "fault_links"
+    ],
+    "timesteps": 10000,
+    "validation_episodes": 50,
+    "test_episodes": 50,
+    "eval_every_rollouts": 20,
+    "save_every_steps": 2500,
+    "batch_size": 4,
+    "q_routing_train_episodes": 400
+  },
+  "policy_seeds": [
+    7,
+    42,
+    1024,
+    123,
+    456,
+    789,
+    2024,
+    314
+  ],
+  "train_workload_seeds": [
+    9001,
+    9020
+  ],
+  "validation_workload_seeds": [
+    10001,
+    10050
+  ],
+  "test_workload_seeds": [
+    11001,
+    11050
+  ],
+  "checkpoints": {
+    "low_load/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\low_load\\no_lifetime\\seed_7\\leo_multi__low_load__seed-7__2026-08-11_20-40-02__EXP-004\\validation_best.pt",
+    "low_load/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\low_load\\no_lifetime\\seed_42\\leo_multi__low_load__seed-42__2026-08-11_20-42-26__EXP-004\\validation_best.pt",
+    "low_load/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\low_load\\no_lifetime\\seed_1024\\leo_multi__low_load__seed-1024__2026-08-11_20-44-54__EXP-004\\validation_best.pt",
+    "low_load/seed_123": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\low_load\\no_lifetime\\seed_123\\leo_multi__low_load__seed-123__2026-08-11_20-47-21__EXP-004\\validation_best.pt",
+    "low_load/seed_456": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\low_load\\no_lifetime\\seed_456\\leo_multi__low_load__seed-456__2026-08-11_20-49-47__EXP-004\\validation_best.pt",
+    "low_load/seed_789": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\low_load\\no_lifetime\\seed_789\\leo_multi__low_load__seed-789__2026-08-11_20-52-12__EXP-004\\validation_best.pt",
+    "low_load/seed_2024": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\low_load\\no_lifetime\\seed_2024\\leo_multi__low_load__seed-2024__2026-08-11_20-54-38__EXP-004\\validation_best.pt",
+    "low_load/seed_314": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\low_load\\no_lifetime\\seed_314\\leo_multi__low_load__seed-314__2026-08-11_20-57-04__EXP-004\\validation_best.pt",
+    "medium_load/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\medium_load\\no_lifetime\\seed_7\\leo_multi__medium_load__seed-7__2026-08-11_21-07-09__EXP-004\\validation_best.pt",
+    "medium_load/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\medium_load\\no_lifetime\\seed_42\\leo_multi__medium_load__seed-42__2026-08-11_21-10-19__EXP-004\\validation_best.pt",
+    "medium_load/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\medium_load\\no_lifetime\\seed_1024\\leo_multi__medium_load__seed-1024__2026-08-11_21-13-38__EXP-004\\validation_best.pt",
+    "medium_load/seed_123": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\medium_load\\no_lifetime\\seed_123\\leo_multi__medium_load__seed-123__2026-08-11_21-17-07__EXP-004\\validation_best.pt",
+    "medium_load/seed_456": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\medium_load\\no_lifetime\\seed_456\\leo_multi__medium_load__seed-456__2026-08-11_21-20-38__EXP-004\\validation_best.pt",
+    "medium_load/seed_789": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\medium_load\\no_lifetime\\seed_789\\leo_multi__medium_load__seed-789__2026-08-11_21-24-08__EXP-004\\validation_best.pt",
+    "medium_load/seed_2024": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\medium_load\\no_lifetime\\seed_2024\\leo_multi__medium_load__seed-2024__2026-08-11_21-27-27__EXP-004\\validation_best.pt",
+    "medium_load/seed_314": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\medium_load\\no_lifetime\\seed_314\\leo_multi__medium_load__seed-314__2026-08-11_21-30-44__EXP-004\\validation_best.pt",
+    "hotspot_high_load/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\hotspot_high_load\\no_lifetime\\seed_7\\leo_multi__hotspot_high_load__seed-7__2026-08-11_21-45-46__EXP-004\\validation_best.pt",
+    "hotspot_high_load/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\hotspot_high_load\\no_lifetime\\seed_42\\leo_multi__hotspot_high_load__seed-42__2026-08-11_21-49-32__EXP-004\\validation_best.pt",
+    "hotspot_high_load/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\hotspot_high_load\\no_lifetime\\seed_1024\\leo_multi__hotspot_high_load__seed-1024__2026-08-11_21-53-19__EXP-004\\validation_best.pt",
+    "hotspot_high_load/seed_123": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\hotspot_high_load\\no_lifetime\\seed_123\\leo_multi__hotspot_high_load__seed-123__2026-08-11_21-57-09__EXP-004\\validation_best.pt",
+    "hotspot_high_load/seed_456": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\hotspot_high_load\\no_lifetime\\seed_456\\leo_multi__hotspot_high_load__seed-456__2026-08-11_22-00-43__EXP-004\\validation_best.pt",
+    "hotspot_high_load/seed_789": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\hotspot_high_load\\no_lifetime\\seed_789\\leo_multi__hotspot_high_load__seed-789__2026-08-11_22-04-27__EXP-004\\validation_best.pt",
+    "hotspot_high_load/seed_2024": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\hotspot_high_load\\no_lifetime\\seed_2024\\leo_multi__hotspot_high_load__seed-2024__2026-08-11_22-08-00__EXP-004\\validation_best.pt",
+    "hotspot_high_load/seed_314": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\hotspot_high_load\\no_lifetime\\seed_314\\leo_multi__hotspot_high_load__seed-314__2026-08-11_22-11-22__EXP-004\\validation_best.pt",
+    "frequent_break/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\frequent_break\\no_lifetime\\seed_7\\leo_multi__frequent_break__seed-7__2026-08-11_22-25-49__EXP-004\\validation_best.pt",
+    "frequent_break/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\frequent_break\\no_lifetime\\seed_42\\leo_multi__frequent_break__seed-42__2026-08-11_22-28-52__EXP-004\\validation_best.pt",
+    "frequent_break/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\frequent_break\\no_lifetime\\seed_1024\\leo_multi__frequent_break__seed-1024__2026-08-11_22-31-57__EXP-004\\validation_best.pt",
+    "frequent_break/seed_123": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\frequent_break\\no_lifetime\\seed_123\\leo_multi__frequent_break__seed-123__2026-08-11_22-35-03__EXP-004\\validation_best.pt",
+    "frequent_break/seed_456": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\frequent_break\\no_lifetime\\seed_456\\leo_multi__frequent_break__seed-456__2026-08-11_22-38-09__EXP-004\\validation_best.pt",
+    "frequent_break/seed_789": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\frequent_break\\no_lifetime\\seed_789\\leo_multi__frequent_break__seed-789__2026-08-11_22-41-36__EXP-004\\validation_best.pt",
+    "frequent_break/seed_2024": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\frequent_break\\no_lifetime\\seed_2024\\leo_multi__frequent_break__seed-2024__2026-08-11_22-45-44__EXP-004\\validation_best.pt",
+    "frequent_break/seed_314": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\frequent_break\\no_lifetime\\seed_314\\leo_multi__frequent_break__seed-314__2026-08-11_22-49-09__EXP-004\\validation_best.pt",
+    "fault_links/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\fault_links\\no_lifetime\\seed_7\\leo_multi__fault_links__seed-7__2026-08-11_23-04-04__EXP-004\\validation_best.pt",
+    "fault_links/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\fault_links\\no_lifetime\\seed_42\\leo_multi__fault_links__seed-42__2026-08-11_23-07-03__EXP-004\\validation_best.pt",
+    "fault_links/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\fault_links\\no_lifetime\\seed_1024\\leo_multi__fault_links__seed-1024__2026-08-11_23-10-04__EXP-004\\validation_best.pt",
+    "fault_links/seed_123": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\fault_links\\no_lifetime\\seed_123\\leo_multi__fault_links__seed-123__2026-08-11_23-13-05__EXP-004\\validation_best.pt",
+    "fault_links/seed_456": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\fault_links\\no_lifetime\\seed_456\\leo_multi__fault_links__seed-456__2026-08-11_23-16-03__EXP-004\\validation_best.pt",
+    "fault_links/seed_789": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\fault_links\\no_lifetime\\seed_789\\leo_multi__fault_links__seed-789__2026-08-11_23-19-00__EXP-004\\validation_best.pt",
+    "fault_links/seed_2024": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\fault_links\\no_lifetime\\seed_2024\\leo_multi__fault_links__seed-2024__2026-08-11_23-22-00__EXP-004\\validation_best.pt",
+    "fault_links/seed_314": "F:\\leo-routing-preliminary-matlab\\experiments\\IEEE-NOLIFE-x10k\\checkpoints\\fault_links\\no_lifetime\\seed_314\\leo_multi__fault_links__seed-314__2026-08-11_23-24-59__EXP-004\\validation_best.pt"
+  },
+  "code_fingerprint": {
+    "trainer": "fc69e6cc1f83be87826f21a5aaca79f7adcc5a1bb453f5dde1c76a383ab28500",
+    "environment": "15a2973a11a0bea16a01f0633c15d7ba302e6d96b9e6e724d030a6631966e7b2",
+    "wrapper": "61c305ea266b0eee1e4e4a56845eeaeb0de85dd404c1b5471122e3f6445996d5",
+    "design": "40f2b484225cbe05d5321e723c88a64294c68624bf5947432d0c2606d2cf445a",
+    "evaluation": "29d032bc424489c259cee1c84ca0fa10c4c465981afcc87692401532ab09d594"
+  }
+}

@@ -175,8 +175,8 @@ python -m venv leo-venv && leo-venv/Scripts/pip install -r requirements.txt
 bash run_ieee_reproduction.sh full
 
 # 生成全部图表
-python src/make_figures.py -i experiments/IEEE-NOLIFE-x2k -i experiments/IEEE-NOLIFE-x10k -i experiments/IEEE-NOLIFE-full \
-    --ablation experiments/IEEE-ABLATION-FULL --outdir figures
+python src/make_figures.py -i experiments/IEEE-NOLIFE-EVALFIX-x2k -i experiments/IEEE-NOLIFE-EVALFIX-x10k -i experiments/IEEE-NOLIFE-EVALFIX \
+    --budget-labels x2k,x10k,full --ablation experiments/IEEE-ABLATION-FULL --outdir figures
 ```
 
 复现清单(代码源文件 SHA、git ref、pip freeze、fixture SHA)见 [`experiments/REPRO_MANIFEST.json`](experiments/REPRO_MANIFEST.json)。
