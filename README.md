@@ -9,7 +9,7 @@
 去中心化、只用**一跳局部信息**的 MAPPO,在 24 星座 5 个场景上:
 
 - **显著反超看全图的集中式最短路 oracle(Dijkstra/ECMP)**:中负载 **+5.3 pp**、频繁断链 **+5.1 pp**、故障 **+4.9 pp**(均 p≤1.2e-9);轻负载持平,仅在高负载饱和场景落后 0.9 pp。
-- 对分布式基线:**碾压队列感知启发式 +13–41 pp**(p≤1.2e-9);与分布式 Q-routing 在投递率上**基本持平**(差距 ±0.6 pp 内),但 MAPPO **零样本迁移**:4.6× 规模内与 oracle 持平或更好、5.5× 处保持 92% 吞吐,真实 Starlink/OneWeb 拓扑 93% 吞吐 + 更低 P95(Q 表按星座规模索引、无法迁移,见 §6)。
+- 对分布式基线:**碾压队列感知启发式 +13–41 pp**(p≤1.2e-9);与分布式 Q-routing 在投递率上**基本持平**(差距 ±0.6 pp 内),但规模上分化:**零样本** 4.6× 规模内与 oracle 持平或更好、5.5× 处保持 92% 吞吐,真实 Starlink/OneWeb 拓扑 93% 吞吐 + 更低 P95;而 Q 表直搬塌至 16% oracle 吞吐、即使目标星座同预算重训 n110 处也仅 0.68(见 §6)。
 - 零样本泛化 + 对奖励权重扰动和 8 个训练种子鲁棒(§6/§7)。
 - **数据包级验证**:ns-3 重放(静态 + 动态断链拓扑)确认对 oracle 的优势在包级仿真中保持(@1×–4× 压缩;8× 深度饱和区收敛为平局,详见 §8)。
 
@@ -102,6 +102,9 @@ credit 项零均值,锐化个体信号而不偏移团队目标。消融证明这
 | **真实拓扑** | 合成 4×6 → Starlink-24/OneWeb-24(冻结 TLE) | 吞吐比 0.928/0.935,P95 延迟 MAPPO 更低(18.7 vs 20.4;17.6 vs 21.8) |
 | **负载扫描** | medium 训练 → exo2..28 | **exo4–exo10 显著领先 +2.4~+4.8 pp**(p≤8e-4),exo14 边缘(+0.6,p=0.035),轻载/深饱和(exo20/28)平局;峰值吞吐比 **1.079**(exo8) |
 | **故障率扫描** | fault_link_ratio 0..0.20 | **每个**故障率领先 **+4.0~+5.4 pp**(全部 p=6.1e-5),吞吐比随故障加重 1.074→1.091 |
+| **分布式基线迁移** | n24 Q 表直搬 / 目标星座重训(500 集同预算) | 直搬吞吐比塌至 **~0.16**;重训后 n66/n110/n132 也仅 **0.94/0.68/0.64** vs MAPPO 零样本 1.022/1.011/0.921 |
+
+**为什么用 MAPPO 而不是同样能打平的 Q-routing(§3)?** 答案在规模:Q 表按具体节点索引,n24 的表搬到更大星座 = 覆盖不到的条目退化为常数 → 吞吐直接塌到 oracle 的 16%;**即使在目标星座上按同预算重训**,表条目数随 n³ 增长、500 集只覆盖零头,n110 处也只有 oracle 的 68%。MAPPO 的置换等变 Actor 零样本保持 ≥oracle 到 4.6× 规模 —— n110 处零样本 MAPPO 比重训后的 Q-routing 高 **+33 pp**。见 `figures/fig_qscale_transfer`;数据 [`IEEE-QSCALE/`](experiments/IEEE-QSCALE/)。
 
 > **修正说明(2026-08-14)**:上述 4 个 sweep 此前把 Dijkstra/heuristic oracle 跑在 `full` 变体下(被 lifetime mask 限制可用链路)而 MAPPO 跑 `no_lifetime`,一边被暗中削弱。修复为同变体后重跑:故障扫描/负载扫描结论存活(幅度略降),真实拓扑数字不变(0.928/0.935,TLE 拓扑上 mask 本就不触发,重跑等于独立复核),**星座规模的"n66 +19% / n110 显著击败"不成立** —— 修正为 n66 +2.2%(p=3.4e-3)、n110 统计平局。旧数据存于 `IEEE-*-NOLIFE/` 目录。
 
@@ -154,6 +157,7 @@ MAPPO 在静态重放的每个负载点均值都高于 Dijkstra(1× CI 分离,+6
 | `run_exp004_mappo.py` | 正式训练 + 基线 + held-out 评测 + 统计 |
 | `run_ablation_experiments.py` | 受控消融 |
 | `run_scale_experiment.py` / `run_realism_transfer.py` / `run_load_sweep.py` / `run_fault_sweep.py` | 泛化实验 |
+| `run_qrouting_scale_experiment.py` | 分布式基线(Q-routing)迁移 vs 重训对照 |
 | `run_reward_sensitivity.py` | 奖励权重敏感 |
 | `run_tle_training_experiment.py` + `tle_topology_builder.py` | TLE/SGP4 真实拓扑训练 |
 | `ns3_trace_extractor.py` + `ns3_leo_validation.cc` | ns-3 逐包验证 harness |

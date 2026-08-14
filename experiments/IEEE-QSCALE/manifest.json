@@ -1,0 +1,71 @@
+{
+  "experiment": "q_routing_scale_transfer_vs_retrain",
+  "variant": "no_lifetime",
+  "scenario": "medium_load",
+  "scales": [
+    {
+      "label": "n24",
+      "n_planes": 4,
+      "sats_per_plane": 6,
+      "n_sats": 24
+    },
+    {
+      "label": "n66",
+      "n_planes": 6,
+      "sats_per_plane": 11,
+      "n_sats": 66
+    },
+    {
+      "label": "n110",
+      "n_planes": 10,
+      "sats_per_plane": 11,
+      "n_sats": 110
+    },
+    {
+      "label": "n132",
+      "n_planes": 6,
+      "sats_per_plane": 22,
+      "n_sats": 132
+    }
+  ],
+  "table_seeds": [
+    7,
+    42,
+    1024,
+    123,
+    456,
+    789,
+    2024,
+    314
+  ],
+  "retrain_seeds": [
+    7,
+    42,
+    1024
+  ],
+  "q_episodes": 500,
+  "workload_seeds": [
+    16001,
+    16002,
+    16003,
+    16004,
+    16005,
+    16006,
+    16007,
+    16008,
+    16009,
+    16010,
+    16011,
+    16012,
+    16013,
+    16014,
+    16015,
+    16016,
+    16017,
+    16018,
+    16019,
+    16020
+  ],
+  "tables_dir": "experiments\\IEEE-NOLIFE-EVALFIX\\q_routing_models",
+  "note": "join with IEEE-SCALE-EVALFIX transfer_matrix.csv on (target_scale, workload_seed) for MAPPO-transfer / Dijkstra comparisons (same wseeds)"
+}
