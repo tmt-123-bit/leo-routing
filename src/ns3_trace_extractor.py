@@ -74,6 +74,12 @@ def dump_topology(env, path: Path) -> None:
 
 
 def make_wrapper_factory(variant: str, scenario: str) -> Callable[[int], CleanMARLLeoMultiAgentWrapper]:
+    """IMPORTANT: both policies must run under the SAME env variant. The action
+    masks constrain every policy (Dijkstra picks among mask-feasible actions
+    too), so a mask-variant mismatch between MAPPO and its baseline silently
+    handicaps one side — e.g. running Dijkstra under variant 'full' applies the
+    lifetime mask to it while a no_lifetime MAPPO runs unmasked."""
+
     ini, exo = MULTIAGENT_LOADS[scenario]
     def make(seed: int) -> CleanMARLLeoMultiAgentWrapper:
         envc = EnvConfig(scenario=SCENARIOS[scenario], seed=seed)
@@ -170,13 +176,15 @@ def main():
     ap.add_argument("--scenario", default="medium_load")
     ap.add_argument("--outdir", type=Path, default=Path("experiments/IEEE-NS3"))
     ap.add_argument("--workload-seeds", default="21001,21002,21003,21004,21005")
+    ap.add_argument("--variant", default="no_lifetime",
+                    help="env variant for BOTH policies (mask parity)")
     ap.add_argument("--device", default="cpu")
     args = ap.parse_args()
     args.outdir.mkdir(parents=True, exist_ok=True)
     wl = [int(s) for s in args.workload_seeds.split(",")]
 
     # topology (use a throwaway wrapper to access the graph; must reset to populate)
-    tw = make_wrapper_factory("no_lifetime", args.scenario)(wl[0])
+    tw = make_wrapper_factory(args.variant, args.scenario)(wl[0])
     tw.reset(seed=wl[0])
     dump_topology(tw.env, args.outdir / "topology.csv")
     # horizon + per-class deadline slots -> pass to the ns-3 run as
@@ -186,14 +194,14 @@ def main():
     tw.close()
     print(f"=> wrote topology.csv ({sum(1 for _ in open(args.outdir/'topology.csv'))-1} links)")
 
-    # MAPPO (no_lifetime checkpoint)
+    # MAPPO (checkpoint of the adopted variant)
     print(f"== MAPPO ({args.checkpoint.name}) ==", flush=True)
     policy, _info = load_checkpoint_policy(args.checkpoint, device=args.device)
-    dump_policy_traces(policy, "mappo", "no_lifetime", args.scenario, wl, args.outdir)
+    dump_policy_traces(policy, "mappo", args.variant, args.scenario, wl, args.outdir)
 
-    # Dijkstra oracle
+    # Dijkstra oracle (SAME variant as MAPPO — mask parity, see factory note)
     print("== Dijkstra ==", flush=True)
-    dump_policy_traces(GlobalDijkstraPolicy(), "dijkstra", "full", args.scenario, wl, args.outdir)
+    dump_policy_traces(GlobalDijkstraPolicy(), "dijkstra", args.variant, args.scenario, wl, args.outdir)
     print("DONE")
 
 

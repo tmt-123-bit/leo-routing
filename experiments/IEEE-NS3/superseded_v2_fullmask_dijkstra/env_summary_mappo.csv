@@ -1,0 +1,6 @@
+episode,policy,workload_seed,generated,delivered,dropped,delivery_ratio,throughput_per_slot,mean_delay_slots,p95_delay_slots
+0,mappo,21001,192,153,0,0.7969,5.1,5.346,10.4
+1,mappo,21002,192,150,0,0.7812,5.0,6.02,10.55
+2,mappo,21003,192,155,2,0.8073,5.1667,5.819,12.3
+3,mappo,21004,192,146,4,0.7604,4.8667,6.37,11.0
+4,mappo,21005,192,148,1,0.7708,4.9333,5.405,10.65

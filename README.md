@@ -8,12 +8,12 @@
 
 去中心化、只用**一跳局部信息**的 MAPPO,在 24 星座 5 个场景上:
 
-- **显著反超看全图的集中式最短路 oracle(Dijkstra/ECMP)**:中负载 **+4.8 pp**、故障 **+4.3 pp**、频繁断链 **+2.5 pp**(均 p<1e-6);轻负载持平,仅在高负载饱和场景落后 1.1 pp。
-- **碾压分布式基线**:对 Q-routing 和队列感知启发式领先 **14–43 pp**(p<1e-9)。
-- 零样本泛化到 **5.5× 规模**和**真实 Starlink/OneWeb 拓扑**,对奖励权重扰动和 8 个训练种子都鲁棒。
-- **数据包级验证**:ns-3 重放(静态 + 动态断链拓扑)确认投递率优势在包级仿真中成立(详见 §8)。
+- **显著反超看全图的集中式最短路 oracle(Dijkstra/ECMP)**:中负载 **+5.3 pp**、频繁断链 **+5.1 pp**、故障 **+4.9 pp**(均 p≤1.2e-9);轻负载持平,仅在高负载饱和场景落后 0.9 pp。
+- 对分布式基线:**碾压队列感知启发式 +13–41 pp**(p≤1.2e-9);与分布式 Q-routing 在投递率上**基本持平**(差距 ±0.6 pp 内),但 MAPPO **零样本迁移**到 5.5× 规模和真实 Starlink/OneWeb 拓扑(Q 表按星座规模索引、无法迁移),P95 时延与负载均衡也不劣于 Q-routing。
+- 零样本泛化 + 对奖励权重扰动和 8 个训练种子鲁棒(§6/§7)。
+- **数据包级验证**:ns-3 重放(静态 + 动态断链拓扑)确认 oracle 优势在包级仿真中保持(@1×–4× 压缩;8× 深度饱和区收敛为平局,详见 §8)。
 
-> 这是从早期"接近但未超过全局最短路"定位的实质提升 —— 关键转折是发现并移除了净有害的链路寿命子系统(见消融 §5)。
+> 诚实说明:早期"对 Q-routing 领先 14–43 pp"的结论是评测 harness 两处 bug 的伪影(held-out 评测误用 `full` 变体给 no_lifetime 检查点加 lifetime mask;Q-routing 也曾在 mask 下训练/评测)。修复后两策略在同一信息集对比,Q-routing 是真正的强基线 —— MAPPO 的差异化优势是**零样本可迁移性 + 相对 oracle 的尾时延/负载均衡收益**,而非对同类学习基线的投递率碾压。
 
 ## 1. 要解决的问题
 
@@ -50,23 +50,29 @@ r_i    = R_team + 0.25·(r_local_i - mean(r_local_active))
 
 credit 项零均值,锐化个体信号而不偏移团队目标。消融证明这是**最大的单一架构因子**(去掉掉 −8.8 pp)。
 
-## 3. 主要结果(5 场景,8 seed × 50k 步,`no_lifetime`)
+## 3. 主要结果(5 场景 × 8 seed × 50 held-out episodes,全部策略同一 `no_lifetime` 信息集)
 
-| 场景 | MAPPO(局部) | Dijkstra(全局 oracle) | 差距 | 配对统计 |
-|---|---:|---:|---:|---|
-| low_load | 0.904 | 0.907 | −0.3 pp | 持平(p=0.051) |
-| medium_load | **0.774** | 0.726 | **+4.8 pp** | dz=2.84, p=1.1e-9 |
-| hotspot_high_load | 0.284 | 0.295 | −1.1 pp | 唯一落后场景 |
-| frequent_break | **0.439** | 0.414 | **+2.5 pp** | p=1.1e-6 |
-| fault_links | **0.747** | 0.704 | **+4.3 pp** | dz=1.94, p=1.2e-9 |
+投递率(95% CI):
 
-对分布式基线:Q-routing 投递率 0.237–0.640,启发式 0.145–0.592 —— MAPPO 领先 14–43 pp,全部 p<1e-9。
+| 场景 | MAPPO(局部) | Q-routing(分布式) | Dijkstra(全局 oracle) | ECMP(全局 oracle) | 队列感知启发式 |
+|---|---:|---:|---:|---:|---:|
+| low_load | **0.913** | 0.912 | 0.911 | 0.911 | 0.643 |
+| medium_load | **0.788** | 0.785 | 0.735 | 0.736 | 0.381 |
+| hotspot_high_load | 0.290 | **0.309** | 0.299 | 0.299 | 0.160 |
+| frequent_break | **0.759** | 0.752 | 0.707 | 0.706 | 0.366 |
+| fault_links | **0.763** | 0.762 | 0.714 | 0.716 | 0.373 |
 
-**机制(C5 尾部与均衡)**:MAPPO 匹配或超过 oracle 投递率的同时,负载不均衡(`global_load_imbalance`)在全部 5 场景显著低于 Dijkstra(p=1.8e-15),P95 延迟与队列更低 —— 即用一点点路径最优性换更好的负载分散。
+- **对集中式 SPF oracle(信息集优势方)**:MAPPO 在 medium/frequent_break/fault 领先 **+5.3 / +5.1 / +4.9 pp**(dz 2.3–2.9,p≤1.2e-9);low_load 持平;hotspot 落后 0.9 pp(唯一落后场景)。
+- **对分布式 Q-routing(同一信息集)**:投递率差距 ±0.6 pp 内(medium +0.3 pp p=0.013、frequent_break +0.6 pp p=1.9e-5、hotspot −1.9 pp、其余持平)—— Q-routing 是强基线,不是被碾压方。
+- **对启发式基线**:领先 **+13 到 +41 pp**(dz 4.5–13.3,全部 p≤1.2e-9)。
+
+**机制(C5 尾部与均衡)**:MAPPO 在超过 oracle 投递率的同时,P95 延迟在 medium/frequent_break/fault 比 Dijkstra 低 **1.9–2.1 slots**(p≤1.5e-14),负载不均衡(`global_load_imbalance`)在全部 5 场景显著更低(p≤5.3e-15),平均队列更低 —— 即用一点点路径最优性换更好的负载分散与尾时延;对 Q-routing 这些次级指标不劣(差异 <0.1 slot)。
+
+> **修正说明(2026-08-14)**:本表来自 eval harness 修复后的重跑(`IEEE-NOLIFE-EVALFIX/`)。此前 `run_exp004_mappo.py` 的 held-out 评测未把 `--variant` 传给 `evaluate_policy`,导致 no_lifetime 检查点在带 lifetime mask 的环境下评测(frequent_break 被 低估约 27 pp);Q-routing 也曾在错误变体下训练。修复覆盖全部 5 个评测点 + `train_q_routing`。
 
 统计方法:分层 bootstrap(5000 重采样,独立重采样策略 seed 与 workload seed),配对 Wilcoxon + Benjamini-Hochberg 校正,配对 Cohen's dz,所有"无显著差异"声明附 MDE(α=0.05, power=0.8)。
 
-数据:[`experiments/IEEE-NOLIFE-full/`](experiments/IEEE-NOLIFE-full/)(`aggregate_metrics.csv`、`paired_tests.csv`、`episode_metrics.csv`)。
+数据:[`experiments/IEEE-NOLIFE-EVALFIX/`](experiments/IEEE-NOLIFE-EVALFIX/)(`aggregate_metrics.csv`、`paired_tests.csv`、`episode_metrics.csv`)。
 
 ## 4. 复现核查(代码漂移 vs 训练预算)
 
@@ -109,27 +115,27 @@ credit 项零均值,锐化个体信号而不偏移团队目标。消融证明这
 
 在 ns-3.48 中重放每条策略的**逐包源路由路径**,通过真实 FIFO 丢尾队列、字节带宽、传播时延的 P2P 环面网格。两策略跑在**完全相同**的物理模型与流量上,唯一变量是路径选择;负载通过 slot 时间压缩(1×–8×)扫描。
 
-> **修正说明(2026-08-14)**:早期版本把 env 中被丢弃包的**部分路径**终点误计为"交付"(Dijkstra 被丢弃包更多、被抬高也更多),由此得出的"静态重放中 MAPPO 优势消失"结论是该 harness bug 的伪影。修复后静态与动态重放结果如下。
+> **修正说明(2026-08-14)**:两处 harness bug 已修复,早期 §8 结论作废:(1) env 中被丢弃包的**部分路径**终点曾被误计为"交付"(Dijkstra 被丢弃包更多、被抬高也更多);(2) 重放提取时 Dijkstra 曾跑在 `full` 变体下(被 lifetime mask 限制可用链路)而 MAPPO 跑 `no_lifetime`(两者不在同一信息集)。修复后两策略在**同一变体、同一断链调度**下对比,结果如下。
 
-### 8.1 静态拓扑(medium_load,5 episodes)
+### 8.1 静态拓扑(medium_load,5 episodes,两策略同为 no_lifetime)
 
 | | env(slot 同步) | ns-3 @1× | @2× | @4× | @8× |
 |---|---|---|---|---|---|
 | MAPPO | **0.783** [0.769, 0.798] | **0.854** [0.846, 0.864] | **0.811** [0.797, 0.829] | **0.609** [0.550, 0.684] | **0.502** [0.442, 0.586] |
-| Dijkstra | 0.719 [0.686, 0.752] | 0.782 [0.753, 0.812] | 0.760 [0.727, 0.794] | 0.565 [0.514, 0.643] | 0.476 [0.422, 0.543] |
+| Dijkstra | 0.728 [0.696, 0.760] | 0.793 [0.765, 0.822] | 0.770 [0.744, 0.798] | 0.576 [0.526, 0.653] | 0.487 [0.436, 0.553] |
 
-MAPPO 在静态重放的**每个负载点**都 ≥ Dijkstra(1×/2× CI 分离;4×/8× 饱和区 CI 重叠,统计平局),差距随拥塞收窄(+7.2 → +2.6 pp),与 env 的 +6.4 pp 一致。见 `figures/fig_ns3_validation`。
+MAPPO 在静态重放的每个负载点均值都高于 Dijkstra(1× CI 分离,+6.1 pp;随拥塞收窄至 +1.5 pp,4×/8× 饱和区为统计平局),与 env 的 +5.5 pp 一致。见 `figures/fig_ns3_validation`。
 
-### 8.2 动态断链拓扑(frequent_break,16 episodes)
+### 8.2 动态断链拓扑(frequent_break,16 episodes,两策略同为 no_lifetime)
 
 链路按 env **真实的逐 slot 断链调度**通断(`links_<policy>.csv`,两策略完全相同);断链时在途包在节点等待、下个 slot 边界重试,超过业务等级 deadline 判丢,投递仅在 deadline 内有效。
 
 | | env(slot 同步) | ns-3 @1× | @2× | @4× | @8× |
 |---|---|---|---|---|---|
-| MAPPO | **0.765** [0.752, 0.777] | **0.830** [0.818, 0.841] | **0.830** [0.818, 0.841] | **0.759** [0.739, 0.777] | **0.345** [0.319, 0.377] |
-| Dijkstra | 0.429 [0.390, 0.465] | 0.483 [0.441, 0.524] | 0.483 [0.441, 0.524] | 0.463 [0.421, 0.504] | 0.235 [0.206, 0.265] |
+| MAPPO | **0.765** [0.752, 0.777] | **0.830** [0.818, 0.841] | **0.830** [0.818, 0.841] | **0.759** [0.739, 0.777] | 0.345 [0.319, 0.377] |
+| Dijkstra | 0.718 [0.707, 0.729] | 0.781 [0.770, 0.792] | 0.781 [0.770, 0.792] | 0.741 [0.725, 0.755] | 0.356 [0.330, 0.391] |
 
-**MAPPO 的优势完整迁移到数据包级动态重放**:每个负载点 CI 全部分离,差距 +34.6 / +34.6 / +29.6 / +11.0 pp,配对 Wilcoxon p ≤ 9.2e-5(16 episodes;1×/2× 无丢包故结果重合)。8× 压缩下两策略同时退化(deadline 丢包为主),排序不翻转。@1× 时 ns-3 投递数与 env **逐包完全一致**(2349 = 2349),是 harness 与 env 语义对齐的 sanity check。见 `figures/fig_ns3_dynamic`;统计 [`experiments/IEEE-NS3-DYN/ns3_dynamic_stats.csv`](experiments/IEEE-NS3-DYN/ns3_dynamic_stats.csv)。
+**env 的 +4.7 pp 优势迁移到数据包级动态重放**:@1×/2× 为 +4.8 pp(CI 分离,配对 Wilcoxon p=1.5e-4;1×/2× 无丢包故结果重合),@4× 收窄为 +1.8 pp(p=0.044),@8× 深度饱和区两策略同时退化(deadline 丢包为主)并收敛为统计平局(−1.0 pp,p=0.23)。@1× 时 ns-3 投递数与 env **逐包完全一致**(2349 = 2349),是 harness 与 env 语义对齐的 sanity check。见 `figures/fig_ns3_dynamic`;统计 [`experiments/IEEE-NS3-DYN/ns3_dynamic_stats.csv`](experiments/IEEE-NS3-DYN/ns3_dynamic_stats.csv)。
 
 ## 9. 主要代码
 
