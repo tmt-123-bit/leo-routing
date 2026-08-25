@@ -1,0 +1,5 @@
+policy,n_episodes,mean,ci95_low,ci95_high,mean_delay_ms,p95_delay_ms
+mappo,16,0.8607,0.8216,0.8916,8419.3,15345.8
+dijkstra,16,0.7865,0.7435,0.8193,9663.9,20594.8
+paired_gap_pp,,7.42,,,,
+wilcoxon_p,,4.349e-04,,,,

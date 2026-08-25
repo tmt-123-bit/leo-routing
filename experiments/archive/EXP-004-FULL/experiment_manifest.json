@@ -1,0 +1,61 @@
+{
+  "experiment": "EXP-004",
+  "mode": "full",
+  "config": {
+    "scenarios": [
+      "low_load",
+      "medium_load",
+      "hotspot_high_load",
+      "frequent_break",
+      "fault_links"
+    ],
+    "timesteps": 50000,
+    "validation_episodes": 50,
+    "test_episodes": 50,
+    "eval_every_rollouts": 40,
+    "save_every_steps": 5000,
+    "batch_size": 4,
+    "q_routing_train_episodes": 500
+  },
+  "policy_seeds": [
+    7,
+    42,
+    1024
+  ],
+  "train_workload_seeds": [
+    9001,
+    9020
+  ],
+  "validation_workload_seeds": [
+    10001,
+    10050
+  ],
+  "test_workload_seeds": [
+    11001,
+    11050
+  ],
+  "checkpoints": {
+    "low_load/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\EXP-004-FULL\\checkpoints\\low_load\\seed_7\\leo_multi__low_load__seed-7__2026-07-15_14-51-35__EXP-004\\validation_best.pt",
+    "low_load/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\EXP-004-FULL\\checkpoints\\low_load\\seed_42\\leo_multi__low_load__seed-42__2026-07-15_14-51-35__EXP-004\\validation_best.pt",
+    "low_load/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\EXP-004-FULL\\checkpoints\\low_load\\seed_1024\\leo_multi__low_load__seed-1024__2026-07-15_16-03-27__EXP-004\\validation_best.pt",
+    "medium_load/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\EXP-004-FULL\\checkpoints\\medium_load\\seed_7\\leo_multi__medium_load__seed-7__2026-07-15_16-03-42__EXP-004\\validation_best.pt",
+    "medium_load/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\EXP-004-FULL\\checkpoints\\medium_load\\seed_42\\leo_multi__medium_load__seed-42__2026-07-15_20-09-18__EXP-004\\validation_best.pt",
+    "medium_load/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\EXP-004-FULL\\checkpoints\\medium_load\\seed_1024\\leo_multi__medium_load__seed-1024__2026-07-15_20-09-18__EXP-004\\validation_best.pt",
+    "hotspot_high_load/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\EXP-004-FULL\\checkpoints\\hotspot_high_load\\seed_7\\leo_multi__hotspot_high_load__seed-7__2026-07-15_14-56-56__EXP-004\\validation_best.pt",
+    "hotspot_high_load/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\EXP-004-FULL\\checkpoints\\hotspot_high_load\\seed_42\\leo_multi__hotspot_high_load__seed-42__2026-07-15_14-56-56__EXP-004\\validation_best.pt",
+    "hotspot_high_load/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\EXP-004-FULL\\checkpoints\\hotspot_high_load\\seed_1024\\leo_multi__hotspot_high_load__seed-1024__2026-07-15_16-33-44__EXP-004\\validation_best.pt",
+    "frequent_break/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\EXP-004-FULL\\checkpoints\\frequent_break\\seed_7\\leo_multi__frequent_break__seed-7__2026-07-15_14-57-02__EXP-004\\validation_best.pt",
+    "frequent_break/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\EXP-004-FULL\\checkpoints\\frequent_break\\seed_42\\leo_multi__frequent_break__seed-42__2026-07-15_14-57-02__EXP-004\\validation_best.pt",
+    "frequent_break/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\EXP-004-FULL\\checkpoints\\frequent_break\\seed_1024\\leo_multi__frequent_break__seed-1024__2026-07-15_16-28-35__EXP-004\\validation_best.pt",
+    "fault_links/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\EXP-004-FULL\\checkpoints\\fault_links\\seed_7\\leo_multi__fault_links__seed-7__2026-07-15_14-57-07__EXP-004\\validation_best.pt",
+    "fault_links/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\EXP-004-FULL\\checkpoints\\fault_links\\seed_42\\leo_multi__fault_links__seed-42__2026-07-15_16-29-04__EXP-004\\validation_best.pt",
+    "fault_links/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\EXP-004-FULL\\checkpoints\\fault_links\\seed_1024\\leo_multi__fault_links__seed-1024__2026-07-15_20-09-18__EXP-004\\validation_best.pt"
+  },
+  "code_fingerprint": {
+    "trainer": "b2fd443545347140d4d0d4c9740621f43cf4a9c4dbf59f25c8c29f2e298f86cf",
+    "environment": "73fd13641e8425241bbaef2467e7429e348793bce0c74c7e84b7c129c351a379",
+    "wrapper": "d3c08983763cb7eb68a9370c9c3a7dafec072307805ce48d96f9edcd7a731584",
+    "design": "40f2b484225cbe05d5321e723c88a64294c68624bf5947432d0c2606d2cf445a",
+    "evaluation": "58a2768d7468deb9385b1c97d032792b033b79c22257448e7c7b912b2fb0a6b7"
+  }
+}

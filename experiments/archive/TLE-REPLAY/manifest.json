@@ -1,0 +1,11 @@
+{
+  "experiment": "TLE-REPLAY",
+  "links": "F:\\leo-routing-preliminary-matlab\\data\\starlink_24_links.csv",
+  "episodes": 20,
+  "workload_seed_range": [
+    12001,
+    12020
+  ],
+  "checkpoint": null,
+  "interpretation": "MAPPO is evaluated zero-shot when a checkpoint is supplied; this is a topology-transfer test, not retraining on TLE data."
+}

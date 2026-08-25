@@ -1,0 +1,3 @@
+﻿policy,sent,delivered,delivery_ratio,mean_delay_ms,p50_delay_ms,p95_delay_ms,deadline_drops,ttl_drops,queue_drops,source_drops,device_queue_drops,blocked_by_link_capacity,holds,decisions,load_imbalance,wall_sec
+mappo,3072,2644,0.860677,8419.24,9341.78,15345.8,347,46,0,0,0,0,3577,7943,1.04075,25.3
+dijkstra,3072,2416,0.786458,9663.92,9341.78,20345.8,621,0,0,0,0,0,4415,7105,1.34164,24.1

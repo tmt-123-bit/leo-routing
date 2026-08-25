@@ -1,0 +1,19 @@
+{
+  "experiment": "stale_link_state_dijkstra",
+  "staleness_slots": [
+    1,
+    3,
+    5,
+    10
+  ],
+  "scenarios": [
+    "medium_load",
+    "frequent_break",
+    "fault_links"
+  ],
+  "workload_seeds": [
+    11001,
+    50
+  ],
+  "variant": "no_lifetime"
+}

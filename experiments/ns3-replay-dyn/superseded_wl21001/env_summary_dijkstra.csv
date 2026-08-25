@@ -1,0 +1,9 @@
+episode,policy,workload_seed,generated,delivered,dropped,delivery_ratio,throughput_per_slot,mean_delay_slots,p95_delay_slots
+0,dijkstra,21001,192,76,30,0.3958,2.5333,8.868,17.5
+1,dijkstra,21002,192,117,30,0.6094,3.9,6.427,12.0
+2,dijkstra,21003,192,100,43,0.5208,3.3333,5.85,13.0
+3,dijkstra,21004,192,43,66,0.224,1.4333,9.419,19.9
+4,dijkstra,21005,192,121,15,0.6302,4.0333,7.066,14.0
+5,dijkstra,21006,192,78,33,0.4062,2.6,7.872,17.15
+6,dijkstra,21007,192,83,39,0.4323,2.7667,6.747,12.9
+7,dijkstra,21008,192,45,59,0.2344,1.5,9.644,19.6

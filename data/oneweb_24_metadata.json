@@ -1,0 +1,183 @@
+{
+  "source_tle": "F:\\leo-routing-preliminary-matlab\\data\\oneweb_2026-07-15.tle",
+  "source_tle_sha256": "ed2d1ee719d40c508a382df887e98cb0d329aedc7f49d249aecfa9e693ae8194",
+  "source_url": "https://celestrak.org/NORAD/elements/gp.php?GROUP=oneweb&FORMAT=tle",
+  "selected_satellites": [
+    {
+      "environment_id": 1,
+      "name": "ONEWEB-0596",
+      "norad_id": 54662,
+      "plane": 0,
+      "local_index": 0
+    },
+    {
+      "environment_id": 2,
+      "name": "ONEWEB-0550",
+      "norad_id": 56052,
+      "plane": 0,
+      "local_index": 1
+    },
+    {
+      "environment_id": 3,
+      "name": "ONEWEB-0681",
+      "norad_id": 56717,
+      "plane": 0,
+      "local_index": 2
+    },
+    {
+      "environment_id": 4,
+      "name": "ONEWEB-0655",
+      "norad_id": 54677,
+      "plane": 0,
+      "local_index": 3
+    },
+    {
+      "environment_id": 5,
+      "name": "ONEWEB-0602",
+      "norad_id": 54666,
+      "plane": 0,
+      "local_index": 4
+    },
+    {
+      "environment_id": 6,
+      "name": "ONEWEB-0542",
+      "norad_id": 54646,
+      "plane": 0,
+      "local_index": 5
+    },
+    {
+      "environment_id": 7,
+      "name": "ONEWEB-0236",
+      "norad_id": 48797,
+      "plane": 1,
+      "local_index": 0
+    },
+    {
+      "environment_id": 8,
+      "name": "ONEWEB-0630",
+      "norad_id": 56072,
+      "plane": 1,
+      "local_index": 1
+    },
+    {
+      "environment_id": 9,
+      "name": "ONEWEB-0696",
+      "norad_id": 56723,
+      "plane": 1,
+      "local_index": 2
+    },
+    {
+      "environment_id": 10,
+      "name": "ONEWEB-0228",
+      "norad_id": 48780,
+      "plane": 1,
+      "local_index": 3
+    },
+    {
+      "environment_id": 11,
+      "name": "ONEWEB-0233",
+      "norad_id": 48795,
+      "plane": 1,
+      "local_index": 4
+    },
+    {
+      "environment_id": 12,
+      "name": "ONEWEB-0632",
+      "norad_id": 56073,
+      "plane": 1,
+      "local_index": 5
+    },
+    {
+      "environment_id": 13,
+      "name": "ONEWEB-0354",
+      "norad_id": 49217,
+      "plane": 2,
+      "local_index": 0
+    },
+    {
+      "environment_id": 14,
+      "name": "ONEWEB-0384",
+      "norad_id": 49310,
+      "plane": 2,
+      "local_index": 1
+    },
+    {
+      "environment_id": 15,
+      "name": "ONEWEB-0510",
+      "norad_id": 54128,
+      "plane": 2,
+      "local_index": 2
+    },
+    {
+      "environment_id": 16,
+      "name": "ONEWEB-0357",
+      "norad_id": 49219,
+      "plane": 2,
+      "local_index": 3
+    },
+    {
+      "environment_id": 17,
+      "name": "ONEWEB-0656",
+      "norad_id": 55817,
+      "plane": 2,
+      "local_index": 4
+    },
+    {
+      "environment_id": 18,
+      "name": "ONEWEB-0364",
+      "norad_id": 49290,
+      "plane": 2,
+      "local_index": 5
+    },
+    {
+      "environment_id": 19,
+      "name": "ONEWEB-0653",
+      "norad_id": 55815,
+      "plane": 3,
+      "local_index": 0
+    },
+    {
+      "environment_id": 20,
+      "name": "ONEWEB-0184",
+      "norad_id": 48211,
+      "plane": 3,
+      "local_index": 1
+    },
+    {
+      "environment_id": 21,
+      "name": "ONEWEB-0198",
+      "norad_id": 48216,
+      "plane": 3,
+      "local_index": 2
+    },
+    {
+      "environment_id": 22,
+      "name": "ONEWEB-0197",
+      "norad_id": 48236,
+      "plane": 3,
+      "local_index": 3
+    },
+    {
+      "environment_id": 23,
+      "name": "ONEWEB-0654",
+      "norad_id": 55816,
+      "plane": 3,
+      "local_index": 4
+    },
+    {
+      "environment_id": 24,
+      "name": "ONEWEB-0219",
+      "norad_id": 48223,
+      "plane": 3,
+      "local_index": 5
+    }
+  ],
+  "start_utc": "2026-07-14T18:49:29.774495+00:00",
+  "slot_seconds": 10,
+  "slots": 30,
+  "model_limits": [
+    "SGP4 propagation uses the frozen TLE epoch.",
+    "ISLs are constructed as same-plane neighbor links plus nearest adjacent-plane links.",
+    "Capacity and reliability are experiment assumptions, not TLE measurements."
+  ]
+}

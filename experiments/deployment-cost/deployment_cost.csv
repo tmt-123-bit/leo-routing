@@ -1,0 +1,8 @@
+﻿policy,params,model_mem_kb,macs_per_sat_decision,slot_decision_ms_cpu,note
+mappo_actor,4097,16.00390625,1056,0.739,"shared scorer h=32 x1, feat=26"
+dqn_routing_head,22729,88.78515625,20864,0.625,MLP 34-128-128-1 + dst embedding
+q_routing_table_n24,15625,61.03515625,0,,table lookup O(1); must be retrained per constellation
+q_routing_table_n66,300763,1174.85546875,0,,table lookup O(1); must be retrained per constellation
+q_routing_table_n110,1367631,5342.30859375,0,,table lookup O(1); must be retrained per constellation
+q_routing_table_n132,2352637,9189.98828125,0,,table lookup O(1); must be retrained per constellation
+dijkstra_reverse_spf,0,0.0,,0.318,"per (slot, dst) on n24; needs CURRENT global link state (oracle)"

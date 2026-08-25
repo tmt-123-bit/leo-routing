@@ -1,0 +1,48 @@
+{
+  "experiment": "EXP-004",
+  "mode": "quick",
+  "config": {
+    "scenarios": [
+      "medium_load",
+      "frequent_break"
+    ],
+    "timesteps": 300,
+    "validation_episodes": 20,
+    "test_episodes": 20,
+    "eval_every_rollouts": 2,
+    "save_every_steps": 150,
+    "batch_size": 2
+  },
+  "policy_seeds": [
+    7,
+    42,
+    1024
+  ],
+  "train_workload_seeds": [
+    9001,
+    9020
+  ],
+  "validation_workload_seeds": [
+    10001,
+    10020
+  ],
+  "test_workload_seeds": [
+    11001,
+    11020
+  ],
+  "checkpoints": {
+    "medium_load/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\EXP-004\\checkpoints\\medium_load\\seed_7\\leo_multi__medium_load__seed-7__2026-07-15_13-56-52__EXP-004\\validation_best.pt",
+    "medium_load/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\EXP-004\\checkpoints\\medium_load\\seed_42\\leo_multi__medium_load__seed-42__2026-07-15_13-57-17__EXP-004\\validation_best.pt",
+    "medium_load/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\EXP-004\\checkpoints\\medium_load\\seed_1024\\leo_multi__medium_load__seed-1024__2026-07-15_13-57-45__EXP-004\\validation_best.pt",
+    "frequent_break/seed_7": "F:\\leo-routing-preliminary-matlab\\experiments\\EXP-004\\checkpoints\\frequent_break\\seed_7\\leo_multi__frequent_break__seed-7__2026-07-15_13-58-25__EXP-004\\validation_best.pt",
+    "frequent_break/seed_42": "F:\\leo-routing-preliminary-matlab\\experiments\\EXP-004\\checkpoints\\frequent_break\\seed_42\\leo_multi__frequent_break__seed-42__2026-07-15_13-58-51__EXP-004\\validation_best.pt",
+    "frequent_break/seed_1024": "F:\\leo-routing-preliminary-matlab\\experiments\\EXP-004\\checkpoints\\frequent_break\\seed_1024\\leo_multi__frequent_break__seed-1024__2026-07-15_13-59-18__EXP-004\\validation_best.pt"
+  },
+  "code_fingerprint": {
+    "trainer": "75ea1aea059a5d0f6dbb0575f974eec45928699f6384acd0ed99d56815926696",
+    "environment": "027f07b57ad64a76b34a7eff1181df072ac82ff3a25f9161a3433091ef4c7b2f",
+    "wrapper": "2b08a0b457ff79f568b660b1c9ee7a5a2d39017f4a7519049cc1382d0777ae58",
+    "design": "40f2b484225cbe05d5321e723c88a64294c68624bf5947432d0c2606d2cf445a",
+    "evaluation": "ee113d040c9fdddcfb7073c5b8d0df9dc1112b3869fc1aef8f912153afd96ff9"
+  }
+}
