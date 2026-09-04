@@ -4,7 +4,54 @@
 
 当前主线不是继续堆奖励项，而是直接约束“本来可以不换路、但策略仍然换了下一跳”的决策。代码、训练协议、经典基线和一次性 sealed test 都已经冻结。
 
-## 当前结果
+## 项目是怎么走到这一版的
+
+这个项目先后解决了两个不同问题。
+
+第一阶段关注投递性能。早期策略把剩余链路寿命作为特征、奖励和硬动作 mask，希望提前避开即将断开的链路。实际观察到的副作用是策略会过早放弃仍然可用的链路，增加绕路和队列压力。后续采用 `no_lifetime` 配置：物理链路仍然会随拓扑变化而断开，但 Actor 不再使用预测寿命特征、寿命奖励或寿命硬 mask。
+
+历史名称容易混淆，代码中的对应关系是：
+
+| 历史名称 | 当前名称 | Lifetime feature | Lifetime reward | Hard mask |
+|---|---|---:|---:|---:|
+| `no_lifetime` | `proposed` / L0 | 关闭 | 关闭 | 关闭 |
+| - | `with_lifetime_feature` / L1 | 开启 | 关闭 | 关闭 |
+| - | `with_lifetime_reward` / L2 | 开启 | 开启 | 关闭 |
+| `full` | `with_hard_lifetime_mask` / L3 | 开启 | 开启 | 开启 |
+
+旧的 5k-step 消融支持“关闭 lifetime 更合适”这一工程判断，但它只有正式训练预算的 10%，因此这里只把它当作探索性证据。计划中的完整 50k-step 组件消融尚未完成，不能据此声称已经严格证明每个 lifetime 组件都会导致性能下降。
+
+第二阶段关注路由决策本身。关闭 lifetime 后，QoS-only MAPPO 仍可能因为候选分数的小幅波动，反复替换一个仍然可用的缓存下一跳。因此当前版本没有恢复 lifetime，也没有继续调整一个难解释的换路惩罚系数，而是定义“可避免切换”，并直接约束它在所有有效机会中的比例。
+
+```text
+带 lifetime 的策略
+        ↓ 发现提前避障会造成过度绕路
+关闭 lifetime 的 QoS-only MAPPO
+        ↓ 投递性能改善，但非必要换路仍没有明确上限
+Constraint-aware MAPPO
+        ↓ 用 12% 决策级预算直接管理可避免切换
+冻结训练、独立 gate、一次性 sealed test
+```
+
+## 两套结果不要混用
+
+仓库保留了两套用途不同的证据。
+
+### 历史五场景结果：关闭 lifetime 后的 QoS-MAPPO
+
+这一组回答“关闭 lifetime 后，MAPPO 的投递率相对传统路由如何”。修正后的 `eval-main` 使用 8 个独立 policy seed 和每个 seed 50 个共同 workload。相对 Global Dijkstra 的投递率差值为：
+
+| 场景 | MAPPO - Dijkstra |
+|---|---:|
+| `low_load` | +0.22 pp |
+| `medium_load` | +5.31 pp |
+| `hotspot_high_load` | -0.90 pp |
+| `frequent_break` | +5.15 pp |
+| `fault_links` | +4.89 pp |
+
+这些数字来自修正后的 evaluator，因此与早期汇报中的约 `+4.81 / +2.42 / +4.31 / -1.12 pp` 不完全相同。当前仓库以 [`RESULTS_SUMMARY.md`](RESULTS_SUMMARY.md) 和 `experiments/legacy-reanalysis/eval-main/` 为准。这套结果是对已完成 checkpoint 的回顾性重分析，不是新一轮独立重训练，也不是当前 constraint 方法的 sealed result。
+
+### 当前正式结果：显式约束是否有效
 
 正式实验包含两个 24 星场景、3 个 MAPPO 方法、3 个经典方法、8 个独立 policy seed 和 50 个未见 workload。sealed panel 共 4,100 行，没有缺失或重复。
 
@@ -50,6 +97,20 @@ sealed test 中，各方法的投递率 / 可避免切换率如下：
 | Global Dijkstra | 0.7381 / 0.1886 | 0.3011 / 0.1985 |
 
 相对同结构的 QoS-only MAPPO，约束方法把可避免切换率分别降低约 72.8% 和 94.9%。相对 Q-routing，切换率分别降低约 78.2% 和 95.1%，但投递率分别低约 0.46 pp 和 1.69 pp。也就是说，当前证据最稳妥的结论是“用很小或受控的投递率变化换取明显更少的非必要换路”，而不是全面击败传统路由。
+
+### 相比上一版，具体提升在哪里
+
+| 维度 | 上一版 `no_lifetime` MAPPO | 当前 constraint-aware MAPPO |
+|---|---|---|
+| 主要问题 | 提高投递率、减少 lifetime 引起的绕路 | 控制仍可沿用缓存路由时的非必要切换 |
+| 换路处理 | 换路开销混在标量奖励中 | 独立的机会条件切换率和 12% 预算 |
+| 对照方法 | 重点与 Dijkstra、Q-routing 比投递率 | 增加同结构 QoS-only MAPPO 和 reward-shaped control |
+| 统计单位 | 后来修正为 policy seed | 从协议开始就以 policy seed 为独立单位 |
+| 数据使用 | 已有 checkpoint 的回顾性重分析 | selection、independent gate 和 sealed workload 完全分离 |
+| 可审计性 | 有训练与评估 manifest | 协议、checkpoint、Q 表和最终结果逐层 hash 冻结 |
+| 支持的结论 | 多数场景投递率优于 Dijkstra，热点失败 | 两场景显著减少可避免切换，并通过预设投递率容差 |
+
+因此，这一版最主要的提升不是多得到几个百分点的投递率，而是把“路由不要无意义地来回换”从一个模糊的奖励偏好，变成可以定义、训练、检验和复现的约束目标。代价也写得很清楚：中负载下付出了约 0.96 pp 的投递率，热点下虽然相对普通 MAPPO 有所改善，但仍没有超过 Q-routing、OSPF-ECMP 和 Dijkstra。
 
 ## 方法
 
