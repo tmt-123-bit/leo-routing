@@ -1,16 +1,14 @@
 # LEO Routing with Constraint-Aware MAPPO
 
-这个仓库研究动态 LEO 星座中的分布式下一跳路由。每颗卫星作为一个 agent，使用共享参数的候选邻居 Actor 做本地决策；训练阶段使用图 Critic，部署阶段只需要本地包状态、缓存下一跳和一跳链路/队列信息。
+这个仓库做的是动态 LEO 星座中的分布式下一跳路由。每颗卫星独立选下一跳，Actor 参数共享；图 Critic 只在训练时使用。运行策略时不需要全局路由表，只读取本地包、缓存下一跳以及一跳链路和队列状态。
 
-当前主线不是继续堆奖励项，而是直接约束“本来可以不换路、但策略仍然换了下一跳”的决策。代码、训练协议、经典基线和一次性 sealed test 都已经冻结。
+现在研究的问题很具体：缓存的下一跳明明还能用，策略有没有必要换路？这类切换不会马上造成丢包，却会增加转发表更新和路由振荡。当前版本给它单独记账，并在 MAPPO 训练中设置 12% 的上限。
 
-## 项目是怎么走到这一版的
+## 版本变化
 
-这个项目先后解决了两个不同问题。
+最开始的版本使用了剩余链路寿命信息。原本的考虑是提前避开快要断开的链路，但实验里经常出现另一个问题：策略过早绕路，包走得更远，局部队列也更拥挤。后来将这部分关闭，保留拓扑中的真实断链，但不再把预测寿命交给 Actor，也不再使用寿命奖励和硬 mask。
 
-第一阶段关注投递性能。早期策略把剩余链路寿命作为特征、奖励和硬动作 mask，希望提前避开即将断开的链路。实际观察到的副作用是策略会过早放弃仍然可用的链路，增加绕路和队列压力。后续采用 `no_lifetime` 配置：物理链路仍然会随拓扑变化而断开，但 Actor 不再使用预测寿命特征、寿命奖励或寿命硬 mask。
-
-历史名称容易混淆，代码中的对应关系是：
+代码里保留了几种配置，名称对应如下：
 
 | 历史名称 | 当前名称 | Lifetime feature | Lifetime reward | Hard mask |
 |---|---|---:|---:|---:|
@@ -19,27 +17,17 @@
 | - | `with_lifetime_reward` / L2 | 开启 | 开启 | 关闭 |
 | `full` | `with_hard_lifetime_mask` / L3 | 开启 | 开启 | 开启 |
 
-旧的 5k-step 消融支持“关闭 lifetime 更合适”这一工程判断，但它只有正式训练预算的 10%，因此这里只把它当作探索性证据。计划中的完整 50k-step 组件消融尚未完成，不能据此声称已经严格证明每个 lifetime 组件都会导致性能下降。
+5k-step 消融中，关闭 lifetime 的结果更好，所以后续正式实验采用了 `no_lifetime`。这组消融的训练量只有正式实验的 10%，只能解释方案选择，不能当作完整的组件证明。50k-step 全量消融目前也没有跑完。
 
-第二阶段关注路由决策本身。关闭 lifetime 后，QoS-only MAPPO 仍可能因为候选分数的小幅波动，反复替换一个仍然可用的缓存下一跳。因此当前版本没有恢复 lifetime，也没有继续调整一个难解释的换路惩罚系数，而是定义“可避免切换”，并直接约束它在所有有效机会中的比例。
+关闭 lifetime 以后还有一个现象：QoS-only MAPPO 会因为候选分数的小幅变化，反复替换仍然可用的下一跳。当前版本就是在这里加了“可避免切换”约束。Lifetime 仍然关闭，QoS 奖励也没换，主要改动是给非必要换路单独设预算。
 
-```text
-带 lifetime 的策略
-        ↓ 发现提前避障会造成过度绕路
-关闭 lifetime 的 QoS-only MAPPO
-        ↓ 投递性能改善，但非必要换路仍没有明确上限
-Constraint-aware MAPPO
-        ↓ 用 12% 决策级预算直接管理可避免切换
-冻结训练、独立 gate、一次性 sealed test
-```
+## 两组实验
 
-## 两套结果不要混用
+仓库里有一组早期五场景结果和一组当前的 sealed test。它们的训练和评估协议不同，需要分别看。
 
-仓库保留了两套用途不同的证据。
+### 五场景 QoS-MAPPO
 
-### 历史五场景结果：关闭 lifetime 后的 QoS-MAPPO
-
-这一组回答“关闭 lifetime 后，MAPPO 的投递率相对传统路由如何”。修正后的 `eval-main` 使用 8 个独立 policy seed 和每个 seed 50 个共同 workload。相对 Global Dijkstra 的投递率差值为：
+这是关闭 lifetime 后的版本，用来比较 MAPPO 和传统路由的投递率。修正后的 `eval-main` 包含 8 个 policy seed，每个 seed 使用相同的 50 个 workload。相对 Global Dijkstra 的结果是：
 
 | 场景 | MAPPO - Dijkstra |
 |---|---:|
@@ -49,11 +37,11 @@ Constraint-aware MAPPO
 | `frequent_break` | +5.15 pp |
 | `fault_links` | +4.89 pp |
 
-这些数字来自修正后的 evaluator，因此与早期汇报中的约 `+4.81 / +2.42 / +4.31 / -1.12 pp` 不完全相同。当前仓库以 [`RESULTS_SUMMARY.md`](RESULTS_SUMMARY.md) 和 `experiments/legacy-reanalysis/eval-main/` 为准。这套结果是对已完成 checkpoint 的回顾性重分析，不是新一轮独立重训练，也不是当前 constraint 方法的 sealed result。
+这里采用修正 evaluator 后重新统计的数字，所以和早期汇报的 `+4.81 / +2.42 / +4.31 / -1.12 pp` 有出入。原始 checkpoint 没有重新训练，改的是评估和统计口径。具体记录见 [`RESULTS_SUMMARY.md`](RESULTS_SUMMARY.md) 和 `experiments/legacy-reanalysis/eval-main/`。
 
-### 当前正式结果：显式约束是否有效
+### 两场景 constraint sealed test
 
-正式实验包含两个 24 星场景、3 个 MAPPO 方法、3 个经典方法、8 个独立 policy seed 和 50 个未见 workload。sealed panel 共 4,100 行，没有缺失或重复。
+当前正式实验只做中负载和热点高负载两个场景。比较对象包括 3 个 MAPPO 版本和 3 个经典方法；每个 MAPPO 版本使用 8 个独立训练 seed，测试集是 50 个此前未使用的 workload。最终表共有 4,100 行，没有缺行或重复。
 
 主比较是 `qos_only_constrained` 相对同奖励、同结构的 `qos_only_baseline`：
 
@@ -62,28 +50,28 @@ Constraint-aware MAPPO
 | `medium_load` | -0.958 pp | [-1.587, -0.182] pp | -15.219 pp | [-19.739, -10.357] pp |
 | `hotspot_high_load` | +0.772 pp | [+0.353, +1.188] pp | -36.245 pp | [-40.872, -31.305] pp |
 
-两个场景都通过了预先写定的四个门限：
+实验开始前写了四个通过条件：
 
 - 投递率单侧 95% 下界不低于 -2 pp；
 - 可避免切换率差值的单侧上界低于 0；
 - constrained 策略的切换率单侧上界不高于 12%；
 - 每个 policy seed 的切换率都不高于 12%。
 
-中负载并不是“无损提升”：投递率下降约 0.96 pp，只是仍在预设的 2 pp non-inferiority 容差内。热点场景下 constrained MAPPO 的投递率也低于 Q-routing（0.2945 对 0.3114）。仓库和论文都保留这两个结果。
+中负载下少投递了约 0.96 pp，并非无损改进，只是没有超过预先允许的 2 pp。热点场景相对普通 MAPPO 多投递约 0.77 pp，但仍低于 Q-routing（0.2945 对 0.3114）。
 
 ![Sealed-test effects](paper/icc2027/fig_sealed_results.png)
 
 ## 和传统路由思路相比
 
-这里的改进不是把最短路换成一个黑盒策略，而是把动态路由里的两个目标拆开处理：QoS 由 MAPPO 学习，可避免的下一跳切换由显式约束控制。所有方法在相同场景和 sealed workload 上评估；不同方法可用的信息并不完全相同，因此下表是端到端方案比较，不是同信息条件下的理论优越性证明。
+几种方法解决问题的着力点不一样：
 
-| 方法 | 基本思路 | 这个实现补了什么 |
+| 方法 | 怎么选路 | 与本项目的区别 |
 |---|---|---|
-| Global Dijkstra | 根据当前全局链路代价重算单条最短路 | 部署时不需要集中式全图计算，并能利用本地队列、包和拥塞状态 |
-| OSPF-ECMP | 在等价最短路之间分流 | 候选集 Actor 不限于等价最短路，并在采样前屏蔽失效链路 |
-| Q-routing | 用下游反馈更新逐目的地 Q 值 | 共享参数适配动态候选邻居，同时直接约束仍可沿用缓存路由时的非必要切换 |
-| QoS-only MAPPO | 用奖励同时表达投递、时延和开销 | 增加独立的 12% 切换率预算，避免切换惩罚被其他奖励尺度淹没 |
-| Reward-shaped MAPPO | 在标量奖励中加入换路惩罚 | 约束值有直接的运行含义，不必把固定惩罚系数解释成切换率保证 |
+| Global Dijkstra | 按当前全局链路代价计算最短路 | MAPPO 在每颗卫星本地决策，并使用队列和包状态 |
+| OSPF-ECMP | 在等价最短路之间分流 | Actor 可以在全部可行邻居中选择，并屏蔽已经失效的链路 |
+| Q-routing | 根据下游反馈更新逐目的地 Q 值 | MAPPO 共享网络参数，并额外控制缓存下一跳的切换频率 |
+| QoS-only MAPPO | 把投递、时延和开销写进同一个奖励 | 当前版本沿用这套奖励，但另设 12% 切换率预算 |
+| Reward-shaped MAPPO | 在奖励里增加换路惩罚 | 固定惩罚只能间接影响换路；约束版本直接检查最终切换率 |
 
 sealed test 中，各方法的投递率 / 可避免切换率如下：
 
@@ -96,21 +84,9 @@ sealed test 中，各方法的投递率 / 可避免切换率如下：
 | OSPF-ECMP | 0.7386 / 0.1875 | 0.3012 / 0.1982 |
 | Global Dijkstra | 0.7381 / 0.1886 | 0.3011 / 0.1985 |
 
-相对同结构的 QoS-only MAPPO，约束方法把可避免切换率分别降低约 72.8% 和 94.9%。相对 Q-routing，切换率分别降低约 78.2% 和 95.1%，但投递率分别低约 0.46 pp 和 1.69 pp。也就是说，当前证据最稳妥的结论是“用很小或受控的投递率变化换取明显更少的非必要换路”，而不是全面击败传统路由。
+相对 QoS-only MAPPO，可避免切换率在两个场景分别下降 72.8% 和 94.9%。相对 Q-routing，下降 78.2% 和 95.1%，代价是投递率低 0.46 pp 和 1.69 pp。OSPF-ECMP 和 Dijkstra 在热点场景的投递率也更高，因此这版结果不能解释成全面领先传统路由。
 
-### 相比上一版，具体提升在哪里
-
-| 维度 | 上一版 `no_lifetime` MAPPO | 当前 constraint-aware MAPPO |
-|---|---|---|
-| 主要问题 | 提高投递率、减少 lifetime 引起的绕路 | 控制仍可沿用缓存路由时的非必要切换 |
-| 换路处理 | 换路开销混在标量奖励中 | 独立的机会条件切换率和 12% 预算 |
-| 对照方法 | 重点与 Dijkstra、Q-routing 比投递率 | 增加同结构 QoS-only MAPPO 和 reward-shaped control |
-| 统计单位 | 后来修正为 policy seed | 从协议开始就以 policy seed 为独立单位 |
-| 数据使用 | 已有 checkpoint 的回顾性重分析 | selection、independent gate 和 sealed workload 完全分离 |
-| 可审计性 | 有训练与评估 manifest | 协议、checkpoint、Q 表和最终结果逐层 hash 冻结 |
-| 支持的结论 | 多数场景投递率优于 Dijkstra，热点失败 | 两场景显著减少可避免切换，并通过预设投递率容差 |
-
-因此，这一版最主要的提升不是多得到几个百分点的投递率，而是把“路由不要无意义地来回换”从一个模糊的奖励偏好，变成可以定义、训练、检验和复现的约束目标。代价也写得很清楚：中负载下付出了约 0.96 pp 的投递率，热点下虽然相对普通 MAPPO 有所改善，但仍没有超过 Q-routing、OSPF-ECMP 和 Dijkstra。
+和上一版相比，方法上的变化其实只有一条主线：上一版解决 lifetime 带来的绕路，当前版本继续解决 MAPPO 自身的非必要换路。实验上则补了同结构的 QoS-only 对照、reward-shaped 对照、独立 checkpoint gate 和一次性 sealed test。统计时先在每个 policy seed 内汇总 50 个 workload，再比较 8 个独立 seed，不把同一策略跑出的 50 个 episode 当成 50 次独立训练。
 
 ## 方法
 
