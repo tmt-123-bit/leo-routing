@@ -5,7 +5,8 @@ make_figures.py — publication figures + LaTeX tables from aggregate_metrics.cs
 Generates the core figures (F1–F3) and Table I directly from the
 hierarchical-bootstrap aggregate produced by run_exp004_mappo.py. Data-driven:
 swap the --input directory when a fresh experiment finishes and every figure
-regenerates. Uses ONLY column names that already exist in the schema:
+regenerates. F4 additionally consumes the complete confirmatory
+paired_ablation_effects.csv. The main-result inputs use this schema:
 
     scenario, policy, metric, n, mean, std, ci95_low, ci95_high, ci_method
 
@@ -13,6 +14,7 @@ Figures
   F2  delivery by scenario, MAPPO vs every baseline, 95% CI error bars   (fig_delivery)
   F3  P95 delay + load-imbalance under stress scenarios                   (fig_tail_balance)
   F1  delivery-vs-budget crossover, needs >=2 --input dirs                (fig_budget)
+  F4  planned delivery ablations, treatment-reference effects + 95% CI    (fig_ablation)
   T1  main-results LaTeX table                                            (table_main)
 
 Usage
@@ -32,6 +34,12 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+
+try:
+    from variant_definitions import PLANNED_CONTRASTS
+except ImportError:
+    # Support both direct execution and ``python -m src.make_figures``.
+    from .variant_definitions import PLANNED_CONTRASTS
 
 # ---------------------------------------------------------------------------
 # Display maps — keep names stable; missing policies/scenarios are skipped.
@@ -314,69 +322,224 @@ def table_main(data, outdir: Path):
 
 
 # ---------------------------------------------------------------------------
-# F4 — ablation effect on delivery (needs paired_ablation_effects.csv)
+# F4 — confirmatory delivery effects (needs paired_ablation_effects.csv)
 # ---------------------------------------------------------------------------
-VARIANT_DISPLAY = {
-    "no_credit": "no credit", "no_ppo_protection": "no PPO protect.",
-    "flat_critic": "flat critic", "no_queue": "no queue",
-    "no_lifetime": "no lifetime", "no_packet_context": "no pkt context",
+PRIMARY_ABLATION_METRIC = "delivery_ratio"
+PRIMARY_HOLM_FIELD = "confirmatory_holm_within_metric_p"
+PRIMARY_ABLATION_FAMILY_SIZE = len(PLANNED_CONTRASTS) * len(SCENARIO_ORDER)
+
+CONTRAST_DISPLAY = {
+    "remove_queue_mechanism_package": "Remove queue mechanism",
+    "remove_centered_local_credit": "Remove centered credit",
+    "remove_packet_context": "Remove packet context",
+    "replace_graph_critic_with_flat_critic": "Use flat critic",
+    # Keep the display stable across the protocol-ID spelling correction.
+    "remove_ppo_protection_package": "Remove PPO protection",
+    "add_lifetime_feature": "Add lifetime feature (L1 - L0)",
+    "add_lifetime_reward": "Add lifetime reward (L2 - L1)",
+    "add_hard_lifetime_mask": "Add hard mask (L3 - L2)",
 }
-VARIANT_ORDER = ["no_credit", "no_ppo_protection", "flat_critic",
-                 "no_queue", "no_lifetime", "no_packet_context"]
-VARIANT_COLOR = {"no_credit": "#d62728", "no_ppo_protection": "#9467bd",
-                 "flat_critic": "#2ca02c", "no_queue": "#ff7f0e",
-                 "no_lifetime": "#1f77b4", "no_packet_context": "#7f7f7f"}
+
+CONTRAST_STYLE = {
+    "component_removal": ("#1f4e79", "o"),
+    "training_safeguard_package": ("#7a5195", "s"),
+    "lifetime_ladder": ("#d95f02", "D"),
+}
+
+
+def _finite_float(row, field, *, cell):
+    try:
+        value = float(row[field])
+    except (KeyError, TypeError, ValueError) as error:
+        raise ValueError(f"invalid {field!r} for ablation cell {cell!r}") from error
+    if not np.isfinite(value):
+        raise ValueError(f"non-finite {field!r} for ablation cell {cell!r}")
+    return value
+
+
+def load_confirmatory_delivery_effects(effects_csv: Path) -> dict:
+    """Load the frozen 8 x 5 primary ablation family without schema fallbacks."""
+
+    required = {
+        "scenario",
+        "contrast",
+        "contrast_family",
+        "reference_variant",
+        "treatment_variant",
+        "metric",
+        "treatment_minus_reference",
+        "difference_ci95_low",
+        "difference_ci95_high",
+        PRIMARY_HOLM_FIELD,
+        "within_metric_family_size",
+        "multiplicity_role",
+    }
+    with open(effects_csv, encoding="utf-8-sig", newline="") as handle:
+        reader = csv.DictReader(handle)
+        missing_columns = required.difference(reader.fieldnames or ())
+        if missing_columns:
+            raise ValueError(
+                "paired ablation CSV is not the confirmatory schema; missing "
+                + ", ".join(sorted(missing_columns))
+            )
+        delivery_rows = [
+            row for row in reader if row["metric"] == PRIMARY_ABLATION_METRIC
+        ]
+
+    contrast_by_name = {contrast.name: contrast for contrast in PLANNED_CONTRASTS}
+    expected_cells = {
+        (scenario, contrast.name)
+        for scenario in SCENARIO_ORDER
+        for contrast in PLANNED_CONTRASTS
+    }
+    records = {}
+    for row in delivery_rows:
+        cell = (row["scenario"], row["contrast"])
+        if cell not in expected_cells:
+            raise ValueError(f"unexpected primary ablation cell {cell!r}")
+        if cell in records:
+            raise ValueError(f"duplicate primary ablation cell {cell!r}")
+
+        contrast = contrast_by_name[row["contrast"]]
+        if row["reference_variant"] != contrast.reference:
+            raise ValueError(
+                f"wrong reference for {cell!r}: {row['reference_variant']!r}; "
+                f"expected {contrast.reference!r}"
+            )
+        if row["treatment_variant"] != contrast.treatment:
+            raise ValueError(
+                f"wrong treatment for {cell!r}: {row['treatment_variant']!r}; "
+                f"expected {contrast.treatment!r}"
+            )
+        if row["contrast_family"] != contrast.family:
+            raise ValueError(
+                f"wrong contrast family for {cell!r}: {row['contrast_family']!r}; "
+                f"expected {contrast.family!r}"
+            )
+        if row["multiplicity_role"] != "primary_confirmatory_family":
+            raise ValueError(f"primary delivery cell {cell!r} has the wrong role")
+        try:
+            family_size = int(row["within_metric_family_size"])
+        except (TypeError, ValueError) as error:
+            raise ValueError(f"invalid Holm family size for {cell!r}") from error
+        if family_size != PRIMARY_ABLATION_FAMILY_SIZE:
+            raise ValueError(
+                f"wrong Holm family size for {cell!r}: {family_size}; "
+                f"expected {PRIMARY_ABLATION_FAMILY_SIZE}"
+            )
+
+        effect = _finite_float(row, "treatment_minus_reference", cell=cell)
+        ci_low = _finite_float(row, "difference_ci95_low", cell=cell)
+        ci_high = _finite_float(row, "difference_ci95_high", cell=cell)
+        holm_p = _finite_float(row, PRIMARY_HOLM_FIELD, cell=cell)
+        if ci_low > ci_high:
+            raise ValueError(f"reversed confidence interval for {cell!r}")
+        if not 0.0 <= holm_p <= 1.0:
+            raise ValueError(f"Holm-adjusted p-value outside [0, 1] for {cell!r}")
+        records[cell] = {
+            "effect_pp": 100.0 * effect,
+            "ci_low_pp": 100.0 * ci_low,
+            "ci_high_pp": 100.0 * ci_high,
+            "holm_p": holm_p,
+            "significant": holm_p <= 0.05,
+            "contrast_family": contrast.family,
+        }
+
+    missing_cells = expected_cells.difference(records)
+    if missing_cells:
+        examples = sorted(missing_cells)[:5]
+        raise ValueError(
+            f"incomplete primary ablation grid: observed {len(records)} of "
+            f"{len(expected_cells)} cells; missing examples={examples!r}"
+        )
+    return records
 
 
 def fig_ablation(effects_csv: Path, outdir: Path):
-    """Delivery change (pp) from ablating each component vs full. Negative = the
-    component is useful (removing it hurts). Star = Benjamini-Hochberg p<0.05."""
-    import csv as _csv
-    rows = list(_csv.DictReader(open(effects_csv, encoding="utf-8-sig")))
-    scens = [s for s in SCENARIO_ORDER if any(r["scenario"] == s for r in rows)]
-    variants = [v for v in VARIANT_ORDER if any(r["variant"] == v for r in rows)]
-    if not scens or not variants:
-        print("  [fig_ablation] skip: no data")
-        return
+    """Draw all predeclared delivery contrasts as a five-panel forest matrix."""
 
-    def get(s, v):
-        for r in rows:
-            if r["scenario"] == s and r["variant"] == v and r["metric"] == "delivery_ratio":
-                return float(r["ablated_minus_full"]) * 100, float(r["benjamini_hochberg_p"])
-        return None, None
+    records = load_confirmatory_delivery_effects(effects_csv)
+    contrast_names = [contrast.name for contrast in PLANNED_CONTRASTS]
+    y_positions = np.arange(len(contrast_names))
+    all_bounds = [
+        abs(record[field])
+        for record in records.values()
+        for field in ("ci_low_pp", "ci_high_pp", "effect_pp")
+    ]
+    max_abs = max(all_bounds, default=0.0)
+    axis_limit = max(1.0, np.ceil(max_abs * 1.10 * 2.0) / 2.0)
 
-    width = 0.8 / len(variants)
-    x = np.arange(len(scens))
-    fig, ax = plt.subplots(figsize=(min(0.7 * len(variants) * len(scens) + 3, 8.5), 4.0))
-    for i, v in enumerate(variants):
-        vals, sigs = [], []
-        for s in scens:
-            d, p = get(s, v)
-            vals.append(d if d is not None else 0.0)
-            sigs.append(p is not None and p < 0.05)
-        ax.bar(x + i * width, vals, width, color=VARIANT_COLOR.get(v, "#444"),
-               edgecolor="black", linewidth=0.4, label=VARIANT_DISPLAY.get(v, v))
-        for j, sg in enumerate(sigs):
-            if sg:
-                yv = vals[j]
-                ax.text(x[j] + i * width + width / 2, yv + (0.5 if yv >= 0 else -0.5), "*",
-                        ha="center", va="bottom" if yv >= 0 else "top",
-                        fontsize=9, fontweight="bold")
-    ax.axhline(0, color="black", linewidth=0.9)
-    ax.set_xticks(x + width * (len(variants) - 1) / 2)
-    ax.set_xticklabels([SCENARIO_DISPLAY.get(s, s) for s in scens], fontsize=9)
-    ax.set_ylabel("Delivery change vs full MAPPO (pp)", fontsize=10)
-    ax.grid(axis="y", linestyle=":", alpha=0.5)
-    ax.set_axisbelow(True)
-    ax.legend(fontsize=7.5, ncol=min(len(variants), 3), loc="best", frameon=False)
-    fig.text(0.5, 0.005,
-             "Negative (below 0) = removing the component hurts delivery = it is useful.  * = BH p<0.05",
-             ha="center", fontsize=7.5, style="italic")
-    fig.tight_layout(rect=(0, 0.03, 1, 1))
+    fig, axes = plt.subplots(
+        1,
+        len(SCENARIO_ORDER),
+        sharex=True,
+        sharey=True,
+        figsize=(7.2, 5.0),
+    )
+    axes = np.atleast_1d(axes)
+    for ax, scenario in zip(axes, SCENARIO_ORDER):
+        for y, contrast_name in zip(y_positions, contrast_names):
+            record = records[(scenario, contrast_name)]
+            color, marker = CONTRAST_STYLE.get(
+                record["contrast_family"], ("#444444", "o")
+            )
+            ax.hlines(
+                y,
+                record["ci_low_pp"],
+                record["ci_high_pp"],
+                color=color,
+                linewidth=1.25,
+                zorder=2,
+            )
+            ax.scatter(
+                record["effect_pp"],
+                y,
+                marker=marker,
+                s=27,
+                facecolor=color if record["significant"] else "white",
+                edgecolor=color,
+                linewidth=1.0,
+                zorder=3,
+            )
+        ax.axvline(0.0, color="black", linewidth=0.75, zorder=1)
+        ax.axhline(4.5, color="#bdbdbd", linewidth=0.6, linestyle=":")
+        ax.set_xlim(-axis_limit, axis_limit)
+        ax.set_title(SCENARIO_DISPLAY.get(scenario, scenario), fontsize=8.5)
+        ax.grid(axis="x", linestyle=":", alpha=0.35)
+        ax.set_axisbelow(True)
+        ax.tick_params(axis="x", labelsize=7)
+        ax.xaxis.set_major_locator(matplotlib.ticker.MaxNLocator(nbins=3))
+
+    axes[0].set_yticks(y_positions)
+    axes[0].set_yticklabels(
+        [
+            CONTRAST_DISPLAY.get(name, name.replace("_", " "))
+            for name in contrast_names
+        ],
+        fontsize=7.2,
+    )
+    axes[0].invert_yaxis()
+    fig.supxlabel(
+        "Delivery effect: treatment - reference (percentage points)",
+        fontsize=9,
+        y=0.075,
+    )
+    fig.text(
+        0.5,
+        0.018,
+        "Lines: 95% crossed-bootstrap CI. Filled markers: primary Holm-FWER "
+        "adjusted p <= 0.05 (40 tests).",
+        ha="center",
+        fontsize=6.7,
+    )
+    fig.subplots_adjust(left=0.29, right=0.99, bottom=0.16, top=0.91, wspace=0.12)
     for ext in ("png", "pdf"):
         fig.savefig(outdir / f"fig4_ablation_effect.{ext}", dpi=300)
     plt.close(fig)
-    print(f"  [F4] fig4_ablation_effect  ({len(variants)} variants x {len(scens)} scenarios)")
+    print(
+        "  [F4] fig4_ablation_effect  "
+        f"({len(contrast_names)} planned contrasts x {len(SCENARIO_ORDER)} scenarios)"
+    )
 
 
 # ---------------------------------------------------------------------------

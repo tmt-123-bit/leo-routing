@@ -58,8 +58,7 @@ def make_wrapper(scenario: str, seed: int) -> CleanMARLLeoMultiAgentWrapper:
 
 
 class EpisodeFeatureContext:
-    """Env instance per workload seed: geometry/edge statics from the model,
-    dynamic state overwritten each slot from the ns-3 report."""
+    """Env instance per policy/episode: model statics plus ns-3 dynamics."""
 
     def __init__(self, scenario: str, seed: int):
         wrapper = make_wrapper(scenario, seed)
@@ -76,19 +75,26 @@ class EpisodeFeatureContext:
         self.env.route_cache = {}
 
     def advance_to_slot(self, slot: int, link_tx: Dict[tuple, int]) -> None:
-        """Apply last slot's accepted transmissions + decay, refresh edge
-        used-rate in the env graph (mirrors env step: adds happen during the
-        slot, _decay_load at slot end)."""
+        """Apply preceding-slot transmissions, then rebuild the current graph.
+
+        Load evolution mirrors the env step: accepted transmissions add load
+        during a slot and ``_decay_load`` runs at its end.  Graph construction
+        remains owned by the env so geometry, faults, lifetime and availability
+        all use the same current-slot implementation as training/evaluation.
+        """
         cfg = self.env.cfg
         for (u, v), n in link_tx.items():
-            if (u, v) in self.used_rate:
+            if u in self.used_rate and v in self.used_rate[u]:
                 self.used_rate[u][v] += n * cfg.env.packet_demand_mbps
         for u in self.used_rate:
             for v in self.used_rate[u]:
                 self.used_rate[u][v] *= cfg.env.load_decay
-        for (u, v), edge in self.env.graph.items():
-            edge.used_rate_mbps = self.used_rate[u][v]
+
         self.env.slot = slot
+        for u in self.used_rate:
+            for v, rate in self.used_rate[u].items():
+                self.env.used_rate[u][v] = rate
+        self.env._refresh_graph()
 
     def set_state(self, queue_lens: Dict[int, int], incoming: Dict[int, int]) -> None:
         # only len() is read by the feature/mask code
@@ -164,17 +170,44 @@ class ClosedLoopServer:
         self.bridge = Ns3PolicyBridge(checkpoint, device=device)
         self.scenario = scenario
         self.seeds = list(seeds)
-        self.contexts: Dict[int, EpisodeFeatureContext] = {}
-        for seed in self.seeds:
-            self.contexts[seed] = EpisodeFeatureContext(scenario, seed)
+        self.contexts: Dict[tuple[str, int], EpisodeFeatureContext] = {}
+        self.current_policy: Optional[str] = None
         self.dijkstra = DijkstraProvider(self.contexts)
         self.feature_dim = self.bridge.feature_dim
         self.action_size = self.bridge.action_size
 
+    def begin_policy(self, policy_name: str) -> None:
+        """Start a policy run with no dynamic state from an earlier run."""
+        self.current_policy = policy_name
+        self.contexts.clear()
+
+    def _advance_context(
+        self,
+        episode: int,
+        slot: int,
+        link_tx: Dict[tuple, int],
+    ) -> EpisodeFeatureContext:
+        if self.current_policy is None:
+            raise RuntimeError("policy context has not been initialized")
+        if episode < 0 or episode >= len(self.seeds):
+            raise IndexError(f"episode index out of range: {episode}")
+
+        key = (self.current_policy, episode)
+        new_episode = slot == 1 or key not in self.contexts
+        if new_episode:
+            self.contexts[key] = EpisodeFeatureContext(
+                self.scenario,
+                self.seeds[episode],
+            )
+        ctx = self.contexts[key]
+        # TX counts describe the preceding slot. At slot 1 they belong to the
+        # preceding episode and must not seed this episode's link load.
+        ctx.advance_to_slot(slot, {} if new_episode and slot == 1 else link_tx)
+        return ctx
+
     # ---- one slot: raw report -> features via env methods -> policy -> actions
     def handle_slot(self, parts, lines, tx_lines) -> list:
         episode, slot = int(parts[1]), int(parts[2])
-        ctx = self.contexts[self.seeds[episode]]
         agents_raw = []
         for line in lines:
             f = line.split()
@@ -190,7 +223,7 @@ class ClosedLoopServer:
             f = line.split()
             link_tx[(int(f[1]), int(f[2]))] = int(f[3])
 
-        ctx.advance_to_slot(slot, link_tx)
+        ctx = self._advance_context(episode, slot, link_tx)
         ctx.set_state({a["id"]: a["queue_len"] for a in agents_raw},
                       {a["id"]: a["incoming"] for a in agents_raw})
 
@@ -208,6 +241,10 @@ class ClosedLoopServer:
                                           a["visited_mask"], ctx.n_agents)
                 for action, neighbor in enumerate(a["candidates"]):
                     if neighbor <= 0:
+                        continue
+                    # C++ action slots are structural and stay fixed even when
+                    # the current orbital topology omits a seam link.
+                    if (sat, neighbor) not in ctx.env.graph:
                         continue
                     feats[action] = ctx.env._candidate_features(packet, sat, neighbor)
                     cmask[action] = (
@@ -254,7 +291,7 @@ class ClosedLoopServer:
 
         hello = readline().split()
         assert hello[0] == "HELLO", hello
-        self.current_policy = hello[3]
+        self.begin_policy(hello[3])
         f.write(f"READY {hello[1]} {hello[2]}\n".encode())
         f.flush()
 

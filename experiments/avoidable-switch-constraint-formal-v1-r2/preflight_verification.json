@@ -1,0 +1,42 @@
+{
+  "command": [
+    "F:\\leo-venv\\Scripts\\python.exe",
+    "-m",
+    "unittest",
+    "-v",
+    "test_avoidable_switch_constraint_formal",
+    "test_formal_avoidable_switch_statistics",
+    "test_avoidable_switch_constraint",
+    "test_mappo_design",
+    "test_mappo_evaluation_constraint",
+    "test_avoidable_switch_constraint_smoke"
+  ],
+  "exact_resume_proof_sha256": "96ccb677d7299c290570aa058145a676f8319f94430176d8d0b5ab07984e059b",
+  "finished_at_utc": "2026-09-03T15:03:03.046843Z",
+  "formal_or_sealed_workloads_instantiated": false,
+  "log_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\preflight_tests.log",
+  "log_sha256": "d3baee2c13d14809aebddabbe6727a1f34433c61752afb0f2de56d053675f61a",
+  "schema_version": 1,
+  "spec_sha256": "58fd1e77faafefcb67631c3a568116ad60ce2ba3c90c12de1262d6a3709caaf6",
+  "status": "passed",
+  "study_name": "ICC-AVOIDABLE-SWITCH-CONSTRAINT-FORMAL-v1",
+  "test_count": 163,
+  "test_file_sha256": {
+    "test_avoidable_switch_constraint": "cb02c16b7624002dc0f284bc393d2afcc56777136d8ae4f94e99eaaef6d11629",
+    "test_avoidable_switch_constraint_formal": "e24fb84426e99524ac62b34d30add082879a5fa04a97fbe476532861d767135f",
+    "test_avoidable_switch_constraint_smoke": "34647c356c8267749cc6cb5e90b8bfc20f7ef0ece3edd20278ed68eaaa8058d0",
+    "test_formal_avoidable_switch_statistics": "cce208b7f14e63d9c783568e99b802e9e7cf03c5297581c76f8447053239f172",
+    "test_mappo_design": "747ad3f445c1178d5f86c4ae055425fc3c7d16589d36bcc4e425f7baea714161",
+    "test_mappo_evaluation_constraint": "643009aac6283d5ae0cd67139dce3587320848d71fa307114e7b4dfbbfc62799"
+  },
+  "test_modules": [
+    "test_avoidable_switch_constraint_formal",
+    "test_formal_avoidable_switch_statistics",
+    "test_avoidable_switch_constraint",
+    "test_mappo_design",
+    "test_mappo_evaluation_constraint",
+    "test_avoidable_switch_constraint_smoke"
+  ],
+  "test_panel_consulted": false,
+  "verification_sha256": "c7894b17cce110458b1cd512f2bd403c2697eca98d16e2df5e8d37f043d6e9f4"
+}

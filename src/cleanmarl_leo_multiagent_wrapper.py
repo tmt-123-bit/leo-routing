@@ -11,8 +11,12 @@ from leo_marl_env import EnvConfig, SCENARIOS
 from leo_multiagent_env import (
     MULTIAGENT_LOADS,
     MultiAgentConfig,
+    ROUTE_CLASS_2_FEATURE_INDEX,
+    ROUTE_SWITCH_FEATURE_INDEX,
+    ROUTE_URGENCY_FEATURE_INDEX,
     SynchronousLeoMultiAgentEnv,
 )
+from variant_definitions import VariantDefinition
 
 
 def _apply_reward_overrides(env_cfg: EnvConfig) -> None:
@@ -42,7 +46,7 @@ class CleanMARLLeoMultiAgentWrapper:
         cfg: Optional[MultiAgentConfig] = None,
         seed: Optional[int] = None,
         agent_permutation: Optional[Sequence[int]] = None,
-        variant: str = "full",
+        variant: str = "proposed",
     ):
         if cfg is None:
             effective_seed = 11 if seed is None else seed
@@ -67,7 +71,8 @@ class CleanMARLLeoMultiAgentWrapper:
         self._obs: Optional[list[Dict]] = None
         self._info: Dict = {}
         self._state_size: Optional[int] = None
-        self.variant = cfg.variant
+        self.variant_definition: VariantDefinition = self.env.variant_definition
+        self.variant = self.variant_definition.name
         if agent_permutation is None:
             agent_permutation = list(range(1, self.n_agents + 1))
         self.external_to_internal = [int(x) for x in agent_permutation]
@@ -139,11 +144,31 @@ class CleanMARLLeoMultiAgentWrapper:
     def get_action_size(self) -> int:
         return self.action_size
 
+    def get_route_switch_feature_index(self) -> int:
+        return ROUTE_SWITCH_FEATURE_INDEX
+
+    def get_route_urgency_feature_index(self) -> int:
+        return ROUTE_URGENCY_FEATURE_INDEX
+
+    def get_route_class_2_feature_index(self) -> int:
+        return ROUTE_CLASS_2_FEATURE_INDEX
+
+    def get_candidate_feature_schema(self) -> Dict[str, object]:
+        return {
+            **self.env.candidate_schema,
+            "feature_names": list(self.env.candidate_schema["feature_names"]),
+        }
+
     def get_critic_spec(self) -> Dict:
-        if self.variant == "flat_critic":
+        if not self.variant_definition.graph_critic:
             return None
         state = self.env.global_state()
         return {"type": "graph_attention", **state["schema"]}
+
+    def get_variant_spec(self) -> Dict[str, bool | str]:
+        """Return the canonical method flags for manifests and audit checks."""
+
+        return self.variant_definition.as_dict()
 
     def get_last_agent_rewards(self) -> np.ndarray:
         internal_rewards = self._info.get(
@@ -153,6 +178,24 @@ class CleanMARLLeoMultiAgentWrapper:
             [internal_rewards[sat - 1] for sat in self.external_to_internal],
             dtype=np.float32,
         )
+
+    def _last_decision_flags(self, field: str) -> np.ndarray:
+        internal = self._info.get(field, [False] * self.n_agents)
+        if len(internal) != self.n_agents:
+            raise RuntimeError(f"{field} does not match the agent schema")
+        return np.asarray(
+            [internal[sat - 1] for sat in self.external_to_internal],
+            dtype=np.bool_,
+        )
+
+    def get_last_avoidable_switch_costs(self) -> np.ndarray:
+        return self._last_decision_flags("decision_avoidable_switch_costs")
+
+    def get_last_switch_opportunities(self) -> np.ndarray:
+        return self._last_decision_flags("decision_switch_opportunities")
+
+    def get_last_forced_switches(self) -> np.ndarray:
+        return self._last_decision_flags("decision_forced_switches")
 
     def get_policy_active_mask(self) -> np.ndarray:
         if self._obs is None:

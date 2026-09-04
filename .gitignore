@@ -19,6 +19,45 @@ models/
 # Training-run telemetry (regenerable; aggregated metrics live in experiments/*.csv)
 runs/
 **/tensorboard/
+*.log
+*.jsonl
+*.lock
+*.lock.guard
+
+# Local experiment work trees. Protocols and compact publication artifacts are kept.
+tmp/
+experiments/_*/
+experiments/ablation-50k-v2/
+experiments/avoidable-switch-constraint-formal-v1/
+experiments/avoidable-switch-classical-baselines-formal-v1/
+experiments/avoidable-switch-classical-baselines-formal-v1-r2/
+experiments/avoidable-switch-constraint-smoke-v1/
+experiments/avoidable-switch-constraint-smoke-v1-r1/
+experiments/decoupled-hysteresis-preflight-10k-v2/
+experiments/switch-regularized-preflight-6k-v3/
+experiments/switch-margin-preflight-6k-v4/
+experiments/switch-residual-preflight-6k-v5/
+experiments/switch-controller-preflight-6k-v6/
+experiments/proposed-shield-preflight-v7/
+experiments/adaptive-shield-design-v8/
+experiments/source-runtime-equivalence-v8/
+experiments/calm-selective-shield-design-v9/
+experiments/margin-capped-shield-design-v10/
+experiments/age-band-shield-design-v11/
+experiments/archive/congestion-context-screen-20k-v1/
+experiments/archive/congestion-hysteresis-screen-v1/
+experiments/archive/integrated-hysteresis-screen-20k-v1/
+experiments/archive/source-snapshots/
+experiments/archive/switch-*-failed-*/
+
+# Large per-job evidence stays local; top-level freezes and aggregate rows are versioned.
+experiments/avoidable-switch-constraint-formal-v1-r2/checkpoints/
+experiments/avoidable-switch-constraint-formal-v1-r2/invocations/
+experiments/avoidable-switch-constraint-formal-v1-r2/job_status/
+experiments/avoidable-switch-constraint-formal-v1-r2/validation_shards/
+experiments/avoidable-switch-classical-baselines-formal-v1-r3/gate_shards/
+experiments/avoidable-switch-classical-baselines-formal-v1-r3/invocations/
+experiments/avoidable-switch-classical-baselines-formal-v1-r3/job_status/
 
 # OS / editor
 .DS_Store

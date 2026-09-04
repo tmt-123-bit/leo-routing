@@ -1,0 +1,739 @@
+{
+  "checkpoint_selection_evaluations": 0,
+  "completed_at_utc": "2026-09-04T06:51:25.047062Z",
+  "descriptive_summaries": {
+    "hotspot_high_load/global_dijkstra": {
+      "policy_identity_count": 1,
+      "policy_identity_equal_descriptive": {
+        "decision_avoidable_switch_rate": 0.20216526734423332,
+        "delivery_ratio": 0.3046,
+        "identities": [
+          {
+            "decision_avoidable_switch_rate": 0.20216526734423332,
+            "decision_avoidable_switches": 915,
+            "decision_switch_opportunities": 4526,
+            "delivery_ratio": 0.3046,
+            "policy_seed": -1
+          }
+        ],
+        "undefined_rate_identity_count": 0,
+        "undefined_rate_policy_seeds": []
+      },
+      "pooled_count_audit": {
+        "decision_avoidable_switch_rate": 0.20216526734423332,
+        "decision_avoidable_switches": 915,
+        "decision_switch_opportunities": 4526,
+        "delivered": 1523,
+        "delivery_ratio": 0.3046,
+        "generated": 5000,
+        "inferential_role": "pooled_integrity_audit_only"
+      },
+      "row_count": 10
+    },
+    "hotspot_high_load/ospf_ecmp": {
+      "policy_identity_count": 8,
+      "policy_identity_equal_descriptive": {
+        "decision_avoidable_switch_rate": 0.20227233151328802,
+        "delivery_ratio": 0.305075,
+        "identities": [
+          {
+            "decision_avoidable_switch_rate": 0.20172337604949184,
+            "decision_avoidable_switches": 913,
+            "decision_switch_opportunities": 4526,
+            "delivery_ratio": 0.3041999999999999,
+            "policy_seed": 179055553
+          },
+          {
+            "decision_avoidable_switch_rate": 0.2017718715393134,
+            "decision_avoidable_switches": 911,
+            "decision_switch_opportunities": 4515,
+            "delivery_ratio": 0.30519999999999997,
+            "policy_seed": 183895110
+          },
+          {
+            "decision_avoidable_switch_rate": 0.20265486725663717,
+            "decision_avoidable_switches": 916,
+            "decision_switch_opportunities": 4520,
+            "delivery_ratio": 0.30599999999999994,
+            "policy_seed": 310818925
+          },
+          {
+            "decision_avoidable_switch_rate": 0.2030490499337163,
+            "decision_avoidable_switches": 919,
+            "decision_switch_opportunities": 4526,
+            "delivery_ratio": 0.30439999999999995,
+            "policy_seed": 515636025
+          },
+          {
+            "decision_avoidable_switch_rate": 0.20137350465219317,
+            "decision_avoidable_switches": 909,
+            "decision_switch_opportunities": 4514,
+            "delivery_ratio": 0.3054,
+            "policy_seed": 626669596
+          },
+          {
+            "decision_avoidable_switch_rate": 0.20216766202167663,
+            "decision_avoidable_switches": 914,
+            "decision_switch_opportunities": 4521,
+            "delivery_ratio": 0.3058,
+            "policy_seed": 746965870
+          },
+          {
+            "decision_avoidable_switch_rate": 0.20247568523430592,
+            "decision_avoidable_switches": 916,
+            "decision_switch_opportunities": 4524,
+            "delivery_ratio": 0.3054,
+            "policy_seed": 985998595
+          },
+          {
+            "decision_avoidable_switch_rate": 0.20296263541896972,
+            "decision_avoidable_switches": 918,
+            "decision_switch_opportunities": 4523,
+            "delivery_ratio": 0.30419999999999997,
+            "policy_seed": 2136406109
+          }
+        ],
+        "undefined_rate_identity_count": 0,
+        "undefined_rate_policy_seeds": []
+      },
+      "pooled_count_audit": {
+        "decision_avoidable_switch_rate": 0.2022726644363958,
+        "decision_avoidable_switches": 7316,
+        "decision_switch_opportunities": 36169,
+        "delivered": 12203,
+        "delivery_ratio": 0.305075,
+        "generated": 40000,
+        "inferential_role": "pooled_integrity_audit_only"
+      },
+      "row_count": 80
+    },
+    "hotspot_high_load/q_routing": {
+      "policy_identity_count": 8,
+      "policy_identity_equal_descriptive": {
+        "decision_avoidable_switch_rate": 0.4032924630781496,
+        "delivery_ratio": 0.316825,
+        "identities": [
+          {
+            "decision_avoidable_switch_rate": 0.3987300197065908,
+            "decision_avoidable_switches": 1821,
+            "decision_switch_opportunities": 4567,
+            "delivery_ratio": 0.31799999999999995,
+            "policy_seed": 179055553
+          },
+          {
+            "decision_avoidable_switch_rate": 0.4100877192982456,
+            "decision_avoidable_switches": 1870,
+            "decision_switch_opportunities": 4560,
+            "delivery_ratio": 0.315,
+            "policy_seed": 183895110
+          },
+          {
+            "decision_avoidable_switch_rate": 0.38582155477031804,
+            "decision_avoidable_switches": 1747,
+            "decision_switch_opportunities": 4528,
+            "delivery_ratio": 0.3164,
+            "policy_seed": 310818925
+          },
+          {
+            "decision_avoidable_switch_rate": 0.4120734908136483,
+            "decision_avoidable_switches": 1884,
+            "decision_switch_opportunities": 4572,
+            "delivery_ratio": 0.31620000000000004,
+            "policy_seed": 515636025
+          },
+          {
+            "decision_avoidable_switch_rate": 0.4103585657370518,
+            "decision_avoidable_switches": 1854,
+            "decision_switch_opportunities": 4518,
+            "delivery_ratio": 0.31579999999999997,
+            "policy_seed": 626669596
+          },
+          {
+            "decision_avoidable_switch_rate": 0.40368987480781904,
+            "decision_avoidable_switches": 1838,
+            "decision_switch_opportunities": 4553,
+            "delivery_ratio": 0.317,
+            "policy_seed": 746965870
+          },
+          {
+            "decision_avoidable_switch_rate": 0.4010989010989011,
+            "decision_avoidable_switches": 1825,
+            "decision_switch_opportunities": 4550,
+            "delivery_ratio": 0.31779999999999997,
+            "policy_seed": 985998595
+          },
+          {
+            "decision_avoidable_switch_rate": 0.4044795783926219,
+            "decision_avoidable_switches": 1842,
+            "decision_switch_opportunities": 4554,
+            "delivery_ratio": 0.31839999999999996,
+            "policy_seed": 2136406109
+          }
+        ],
+        "undefined_rate_identity_count": 0,
+        "undefined_rate_policy_seeds": []
+      },
+      "pooled_count_audit": {
+        "decision_avoidable_switch_rate": 0.4033020163727268,
+        "decision_avoidable_switches": 14681,
+        "decision_switch_opportunities": 36402,
+        "delivered": 12673,
+        "delivery_ratio": 0.316825,
+        "generated": 40000,
+        "inferential_role": "pooled_integrity_audit_only"
+      },
+      "row_count": 80
+    },
+    "medium_load/global_dijkstra": {
+      "policy_identity_count": 1,
+      "policy_identity_equal_descriptive": {
+        "decision_avoidable_switch_rate": 0.19384765625,
+        "delivery_ratio": 0.7468750000000001,
+        "identities": [
+          {
+            "decision_avoidable_switch_rate": 0.19384765625,
+            "decision_avoidable_switches": 397,
+            "decision_switch_opportunities": 2048,
+            "delivery_ratio": 0.7468750000000001,
+            "policy_seed": -1
+          }
+        ],
+        "undefined_rate_identity_count": 0,
+        "undefined_rate_policy_seeds": []
+      },
+      "pooled_count_audit": {
+        "decision_avoidable_switch_rate": 0.19384765625,
+        "decision_avoidable_switches": 397,
+        "decision_switch_opportunities": 2048,
+        "delivered": 1434,
+        "delivery_ratio": 0.746875,
+        "generated": 1920,
+        "inferential_role": "pooled_integrity_audit_only"
+      },
+      "row_count": 10
+    },
+    "medium_load/ospf_ecmp": {
+      "policy_identity_count": 8,
+      "policy_identity_equal_descriptive": {
+        "decision_avoidable_switch_rate": 0.19375140827552967,
+        "delivery_ratio": 0.7513671875000001,
+        "identities": [
+          {
+            "decision_avoidable_switch_rate": 0.19337554797856796,
+            "decision_avoidable_switches": 397,
+            "decision_switch_opportunities": 2053,
+            "delivery_ratio": 0.7505208333333334,
+            "policy_seed": 179055553
+          },
+          {
+            "decision_avoidable_switch_rate": 0.19367396593673966,
+            "decision_avoidable_switches": 398,
+            "decision_switch_opportunities": 2055,
+            "delivery_ratio": 0.7536458333333333,
+            "policy_seed": 183895110
+          },
+          {
+            "decision_avoidable_switch_rate": 0.1937682570593963,
+            "decision_avoidable_switches": 398,
+            "decision_switch_opportunities": 2054,
+            "delivery_ratio": 0.7505208333333334,
+            "policy_seed": 310818925
+          },
+          {
+            "decision_avoidable_switch_rate": 0.1953125,
+            "decision_avoidable_switches": 400,
+            "decision_switch_opportunities": 2048,
+            "delivery_ratio": 0.7489583333333333,
+            "policy_seed": 515636025
+          },
+          {
+            "decision_avoidable_switch_rate": 0.19290573372206024,
+            "decision_avoidable_switches": 397,
+            "decision_switch_opportunities": 2058,
+            "delivery_ratio": 0.7505208333333334,
+            "policy_seed": 626669596
+          },
+          {
+            "decision_avoidable_switch_rate": 0.19406614785992218,
+            "decision_avoidable_switches": 399,
+            "decision_switch_opportunities": 2056,
+            "delivery_ratio": 0.7515625,
+            "policy_seed": 746965870
+          },
+          {
+            "decision_avoidable_switch_rate": 0.19340765874939408,
+            "decision_avoidable_switches": 399,
+            "decision_switch_opportunities": 2063,
+            "delivery_ratio": 0.7526041666666667,
+            "policy_seed": 985998595
+          },
+          {
+            "decision_avoidable_switch_rate": 0.19350145489815712,
+            "decision_avoidable_switches": 399,
+            "decision_switch_opportunities": 2062,
+            "delivery_ratio": 0.7526041666666667,
+            "policy_seed": 2136406109
+          }
+        ],
+        "undefined_rate_identity_count": 0,
+        "undefined_rate_policy_seeds": []
+      },
+      "pooled_count_audit": {
+        "decision_avoidable_switch_rate": 0.19375037996230773,
+        "decision_avoidable_switches": 3187,
+        "decision_switch_opportunities": 16449,
+        "delivered": 11541,
+        "delivery_ratio": 0.7513671875,
+        "generated": 15360,
+        "inferential_role": "pooled_integrity_audit_only"
+      },
+      "row_count": 80
+    },
+    "medium_load/q_routing": {
+      "policy_identity_count": 8,
+      "policy_identity_equal_descriptive": {
+        "decision_avoidable_switch_rate": 0.2497726497717762,
+        "delivery_ratio": 0.7998046875,
+        "identities": [
+          {
+            "decision_avoidable_switch_rate": 0.24516129032258063,
+            "decision_avoidable_switches": 532,
+            "decision_switch_opportunities": 2170,
+            "delivery_ratio": 0.7994791666666667,
+            "policy_seed": 179055553
+          },
+          {
+            "decision_avoidable_switch_rate": 0.26770929162833484,
+            "decision_avoidable_switches": 582,
+            "decision_switch_opportunities": 2174,
+            "delivery_ratio": 0.803125,
+            "policy_seed": 183895110
+          },
+          {
+            "decision_avoidable_switch_rate": 0.24977000919963202,
+            "decision_avoidable_switches": 543,
+            "decision_switch_opportunities": 2174,
+            "delivery_ratio": 0.8,
+            "policy_seed": 310818925
+          },
+          {
+            "decision_avoidable_switch_rate": 0.2441016333938294,
+            "decision_avoidable_switches": 538,
+            "decision_switch_opportunities": 2204,
+            "delivery_ratio": 0.8057291666666666,
+            "policy_seed": 515636025
+          },
+          {
+            "decision_avoidable_switch_rate": 0.255524861878453,
+            "decision_avoidable_switches": 555,
+            "decision_switch_opportunities": 2172,
+            "delivery_ratio": 0.7973958333333333,
+            "policy_seed": 626669596
+          },
+          {
+            "decision_avoidable_switch_rate": 0.24826949700046147,
+            "decision_avoidable_switches": 538,
+            "decision_switch_opportunities": 2167,
+            "delivery_ratio": 0.796875,
+            "policy_seed": 746965870
+          },
+          {
+            "decision_avoidable_switch_rate": 0.24169741697416974,
+            "decision_avoidable_switches": 524,
+            "decision_switch_opportunities": 2168,
+            "delivery_ratio": 0.7973958333333333,
+            "policy_seed": 985998595
+          },
+          {
+            "decision_avoidable_switch_rate": 0.2459471977767485,
+            "decision_avoidable_switches": 531,
+            "decision_switch_opportunities": 2159,
+            "delivery_ratio": 0.7984375,
+            "policy_seed": 2136406109
+          }
+        ],
+        "undefined_rate_identity_count": 0,
+        "undefined_rate_policy_seeds": []
+      },
+      "pooled_count_audit": {
+        "decision_avoidable_switch_rate": 0.24976995629169543,
+        "decision_avoidable_switches": 4343,
+        "decision_switch_opportunities": 17388,
+        "delivered": 12285,
+        "delivery_ratio": 0.7998046875,
+        "generated": 15360,
+        "inferential_role": "pooled_integrity_audit_only"
+      },
+      "row_count": 80
+    }
+  },
+  "gate_complete": true,
+  "gate_freeze_sha256": "36bac779a6961ce38eb6872ec0f9cfa3953898ceb00d9b5bd7f10ce80fbc3a1e",
+  "gate_row_count": 340,
+  "gate_rows_by_method": {
+    "global_dijkstra": 20,
+    "ospf_ecmp": 160,
+    "q_routing": 160
+  },
+  "merged_csv": {
+    "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\classical_gate_rows.csv",
+    "sha256": "ef436384a46f944f3a7c4ac6f8d343fa6baf54a02368343142793c4dab2ee3f8"
+  },
+  "merged_jsonl": {
+    "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\classical_gate_rows.jsonl",
+    "sha256": "21924270bbf0c587a597dca8ded99dbf9a7a66f63d2338284000537824b22c5a"
+  },
+  "paper_claim_allowed": false,
+  "performance_gate_applied": false,
+  "promotion_decision_allowed": false,
+  "schema_version": 1,
+  "sealed_test_access_authorized": false,
+  "sealed_test_instantiated": false,
+  "shards": {
+    "hotspot_high_load/global_dijkstra/seed_-1": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "0e14ada799151f034ba68869226578d0c79139d81ad928741f0c5efb2315ca0e",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\hotspot_high_load__global_dijkstra__seed_-1.manifest.json",
+      "manifest_sha256": "e34e80414370f02e94b63c6e228b19437f18f38bc6cda5f465f45802d779eb15",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\hotspot_high_load__global_dijkstra__seed_-1.json",
+        "sha256": "a8bf881baf991f0b38a2ce1924abfebabf4198fa5ef36780c945a0d5a25437fc"
+      }
+    },
+    "hotspot_high_load/ospf_ecmp/seed_179055553": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "da9e064fc8c67e4d71d8f240e1e86c827f4285ed085b0232bf3a03afb13f95fd",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\hotspot_high_load__ospf_ecmp__seed_179055553.manifest.json",
+      "manifest_sha256": "3a09b43edbfaf4c9c84c31dab7286d64ce903c2a41b600abaf8a83a6305237d3",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\hotspot_high_load__ospf_ecmp__seed_179055553.json",
+        "sha256": "c83e1d807e5fc0d96f7487e99e3502502157b9eb354c31fc922fa4d57e7af310"
+      }
+    },
+    "hotspot_high_load/ospf_ecmp/seed_183895110": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "ff70fbb7c41deaebb1b98d6c864baa4ee4bd6ee6d5ffeb1fb9a4675b6d802bdb",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\hotspot_high_load__ospf_ecmp__seed_183895110.manifest.json",
+      "manifest_sha256": "ab13df2dc5008c2c9191efefac8397831c9a2065ae495418dbe13d176d050caa",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\hotspot_high_load__ospf_ecmp__seed_183895110.json",
+        "sha256": "81e6bea594558d35ecbb394ef500250b01489c7b5fc20505db4d05dd689deaca"
+      }
+    },
+    "hotspot_high_load/ospf_ecmp/seed_2136406109": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "a74b73044192ac2b2c308b9b5c86240162bf1c2866ed9e90e7191a9db21a3e70",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\hotspot_high_load__ospf_ecmp__seed_2136406109.manifest.json",
+      "manifest_sha256": "b81a8aa837487c50911b5664a384f8d4117e40e533924c2f28d46ec97cb7722c",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\hotspot_high_load__ospf_ecmp__seed_2136406109.json",
+        "sha256": "7df7f8e2659f90bafdcffb66e4305a11d0e1e2d212511cd4d6f8accf88961ea5"
+      }
+    },
+    "hotspot_high_load/ospf_ecmp/seed_310818925": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "43e1abd39c40fd8d4a35e44a5ccd84fb292d360478f57980506824bae25b2e35",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\hotspot_high_load__ospf_ecmp__seed_310818925.manifest.json",
+      "manifest_sha256": "4de4008d6e011d2b973b6820801dca22bda4bd94f1686fb729c2ae0cc277724f",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\hotspot_high_load__ospf_ecmp__seed_310818925.json",
+        "sha256": "76511df68a5d9ceff775990e5a16fbeb4a69fbda584f9750f7857a1af11c3932"
+      }
+    },
+    "hotspot_high_load/ospf_ecmp/seed_515636025": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "14121e6842e4ee0923660df847fab25c78a554585775a102c7644b121e42c4aa",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\hotspot_high_load__ospf_ecmp__seed_515636025.manifest.json",
+      "manifest_sha256": "85f7af08db361e5ec81efb4326c944d02e2a090c3047b406b9b09764edc1d237",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\hotspot_high_load__ospf_ecmp__seed_515636025.json",
+        "sha256": "779af54d054cbc00723a947d61b2ede38cef4b60874a14dc6f11319c0d890a7a"
+      }
+    },
+    "hotspot_high_load/ospf_ecmp/seed_626669596": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "92267a6e58739a6c67c85f782f203a6c9fefc3b8edb962b4415acfbbe60ac29f",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\hotspot_high_load__ospf_ecmp__seed_626669596.manifest.json",
+      "manifest_sha256": "741eeeb2cb2005c8d2fbaa70b084262f46162978b9eaa8280dd92c4c993d69e9",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\hotspot_high_load__ospf_ecmp__seed_626669596.json",
+        "sha256": "3fd73116e951c8a4a1389dbaf93f6bf835107ce520a802fb6fec6db3e0af3b3b"
+      }
+    },
+    "hotspot_high_load/ospf_ecmp/seed_746965870": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "f166c7638dafc03e6ad48fccb110e672a2831968984505faa510ca8debd4e8f2",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\hotspot_high_load__ospf_ecmp__seed_746965870.manifest.json",
+      "manifest_sha256": "669ee823eb3dc842ce123fcc672f88ffc2893927a50d0a36567d99dac9c2f80f",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\hotspot_high_load__ospf_ecmp__seed_746965870.json",
+        "sha256": "3d331eff89b2e3d799cab51c632a80cf94a25494e5d9161f2edff7629559c300"
+      }
+    },
+    "hotspot_high_load/ospf_ecmp/seed_985998595": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "bebd973ac7a8748313dd686a36128b694889c1b7c1a9eadb43bf308cd52614a4",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\hotspot_high_load__ospf_ecmp__seed_985998595.manifest.json",
+      "manifest_sha256": "31a842e57f31128c6d8a8c81389b651b703007300eb382fed052405630218832",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\hotspot_high_load__ospf_ecmp__seed_985998595.json",
+        "sha256": "e479bc6d519c02b6cf078e825c558b04c638d35953bc142613a770a6fabda3fd"
+      }
+    },
+    "hotspot_high_load/q_routing/seed_179055553": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "6fc7f7acdcff24a2b5072084a920fcc4f99963b6654635e0a1df383c2f400816",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\hotspot_high_load__q_routing__seed_179055553.manifest.json",
+      "manifest_sha256": "c5d14cee9fcf8e9f478aacf666fab7456eb13b70d4d4dfe0a28293cec8909c0f",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\hotspot_high_load__q_routing__seed_179055553.json",
+        "sha256": "6cc274afc500afc665d63fc627521e220593af77e7642b9099e379ff188075e4"
+      }
+    },
+    "hotspot_high_load/q_routing/seed_183895110": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "914e23f9069d274273ee4b77bf859795a2f09d15d7223f2cb3d1bb7b544920b0",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\hotspot_high_load__q_routing__seed_183895110.manifest.json",
+      "manifest_sha256": "c265f6321ec9bd9498f318d6df96de16ae48b068cc3d67ac41515717abca6afa",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\hotspot_high_load__q_routing__seed_183895110.json",
+        "sha256": "92139f91775945d134e6f1377b93e3d2511b137e14469f90b80c120fb44d04fe"
+      }
+    },
+    "hotspot_high_load/q_routing/seed_2136406109": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "f86687d80e6ad5ab1d4adbf0bd158a78d05bc39c1e79de5d78c9e48f42e151a8",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\hotspot_high_load__q_routing__seed_2136406109.manifest.json",
+      "manifest_sha256": "98b40f535345fc194b4640cbf1fed309a9418ba4b162bf1199f80af5c71471f8",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\hotspot_high_load__q_routing__seed_2136406109.json",
+        "sha256": "bc39ad8fe4f9740328ad2a0305379dc372fb85b462fdc99ccb3232ca6b012798"
+      }
+    },
+    "hotspot_high_load/q_routing/seed_310818925": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "3a819aa3b60dbf67242e3ec62007259ff2f246300e0baf0d72fb9f06f5ea917b",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\hotspot_high_load__q_routing__seed_310818925.manifest.json",
+      "manifest_sha256": "3ca8305ef37f5343e59de115b75702c4f2898a5d8e7997a8eb609c4f2dbdce32",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\hotspot_high_load__q_routing__seed_310818925.json",
+        "sha256": "d587eec47396b80fa4c6d81359c18c0da5cdac54c8ae19a726a1848ffd5a0ecf"
+      }
+    },
+    "hotspot_high_load/q_routing/seed_515636025": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "da72f70c069f221520c80c707950a6b84e86d50493a0530bdd8bb6bec7df7185",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\hotspot_high_load__q_routing__seed_515636025.manifest.json",
+      "manifest_sha256": "618c90f1ec3ffdeddce12223f0417d434132f15f259f0350c15bec4d98b37f95",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\hotspot_high_load__q_routing__seed_515636025.json",
+        "sha256": "0ec972b147a8bbdcfb62efe6e4214844ecd65817de8e3e4566a7da44f1e525a7"
+      }
+    },
+    "hotspot_high_load/q_routing/seed_626669596": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "57e072c6b3620adf5db0a08dc2e1e020d78a4598f3daa658ea54bc8b68f5bff5",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\hotspot_high_load__q_routing__seed_626669596.manifest.json",
+      "manifest_sha256": "dfab60341648e6ef0851c2a572770666a442104f31e1cb8c3654839c014750f2",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\hotspot_high_load__q_routing__seed_626669596.json",
+        "sha256": "71d5e20b86b2822584f8d92501e81e63aa8afbb8308fc0f1d1002b2cbdbda6b3"
+      }
+    },
+    "hotspot_high_load/q_routing/seed_746965870": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "f234a2f4f9c3c4953126afa233c14ba6a6e0f765cd4339d73ae82423242281cc",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\hotspot_high_load__q_routing__seed_746965870.manifest.json",
+      "manifest_sha256": "2ff9d0cafbfb663ee5eddfd75a3d9dc9595de4535ad27b260d56d4938bda783e",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\hotspot_high_load__q_routing__seed_746965870.json",
+        "sha256": "cd180d4ec6987ca1e33847f7235d5920960aa0a34dca640d20180768a4be00b1"
+      }
+    },
+    "hotspot_high_load/q_routing/seed_985998595": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "daadd032a9e0bf96db4b85dbafe4a7809f1ddcb3c9d6599833314f3fff869648",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\hotspot_high_load__q_routing__seed_985998595.manifest.json",
+      "manifest_sha256": "d13946a61739533ac3f864df63e1503bdf151362d82b077caefe6120ed2dd8ee",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\hotspot_high_load__q_routing__seed_985998595.json",
+        "sha256": "995676c375292d39d8f53c772fc8562daed58dcad5a80d7dc59550dbb01a56d3"
+      }
+    },
+    "medium_load/global_dijkstra/seed_-1": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "449a6fca76e87abd2f5487c9dad3db8249cd4c871c0c23d5b9b993e187b549b5",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\medium_load__global_dijkstra__seed_-1.manifest.json",
+      "manifest_sha256": "f7045c945be6a4cfe17e36ad98d90d2a17de79a9243067fa8e46e35ad894b777",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\medium_load__global_dijkstra__seed_-1.json",
+        "sha256": "73409ebe7a044af388c2f66bee876eda1d4d63d06b59e56846c387438769b80c"
+      }
+    },
+    "medium_load/ospf_ecmp/seed_179055553": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "f08ca06646d99741aa5c193ce43aa0d6a5b9266ed7e1e41775cc61dce6db82df",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\medium_load__ospf_ecmp__seed_179055553.manifest.json",
+      "manifest_sha256": "b87413f6ad48c2a78cdc5416b0635ac7ed3741bc175f86821855cbd0a4356f70",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\medium_load__ospf_ecmp__seed_179055553.json",
+        "sha256": "cf86229638129975bb87ae36fe2c92d67cad59d8c16405228b30ecc698f5a0af"
+      }
+    },
+    "medium_load/ospf_ecmp/seed_183895110": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "a1e346afd66a80b1bd28b1abad2f1952cf0a42e08828c851dd8bc2b62e1447d4",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\medium_load__ospf_ecmp__seed_183895110.manifest.json",
+      "manifest_sha256": "1914d0dc49041dfa1c9c58629ed5c9aff7518d215bdbefac35a8dc755865d2ec",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\medium_load__ospf_ecmp__seed_183895110.json",
+        "sha256": "d597f9ffa4156ed6e6401d2e47f6f633c356cb101edc2bc9e7262ba7aea54ce2"
+      }
+    },
+    "medium_load/ospf_ecmp/seed_2136406109": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "097863e66a818cc5e3b38936b2fcb07396523269c9010238210b6136c779a5ad",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\medium_load__ospf_ecmp__seed_2136406109.manifest.json",
+      "manifest_sha256": "6365089a3614f831e9e47d8253b33f09793c2ab520de1c04886f5c8492109765",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\medium_load__ospf_ecmp__seed_2136406109.json",
+        "sha256": "e59ff932d52a0b1f80795aaa673688c2307a18c8baefb4cc6f9407911b16557a"
+      }
+    },
+    "medium_load/ospf_ecmp/seed_310818925": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "5d9aa7d4684db08a0476231235515b727e91afab69eccb7121d8b3d5b57c389e",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\medium_load__ospf_ecmp__seed_310818925.manifest.json",
+      "manifest_sha256": "20ad56968a31cae3856ffe8025db001c8f6017a1bc481cf00750379586604815",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\medium_load__ospf_ecmp__seed_310818925.json",
+        "sha256": "4d4ac35019bca2490932e8de4c83a55d074cb4edeef5bdb7dd4e414ec90c63e8"
+      }
+    },
+    "medium_load/ospf_ecmp/seed_515636025": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "987acdd07ea9437d2239b1768f43e59bf26aaee4eaaac92ef09d7bf5fb560f8e",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\medium_load__ospf_ecmp__seed_515636025.manifest.json",
+      "manifest_sha256": "2d44730454d82f024a799ee440f70359e5d5055dd2a2a0fe2a61ec1ad4e05196",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\medium_load__ospf_ecmp__seed_515636025.json",
+        "sha256": "54508078da58be601299662f1d88f35801d720baf18d09e3de976fc12c9d62dd"
+      }
+    },
+    "medium_load/ospf_ecmp/seed_626669596": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "5c85631d10fa1c863cdba32b34a197d48567c8cf94c15fc283fa68a6cb21d027",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\medium_load__ospf_ecmp__seed_626669596.manifest.json",
+      "manifest_sha256": "423f85d4e025a79a5b603ca335c63ce59ded1727b72426c9a4cc04f7a84289ec",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\medium_load__ospf_ecmp__seed_626669596.json",
+        "sha256": "3cd97abe1b223edaf89f99a05b21ba739dfbe18206c292564ac7d828a260799d"
+      }
+    },
+    "medium_load/ospf_ecmp/seed_746965870": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "ddda6bbba17479c3bcc3d8c385d38f37094c8163ec44a5618aff4acd8a70cb1b",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\medium_load__ospf_ecmp__seed_746965870.manifest.json",
+      "manifest_sha256": "35d230a4ad25b166bf0acf6cd363a0cd3ffa07e014f2d0974281dc2f78a42a69",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\medium_load__ospf_ecmp__seed_746965870.json",
+        "sha256": "6844a67ca0cc04aaf776b99343160bbe5c5f09f6e4d1aab9f16cb11568505a54"
+      }
+    },
+    "medium_load/ospf_ecmp/seed_985998595": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "a0843e14864c08fa3d5d6714e3dc817d5c73d48a85fb95db2fb8bbfbf7ec3fe7",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\medium_load__ospf_ecmp__seed_985998595.manifest.json",
+      "manifest_sha256": "a601df7ea06250891925e54144961a62a90a7035b50f60a2bec45639a108f436",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\medium_load__ospf_ecmp__seed_985998595.json",
+        "sha256": "bcf575e95a6c625548abcfdbfd8699708539dd655ac12eb1f59deeb21d57e036"
+      }
+    },
+    "medium_load/q_routing/seed_179055553": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "6f863ba44901fa3ed50cd30d9215baed2639e71a740658b6ac82e1f858b06125",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\medium_load__q_routing__seed_179055553.manifest.json",
+      "manifest_sha256": "b969e8f4c659d86e7f6c89f842768c0b11a2769e3e6199255f160f44952389cc",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\medium_load__q_routing__seed_179055553.json",
+        "sha256": "56940bf84f226a61d95663a680d5fc56a98e81136a5c9a4ad0a8a4081a195623"
+      }
+    },
+    "medium_load/q_routing/seed_183895110": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "a47405426b0509bc748eb20c692e3a5fc5c56dd887bc6f604d3a196f6672c7f8",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\medium_load__q_routing__seed_183895110.manifest.json",
+      "manifest_sha256": "07cf25809f6f526a78e5d71d028a4a5f82987314fec6387a45906f26b278c19f",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\medium_load__q_routing__seed_183895110.json",
+        "sha256": "4542c020d518eddf4b88e43e06b7ed95c443afba35277b8476ffadccb48b8d45"
+      }
+    },
+    "medium_load/q_routing/seed_2136406109": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "8e22d042536a3eeca5def6b681ee089092d038a6c2cfbc2929193f18b28b168f",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\medium_load__q_routing__seed_2136406109.manifest.json",
+      "manifest_sha256": "efacf6350e5142485933e00149b70699e5012835588d1fca9f1580293969e14d",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\medium_load__q_routing__seed_2136406109.json",
+        "sha256": "e46c14c5078e2f603d5223786be0ae2a187a0292dea7b36ad6dec6fe0a5f867d"
+      }
+    },
+    "medium_load/q_routing/seed_310818925": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "47521b49cd8aba9ed3c31b3361a5c020049184ee809d9938d0385a7543cba9eb",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\medium_load__q_routing__seed_310818925.manifest.json",
+      "manifest_sha256": "f565a128aa48cf994c589f33c66edeb019555cd46987c79a1c8ce2d0e5248124",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\medium_load__q_routing__seed_310818925.json",
+        "sha256": "f42ebc8054c8a17a0f6861caa37f64d0587768d27a3101c14e2996fb582f2e60"
+      }
+    },
+    "medium_load/q_routing/seed_515636025": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "bf2cdde69b1c2398597e952c6a80499e4f091dc5c7736b0d90ab10eca3544812",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\medium_load__q_routing__seed_515636025.manifest.json",
+      "manifest_sha256": "f00d9f405b0647cc238cd6b59e6c0a76da5a41fa81b28e56e0d885c830ff181a",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\medium_load__q_routing__seed_515636025.json",
+        "sha256": "8cf95d76a81ce28d83a1fd7b9cae60c787ceaa87056214f8848961fc61f7f209"
+      }
+    },
+    "medium_load/q_routing/seed_626669596": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "38adb4e0766870f28f8f7ea732a46d5f5700a356b1b100758329f51df140f5f4",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\medium_load__q_routing__seed_626669596.manifest.json",
+      "manifest_sha256": "2ace79975e84f73097576e6722efb53a9461b2ebdb92e04f2880904d17b0a916",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\medium_load__q_routing__seed_626669596.json",
+        "sha256": "22b702a9fcc99bfdfaf995efde7ef5daeb6cd40215ffc8d6043fc58c01c735b2"
+      }
+    },
+    "medium_load/q_routing/seed_746965870": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "f9b01ea91a3661f56b39f781677060577296ca69bac4c602abcb4d502aee444d",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\medium_load__q_routing__seed_746965870.manifest.json",
+      "manifest_sha256": "61295c223267e1015136acea52e3c6b0d6fac94555f5722e028978ab94ef43f0",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\medium_load__q_routing__seed_746965870.json",
+        "sha256": "133e521648bbaaf82acfeae825c935086f1ee42f9abb04323aead13dbbd74502"
+      }
+    },
+    "medium_load/q_routing/seed_985998595": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "63affa6e7c9b94bbbdf9faa3a5d3d306a2f6cd9e97fb25c28690ce0df214a6cc",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\gate_shards\\medium_load__q_routing__seed_985998595.manifest.json",
+      "manifest_sha256": "d12f9c600aceddbf6006d83420db3408186f01cf275dc222264d29ae42283a44",
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\gate\\medium_load__q_routing__seed_985998595.json",
+        "sha256": "a73050eb76118dfb5ac6701e4880d55c67788142cd116b12751299acf6898a79"
+      }
+    }
+  },
+  "spec_sha256": "80c657cb44bdb7ed3ba89fee0e67335da2f7a22236d9ae429265b8f0a7fc03c3",
+  "study_name": "ICC-AVOIDABLE-SWITCH-CLASSICAL-BASELINES-FORMAL-v1",
+  "test_access_count": 0,
+  "test_panel_consulted": false,
+  "training_freeze_sha256": "df7cf104d30360df898ef8239b64789c16e0baa9e87c78c52c08a676ecb62eba"
+}

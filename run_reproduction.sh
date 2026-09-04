@@ -42,7 +42,7 @@ if [[ "$STAGE" == "smoke" || "$STAGE" == "all" ]]; then
   echo "### STEP 0 smoke (600 steps, medium_load)"
   rm -rf /tmp/ieee-smoke
   (cd "$CLEANMARL" && $PY cleanmarl/mappo.py --env-type leo_multi --env-name medium_load \
-     --leo-project-path "$PROJ" --leo-variant full --seed 7 --batch-size 4 \
+     --leo-project-path "$PROJ" --leo-variant proposed --seed 7 --batch-size 4 \
      --total-timesteps 600 --epochs 3 --num-minibatches 4 --eval-steps 100000 \
      --num-eval-ep 3 --save-every-steps 1000000 --checkpoint-dir /tmp/ieee-smoke \
      --run-tag SMOKE --train-seed-start 9001 --train-seed-count 200 \
@@ -60,7 +60,7 @@ fi
 #   fault_links MAPPO ~ 0.05-0.15  => CODE REGRESSION (fix code before Step 2)
 # -----------------------------------------------------------------------------
 if [[ "$STAGE" == "repro" || "$STAGE" == "all" ]]; then
-  echo "### STEP 1 repro-check (FULL, 8 seeds) -> experiments/archive/repro-check"
+  echo "### STEP 1 repro-check (FULL, 12 seeds) -> experiments/archive/repro-check"
   run_exp004 --mode full --output experiments/archive/repro-check
   echo "### checking fault_links MAPPO delivery band..."
   $PY - <<'EOF'
@@ -79,7 +79,7 @@ EOF
 fi
 
 # -----------------------------------------------------------------------------
-# STEP 2 — FULL headline suite: 5 scenarios x 8 policy seeds x 50K steps, with
+# STEP 2 — FULL headline suite: 5 scenarios x 12 policy seeds x 50K steps, with
 # all baselines (Dijkstra/Q-routing/heuristics), held-out test, paired stats.
 # -----------------------------------------------------------------------------
 if [[ "$STAGE" == "all" ]]; then
@@ -88,15 +88,15 @@ if [[ "$STAGE" == "all" ]]; then
 fi
 
 # -----------------------------------------------------------------------------
-# STEP 3 — ABLATION across ALL 5 scenarios (was only medium+frequent; two of four
-# headline conclusions flipped/vanished in the 2nd scenario). Edit
-# run_ablation_experiments.py SCENARIOS to all 5 if not already.
+# STEP 3 — Frozen confirmatory ablation: 9 variants x 5 scenarios x 12 policy
+# seeds x 50K steps. The resumable runner publishes statistics only after its
+# audit verifies all 540 jobs and all 27,000 held-out evaluation rows.
 # -----------------------------------------------------------------------------
 if [[ "$STAGE" == "all" ]]; then
-  echo "### STEP 3 ablation (all 5 scenarios, FULL) -> experiments/ablation"
-  $PY src/run_ablation_experiments.py --scenarios low_load medium_load hotspot_high_load frequent_break fault_links \
-     --mode full --output experiments/ablation --cleanmarl "$CLEANMARL" --project "$PROJ" --device "$DEVICE" || \
-  echo "NOTE: if --scenarios flag differs, edit the command (run_ablation_experiments.py default = 2 scenarios)"
+  echo "### STEP 3 frozen 50K ablation -> experiments/ablation-50k-v2"
+  $PY src/ablation_matrix_runner.py --output experiments/ablation-50k-v2 \
+     --cleanmarl "$CLEANMARL" --project "$PROJ" --device "$DEVICE" \
+     --max-parallel "${MAX_PARALLEL:-2}" --require-complete
 fi
 
 # -----------------------------------------------------------------------------
@@ -133,5 +133,5 @@ if [[ "$STAGE" == "mde" || "$STAGE" == "all" ]]; then
 fi
 
 echo "### DONE. Aggregate + paired-test CSVs are under each experiments/ dir."
-echo "### Report: policy-seed std (now 8 seeds), effect sizes + 95% CI,"
+echo "### Report: policy-seed std (now 12 seeds), effect sizes + 95% CI,"
 echo "###         MDE on every null (mde_report.csv from STEP 5)."

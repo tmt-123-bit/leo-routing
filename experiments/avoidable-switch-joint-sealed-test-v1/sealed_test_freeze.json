@@ -1,0 +1,33 @@
+{
+  "authorization_sha256": "9e2c173b0399adf52adeb575ffb11742d2c3452eb0d50bb6bdccdac22ceed653",
+  "freezes": {
+    "classical_gate": "36bac779a6961ce38eb6872ec0f9cfa3953898ceb00d9b5bd7f10ce80fbc3a1e",
+    "classical_training": "df7cf104d30360df898ef8239b64789c16e0baa9e87c78c52c08a676ecb62eba",
+    "method_training": "153b5cd85305f3f4c9a03fd549eea3e06785a0d1a447b96ec9005098c7d25742",
+    "method_validation": "d3c039657802e9c784c82cec31024e5098b31e5a3e217e69bbc64dad5a8469d6"
+  },
+  "paper_claim_allowed": true,
+  "promotion_decision_allowed": true,
+  "protocol_sha256": "6c44971e623f46073ed9ed2339c4349d467dd51982d396f24a2b0457a881dbe6",
+  "row_count": 4100,
+  "rows_csv": {
+    "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-joint-sealed-test-v1\\sealed_test_rows.csv",
+    "sha256": "893771bc52fe2301034f86fbb5e7e5eec2df3e45051fdaa332ad826628009d02"
+  },
+  "rows_jsonl": {
+    "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-joint-sealed-test-v1\\sealed_test_rows.jsonl",
+    "sha256": "36a01dc7de8c04c4f542bc221e4dce32b45843928a8d6f4a612bfaceaafd088f"
+  },
+  "runner_sha256": "0f017510fdb54e15be70f43e889b18dcf5891fcd482ac8b19d901ff192d0429b",
+  "schema_version": 1,
+  "sealed_test_complete": true,
+  "sealed_test_freeze_sha256": "c5cc82c7edb96add6e8da1275924e83cf159e65a2062184d52f3364ad8e508a9",
+  "statistics": {
+    "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-joint-sealed-test-v1\\sealed_test_statistics.json",
+    "sha256": "5711a083517307aba64f99d481ab5c225f2015109e13abd573c4503c34600b73",
+    "statistics_sha256": "d6266433abd9deb8f381cdd3d3e1934253deabf606debc6d758d45d625990003"
+  },
+  "study_name": "ICC-AVOIDABLE-SWITCH-JOINT-SEALED-TEST-v1",
+  "test_access_count": 4100,
+  "test_panel_consulted": true
+}

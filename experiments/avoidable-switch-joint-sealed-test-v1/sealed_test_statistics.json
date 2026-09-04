@@ -1,0 +1,209 @@
+{
+  "all_primary_gates_passed": true,
+  "analysis_role": "preregistered_sealed_test",
+  "bootstrap_draws": 5000,
+  "row_count": 4100,
+  "scenarios": [
+    {
+      "all_gates_passed": true,
+      "constrained_rate": {
+        "estimate": 0.05681491608854616,
+        "maximum_policy_seed_rate": 0.10913039543932676,
+        "one_sided_95_upper": 0.07115009976064435,
+        "policy_seed_rates": [
+          0.033455545371219066,
+          0.055128784455490284,
+          0.05563032750112158,
+          0.045993928801398215,
+          0.05297346752058554,
+          0.03787671856505508,
+          0.10913039543932676,
+          0.06433016105417276
+        ]
+      },
+      "delivery": {
+        "ci95": [
+          -0.015872395833333334,
+          -0.001821940104166686
+        ],
+        "endpoint": "delivery_ratio_difference",
+        "estimate": -0.009583333333333336,
+        "holm_adjusted_p": 0.0546875,
+        "one_sided_95_lower": -0.015026041666666665,
+        "policy_seed_effects": [
+          -0.011354166666666679,
+          -0.010312500000000004,
+          0.013749999999999995,
+          -0.019791666666666662,
+          -0.019375000000000003,
+          -0.013229166666666676,
+          -0.009999999999999995,
+          -0.006354166666666674
+        ],
+        "raw_exact_p": 0.0546875
+      },
+      "gates": {
+        "delivery_noninferiority": true,
+        "every_policy_seed_within_budget": true,
+        "rate_budget_upper": true,
+        "rate_reduction": true
+      },
+      "method_summaries": [
+        {
+          "decision_avoidable_switch_rate": 0.2090052463264172,
+          "delivery_ratio": 0.7925260416666667,
+          "method": "qos_only_baseline"
+        },
+        {
+          "decision_avoidable_switch_rate": 0.05681491608854616,
+          "delivery_ratio": 0.7829427083333332,
+          "method": "qos_only_constrained"
+        },
+        {
+          "decision_avoidable_switch_rate": 0.14631247190266858,
+          "delivery_ratio": 0.7925260416666667,
+          "method": "reward_shaped_control"
+        },
+        {
+          "decision_avoidable_switch_rate": 0.2605150303955005,
+          "delivery_ratio": 0.7875,
+          "method": "q_routing"
+        },
+        {
+          "decision_avoidable_switch_rate": 0.1874925508451885,
+          "delivery_ratio": 0.7386328125,
+          "method": "ospf_ecmp"
+        },
+        {
+          "decision_avoidable_switch_rate": 0.18856977081520163,
+          "delivery_ratio": 0.7381250000000001,
+          "method": "global_dijkstra"
+        }
+      ],
+      "rate_difference": {
+        "ci95": [
+          -0.19738741017913689,
+          -0.10356744527417892
+        ],
+        "endpoint": "decision_avoidable_switch_rate_difference",
+        "estimate": -0.15219033023787104,
+        "holm_adjusted_p": 0.03125,
+        "one_sided_95_upper": -0.11138778199679343,
+        "policy_seed_effects": [
+          -0.2210357428837236,
+          -0.24848437391229689,
+          -0.20951332082009683,
+          -0.14727346980126943,
+          -0.145959045596838,
+          -0.09392948087135977,
+          -0.024039539201196114,
+          -0.12728766881618775
+        ],
+        "raw_exact_p": 0.0078125
+      },
+      "scenario": "medium_load"
+    },
+    {
+      "all_gates_passed": true,
+      "constrained_rate": {
+        "estimate": 0.019357507892812646,
+        "maximum_policy_seed_rate": 0.07114142463525905,
+        "one_sided_95_upper": 0.033646446620883196,
+        "policy_seed_rates": [
+          0.03827050997782705,
+          0.009501293603354447,
+          0.005305631102590396,
+          0.0004445037116059919,
+          0.015044727568446733,
+          0.07114142463525905,
+          0.005890227576974565,
+          0.009261744966442952
+        ]
+      },
+      "delivery": {
+        "ci95": [
+          0.0035250000000000004,
+          0.011875124999999992
+        ],
+        "endpoint": "delivery_ratio_difference",
+        "estimate": 0.007724999999999995,
+        "holm_adjusted_p": 0.03125,
+        "one_sided_95_lower": 0.0041895000000000005,
+        "policy_seed_effects": [
+          0.0026399999999999956,
+          0.013919999999999986,
+          0.011479999999999997,
+          0.011879999999999996,
+          0.005039999999999997,
+          -0.0013199999999999978,
+          0.003520000000000001,
+          0.014639999999999992
+        ],
+        "raw_exact_p": 0.015625
+      },
+      "gates": {
+        "delivery_noninferiority": true,
+        "every_policy_seed_within_budget": true,
+        "rate_budget_upper": true,
+        "rate_reduction": true
+      },
+      "method_summaries": [
+        {
+          "decision_avoidable_switch_rate": 0.3818096354400279,
+          "delivery_ratio": 0.286765,
+          "method": "qos_only_baseline"
+        },
+        {
+          "decision_avoidable_switch_rate": 0.019357507892812646,
+          "delivery_ratio": 0.29449,
+          "method": "qos_only_constrained"
+        },
+        {
+          "decision_avoidable_switch_rate": 0.2427233855889229,
+          "delivery_ratio": 0.288525,
+          "method": "reward_shaped_control"
+        },
+        {
+          "decision_avoidable_switch_rate": 0.3960308211318566,
+          "delivery_ratio": 0.311405,
+          "method": "q_routing"
+        },
+        {
+          "decision_avoidable_switch_rate": 0.19817185361301604,
+          "delivery_ratio": 0.30118,
+          "method": "ospf_ecmp"
+        },
+        {
+          "decision_avoidable_switch_rate": 0.19847632546396776,
+          "delivery_ratio": 0.30112,
+          "method": "global_dijkstra"
+        }
+      ],
+      "rate_difference": {
+        "ci95": [
+          -0.4087151916389595,
+          -0.31304851712104587
+        ],
+        "endpoint": "decision_avoidable_switch_rate_difference",
+        "estimate": -0.36245212754721523,
+        "holm_adjusted_p": 0.03125,
+        "one_sided_95_upper": -0.32142888713639,
+        "policy_seed_effects": [
+          -0.365,
+          -0.4359963367283991,
+          -0.3994441490001826,
+          -0.45319909142417164,
+          -0.3131698885277605,
+          -0.23938536591137635,
+          -0.29824691528016833,
+          -0.3951752735056632
+        ],
+        "raw_exact_p": 0.0078125
+      },
+      "scenario": "hotspot_high_load"
+    }
+  ],
+  "schema_version": 1,
+  "statistics_sha256": "d6266433abd9deb8f381cdd3d3e1934253deabf606debc6d758d45d625990003",
+  "study_name": "ICC-AVOIDABLE-SWITCH-JOINT-SEALED-TEST-v1"
+}

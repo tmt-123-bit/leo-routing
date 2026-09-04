@@ -19,12 +19,13 @@
  *   - hold (action 0) is only offered when no feasible route exists;
  *   - link capacity: at most --link-capacity forwards per directed link per
  *     slot (by packet id); excess stay queued (blocked, not dropped);
- *   - arrival: hop_count++; delivery at dst takes precedence; else TTL
- *     (hops >= max-hops) drop; else dest-queue-full drop; else enqueue;
+ *   - arrival: hop_count++; delivery at dst takes precedence; else deadline,
+ *     TTL (hops >= max-hops), and dest-queue-full checks, then enqueue;
  *   - deadline: local_slot - created + 1 >= deadline[class] -> dropped,
- *     checked at each boundary after arrivals; delivery only counts within
- *     deadline;
- *   - source admission: dropped (source_queue_overflow) if src queue full.
+ *     after current-slot decisions/forwarding and before exogenous admission;
+ *   - reset-initial traffic is visible in slot 1; step-generated traffic is
+ *     admitted after its created slot's decisions;
+ *   - source overflow is dropped but remains in the generated denominator.
  *
  * Build: copy to ~/ns-3.48/scratch/leo-closed-loop.cc && ./ns3 build
  * Run:   ./ns3 run "scratch/leo-closed-loop --input=...packets.csv
@@ -43,6 +44,7 @@
 #include <cstring>
 #include <deque>
 #include <fstream>
+#include <limits>
 #include <numeric>
 #include <sstream>
 #include <string>
@@ -76,8 +78,8 @@ public:
   uint8_t cls = 0;
   uint8_t episode = 0;
   uint8_t createdSlot = 0;   // episode-local creation slot
-  uint8_t hops = 0;          // hops completed at arrival
-  uint8_t prevNode = 0;      // 0 = none (fresh at source)
+  uint8_t hops = 0;          // hops completed before this transmission
+  uint8_t prevNode = 0;      // sender of this physical hop; 0 at source
   uint32_t visitedMask = 0;  // bit(node-1) for every node touched incl. src
 
   CLHeader() = default;
@@ -113,6 +115,7 @@ struct QPkt {                       // in-queue copy of the packet state
 
 struct Injection {
   uint32_t gslot, gid, src, dst, cls, episode, createdSlot;
+  bool initial;
 };
 
 struct Sim {
@@ -121,19 +124,23 @@ struct Sim {
   std::string output, policyName;
   uint64_t sent=0, delivered=0, deviceQueueDrops=0;
   uint64_t deadlineDrops=0, ttlDrops=0, queueDrops=0, sourceDrops=0, blocked=0;
-  uint64_t holds=0, decisions=0;
+  uint64_t holds=0, decisions=0, truncatedBacklog=0;
   std::map<uint32_t,std::string> dropReason;   // global pktId -> reason
   std::map<uint32_t,double> deliveredDelayMs;
   std::set<uint32_t> allSent;
   std::vector<double> delaysMs;
   std::map<std::pair<uint32_t,uint32_t>,uint64_t> linkTx;      // directed totals
-  std::map<std::pair<uint32_t,uint32_t>,uint64_t> snapshotTx;  // last boundary
+  std::map<std::pair<uint32_t,uint32_t>,uint64_t> episodeLinkTx;
+  std::map<std::pair<uint32_t,uint32_t>,uint64_t> snapshotTx;  // this episode
+  std::map<uint64_t,uint32_t> txEpisodeByUid;
   std::map<uint32_t,uint32_t> incoming;       // arrivals since last boundary
   std::map<uint32_t,std::deque<QPkt>> nodeQ;  // per-node FIFO (env semantics)
   std::vector<Injection> injects;
   double slotSec = 1.0;
-  uint32_t episodeSlots = 30, linkCapacity = 3, nodeQCap = 45, maxHops = 12;
+  uint32_t episodeSlots = 30, numEpisodes = 0;
+  uint32_t linkCapacity = 3, nodeQCap = 45, maxHops = 12;
   uint32_t deadlineSlots[3] = {30,12,20};
+  int activeEpisode = -1;
   int sock = -1;
 } g;
 
@@ -152,9 +159,42 @@ static uint32_t GlobalSlot() {
   int64_t s = (int64_t)std::floor(Simulator::Now().GetSeconds()/g.slotSec + 1e-9);
   return (uint32_t)std::max<int64_t>(s, 1);
 }
+static int EpisodeForGlobalSlot(uint32_t gslot) {
+  if (gslot == 0 || g.episodeSlots == 0) return -1;
+  uint32_t episode = (gslot - 1) / g.episodeSlots;
+  return episode < g.numEpisodes ? (int)episode : -1;
+}
 static bool DeadlineExceeded(uint32_t localSlot, uint32_t created, uint32_t cls) {
   return (int64_t)localSlot - (int64_t)created + 1
        >= (int64_t)g.deadlineSlots[cls % 3];
+}
+
+static void MarkBacklog(uint32_t pktId) {
+  if (g.deliveredDelayMs.count(pktId) || g.dropReason.count(pktId)) return;
+  g.dropReason[pktId] = "backlog";
+  g.truncatedBacklog++;
+}
+
+static void TransitionEpisode(int nextEpisode) {
+  if (g.activeEpisode >= 0) {
+    for (const auto& inj : g.injects) {
+      if ((int)inj.episode == g.activeEpisode && g.allSent.count(inj.gid))
+        MarkBacklog(inj.gid);
+    }
+  }
+  // Episode truncation in the slot env leaves unresolved packets as backlog;
+  // it does not turn them into deadline/TTL/queue drops. Clear only dynamic
+  // data-plane state while retaining all cumulative output statistics.
+  g.nodeQ.clear();
+  g.incoming.clear();
+  g.episodeLinkTx.clear();
+  g.snapshotTx.clear();
+  for (auto& [_, dev] : g.devOf) {
+    Ptr<Queue<Packet>> queue = dev->GetQueue();
+    if (queue) queue->Flush();
+  }
+  g.txEpisodeByUid.clear();
+  g.activeEpisode = nextEpisode;
 }
 
 // ---- bridge socket helpers (blocking; sim time is frozen at boundaries) ----
@@ -178,8 +218,14 @@ static std::string BridgeRecvLine() {
   return line;
 }
 
-static void PhyTxDirected(uint32_t u, uint32_t v, Ptr<const Packet>) {
+static void PhyTxDirected(uint32_t u, uint32_t v, Ptr<const Packet> packet) {
   g.linkTx[{u,v}]++;
+  auto tagged = g.txEpisodeByUid.find(packet->GetUid());
+  if (tagged != g.txEpisodeByUid.end()) {
+    if ((int)tagged->second == g.activeEpisode)
+      g.episodeLinkTx[{u,v}]++;
+    g.txEpisodeByUid.erase(tagged);
+  }
 }
 
 // arrival: delivery takes precedence; then TTL; then dest-queue-full; else FIFO
@@ -190,20 +236,25 @@ void OnRx(Ptr<Node> node, uint32_t nodeId, Ptr<NetDevice>, Ptr<const Packet> pck
   Ptr<Packet> p = pckt->Copy();
   CLHeader h;
   p->RemoveHeader(h);
+  if ((int)h.episode != g.activeEpisode) {
+    MarkBacklog(h.pktId);
+    return;
+  }
+  // Match the slot env's accepted-arrival contention snapshot: every packet
+  // received in the active episode counts, including immediate delivery/drop.
+  g.incoming[nodeId]++;
   uint32_t gslot = GlobalSlot();
   uint32_t lslot = gslot - h.episode * g.episodeSlots;
-  uint32_t hops = (uint32_t)h.hops + 1;        // arrival completes the hop
+  uint32_t hops = (uint32_t)h.hops + 1;        // arrival completes one hop
   if (nodeId == h.finalDst) {
-    if (!DeadlineExceeded(lslot, h.createdSlot, h.cls)) {
-      g.delivered++;
-      double dMs = (Simulator::Now().GetNanoSeconds()-(int64_t)h.sendTimeNs)/1e6;
-      g.delaysMs.push_back(dMs);
-      g.deliveredDelayMs[h.pktId] = dMs;
-    } else {
-      g.deadlineDrops++;
-      g.dropReason[h.pktId] = "deadline_exceeded";
-    }
+    g.delivered++;
+    double dMs = (Simulator::Now().GetNanoSeconds()-(int64_t)h.sendTimeNs)/1e6;
+    g.delaysMs.push_back(dMs);
+    g.deliveredDelayMs[h.pktId] = dMs;
     return;
+  }
+  if (DeadlineExceeded(lslot, h.createdSlot, h.cls)) {
+    g.deadlineDrops++; g.dropReason[h.pktId] = "deadline_exceeded"; return;
   }
   if (hops >= g.maxHops) {
     g.ttlDrops++; g.dropReason[h.pktId] = "ttl_exceeded"; return;
@@ -212,141 +263,153 @@ void OnRx(Ptr<Node> node, uint32_t nodeId, Ptr<NetDevice>, Ptr<const Packet> pck
     g.queueDrops++; g.dropReason[h.pktId] = "queue_overflow"; return;
   }
   QPkt q{h.pktId, h.finalDst, h.srcNode, h.cls, h.episode, h.createdSlot,
-         (uint8_t)hops, (uint8_t)nodeId, h.visitedMask | (1u << (nodeId-1)),
+         (uint8_t)hops, h.prevNode, h.visitedMask | (1u << (nodeId-1)),
          h.sendTimeNs};
   g.nodeQ[nodeId].push_back(q);
-  g.incoming[nodeId]++;
 }
 
-// one slot: expire deadlines, report state, get decisions, execute service
-void SlotBoundary(uint32_t gslot)
-{
-  // 1) inject this slot's new packets (env: created before decisions)
+static void AdmitInjections(uint32_t gslot, bool initialPhase) {
   for (const auto& inj : g.injects) {
-    if (inj.gslot != gslot || inj.src == inj.dst) continue;
+    if (inj.gslot != gslot || inj.initial != initialPhase || inj.src == inj.dst)
+      continue;
     g.allSent.insert(inj.gid);
+    g.sent++;                                  // generated denominator in env
     if (g.nodeQ[inj.src].size() >= g.nodeQCap) {
-      g.sourceDrops++; g.dropReason[inj.gid] = "source_queue_overflow";
+      g.sourceDrops++;
+      g.dropReason[inj.gid] = "source_queue_overflow";
       continue;
     }
-    g.sent++;
     QPkt q{inj.gid, inj.dst, inj.src, (uint8_t)inj.cls, (uint8_t)inj.episode,
            (uint8_t)inj.createdSlot, 0, 0, 1u << (inj.src-1),
            Simulator::Now().GetNanoSeconds()};
     g.nodeQ[inj.src].push_back(q);
   }
+}
 
-  // 2) expire deadlines (env: after arrivals, before next decisions)
+static void ExpireQueuedPackets(uint32_t gslot) {
   for (auto& [node, q] : g.nodeQ) {
     (void)node;
     std::deque<QPkt> keep;
     for (auto& pkt : q) {
       uint32_t lslot = gslot - pkt.episode * g.episodeSlots;
       if (DeadlineExceeded(lslot, pkt.createdSlot, pkt.cls)) {
-        g.deadlineDrops++; g.dropReason[pkt.pktId] = "deadline_exceeded";
-      } else keep.push_back(pkt);
+        g.deadlineDrops++;
+        g.dropReason[pkt.pktId] = "deadline_exceeded";
+      } else {
+        keep.push_back(pkt);
+      }
     }
     q.swap(keep);
   }
+}
 
-  // 3) which episode is active? (episodes staggered; at most one)
-  int activeEp = -1;
-  for (const auto& inj : g.injects) {
-    uint32_t epStart = inj.episode * g.episodeSlots + 1;
-    if (gslot >= epStart && gslot < epStart + g.episodeSlots) {
-      activeEp = (int)inj.episode; break;
+// one slot: expire deadlines, report state, get decisions, execute service
+void SlotBoundary(uint32_t gslot)
+{
+  // Episode identity follows the configured clock, not the presence of an
+  // injection row. This keeps empty workload episodes visible to the server.
+  int activeEp = EpisodeForGlobalSlot(gslot);
+  if (activeEp != g.activeEpisode) TransitionEpisode(activeEp);
+  if (activeEp < 0) return;                    // final backlog was audited
+
+  // Reset-initial packets exist before slot-1 observation. Packets generated
+  // by env.step are admitted only after that created slot's decisions.
+  AdmitInjections(gslot, true);
+
+  uint32_t lslot = gslot - (uint32_t)activeEp * g.episodeSlots;
+
+  // directed TX deltas since last boundary, isolated to this episode
+  std::map<std::pair<uint32_t,uint32_t>,uint32_t> txDelta;
+  for (auto& [k, total] : g.episodeLinkTx) {
+    uint64_t prev = g.snapshotTx.count(k) ? g.snapshotTx[k] : 0;
+    if (total > prev) txDelta[k] = (uint32_t)(total - prev);
+  }
+  g.snapshotTx = g.episodeLinkTx;
+
+  // ---- report ----
+  std::ostringstream head;
+  head << "SLOT " << activeEp << " " << lslot << " " << N_NODES
+       << " " << txDelta.size();
+  BridgeSend(head.str());
+  for (uint32_t id = 1; id <= N_NODES; ++id) {
+    auto& q = g.nodeQ[id];
+    std::ostringstream al;
+    if (!q.empty()) {
+      const QPkt& h = q.front();
+      al << "AG " << id << " " << q.size() << " " << g.incoming[id] << " "
+         << h.pktId << " " << h.finalDst << " " << (int)h.cls << " "
+         << (int)h.hops << " " << (int)h.prevNode << " "
+         << (int)h.createdSlot << " " << h.visitedMask;
+    } else {
+      al << "AG " << id << " " << q.size() << " " << g.incoming[id]
+         << " -1 0 0 0 0 0 0";
     }
+    al << " 0";                                 // slot 0: hold placeholder
+    const auto& nbrs = nbrsOf[id];
+    for (uint32_t i = 0; i < 6; ++i) al << " " << (i < nbrs.size() ? nbrs[i] : 0);
+    BridgeSend(al.str());
+  }
+  for (auto& [k, n] : txDelta) {
+    std::ostringstream tl;
+    tl << "TX " << k.first << " " << k.second << " " << n;
+    BridgeSend(tl.str());
   }
 
-  if (activeEp >= 0) {
-    uint32_t lslot = gslot - (uint32_t)activeEp * g.episodeSlots;
+  // ---- decisions ----
+  std::istringstream as(BridgeRecvLine());      // "ACT <n>"
+  std::string tag; int nd = 0; as >> tag >> nd;
+  std::map<uint32_t,int> actionOf;
+  for (int i = 0; i < nd; ++i) {
+    std::istringstream ds(BridgeRecvLine());
+    uint32_t node; int actslot, nh;
+    ds >> node >> actslot >> nh;
+    (void)nh;                                    // server maps slot->neighbor too
+    actionOf[node] = actslot;
+    if (actslot > 0) g.decisions++; else g.holds++;
+  }
 
-    // directed TX deltas since last boundary (accepted forwards last slot)
-    std::map<std::pair<uint32_t,uint32_t>,uint32_t> txDelta;
-    for (auto& [k, total] : g.linkTx) {
-      uint64_t prev = g.snapshotTx.count(k) ? g.snapshotTx[k] : 0;
-      if (total > prev) txDelta[k] = (uint32_t)(total - prev);
-    }
-    g.snapshotTx = g.linkTx;
-
-    // ---- report ----
-    std::ostringstream head;
-    head << "SLOT " << activeEp << " " << lslot << " " << N_NODES
-         << " " << txDelta.size();
-    BridgeSend(head.str());
-    for (uint32_t id = 1; id <= N_NODES; ++id) {
-      auto& q = g.nodeQ[id];
-      std::ostringstream al;
-      if (!q.empty()) {
-        const QPkt& h = q.front();
-        al << "AG " << id << " " << q.size() << " " << g.incoming[id] << " "
-           << h.pktId << " " << h.finalDst << " " << (int)h.cls << " "
-           << (int)h.hops << " " << (int)h.prevNode << " "
-           << (int)h.createdSlot << " " << h.visitedMask;
-      } else {
-        al << "AG " << id << " " << q.size() << " " << g.incoming[id]
-           << " -1 0 0 0 0 0 0";
-      }
-      al << " 0";                               // slot 0: hold placeholder
-      const auto& nbrs = nbrsOf[id];
-      for (uint32_t i = 0; i < 6; ++i) al << " " << (i < nbrs.size() ? nbrs[i] : 0);
-      BridgeSend(al.str());
-    }
-    for (auto& [k, n] : txDelta) {
-      std::ostringstream tl;
-      tl << "TX " << k.first << " " << k.second << " " << n;
-      BridgeSend(tl.str());
-    }
-
-    // ---- decisions ----
-    std::istringstream as(BridgeRecvLine());    // "ACT <n>"
-    std::string tag; int nd = 0; as >> tag >> nd;
-    std::map<uint32_t,int> actionOf;
-    for (int i = 0; i < nd; ++i) {
-      std::istringstream ds(BridgeRecvLine());
-      uint32_t node; int actslot, nh;
-      ds >> node >> actslot >> nh;
-      (void)nh;                                  // server maps slot->neighbor too
-      actionOf[node] = actslot;
-      if (actslot > 0) g.decisions++; else g.holds++;
-    }
-
-    // ---- execute with link-capacity resolution (by packet id) ----
-    struct Prop { uint32_t node, nh, pktId; QPkt pkt; };
-    std::map<std::pair<uint32_t,uint32_t>, std::vector<Prop>> byLink;
-    for (auto& [node, actslot] : actionOf) {
-      if (actslot <= 0) continue;
-      const auto& q = g.nodeQ[node];
-      if (q.empty()) continue;
-      const auto& nbrs = nbrsOf[node];
-      if ((size_t)actslot > nbrs.size()) continue;
-      uint32_t nh = nbrs[actslot - 1];
-      byLink[{node, nh}].push_back({node, nh, q.front().pktId, q.front()});
-    }
-    for (auto& [link, props] : byLink) {
-      (void)link;
-      std::sort(props.begin(), props.end(),
-                [](const Prop& a, const Prop& b){ return a.pktId < b.pktId; });
-      size_t acc = 0;
-      for (auto& pr : props) {
-        if (acc++ >= g.linkCapacity) { g.blocked++; continue; }  // stays queued
-        auto& q = g.nodeQ[pr.node];
-        if (q.empty() || q.front().pktId != pr.pktId) continue;
-        q.pop_front();
-        CLHeader h;
-        h.pktId = pr.pkt.pktId; h.finalDst = pr.pkt.finalDst;
-        h.srcNode = pr.pkt.srcNode; h.sendTimeNs = pr.pkt.sendNs;
-        h.cls = pr.pkt.cls; h.episode = pr.pkt.episode;
-        h.createdSlot = pr.pkt.createdSlot; h.hops = pr.pkt.hops + 1;
-        h.prevNode = pr.pkt.prevNode; h.visitedMask = pr.pkt.visitedMask;
-        Ptr<Packet> p = Create<Packet>(1500 - h.GetSerializedSize());
-        p->AddHeader(h);
-        auto dev = g.devOf[{pr.node, pr.nh}];
-        bool ok = dev->Send(p, dev->GetBroadcast(), LEO_PROTO);
-        if (!ok) { g.deviceQueueDrops++; g.dropReason[pr.pktId] = "device_queue_full"; }
+  // ---- execute with link-capacity resolution (by packet id) ----
+  struct Prop { uint32_t node, nh, pktId; QPkt pkt; };
+  std::map<std::pair<uint32_t,uint32_t>, std::vector<Prop>> byLink;
+  for (auto& [node, actslot] : actionOf) {
+    if (actslot <= 0) continue;
+    const auto& q = g.nodeQ[node];
+    if (q.empty()) continue;
+    const auto& nbrs = nbrsOf[node];
+    if ((size_t)actslot > nbrs.size()) continue;
+    uint32_t nh = nbrs[actslot - 1];
+    byLink[{node, nh}].push_back({node, nh, q.front().pktId, q.front()});
+  }
+  for (auto& [link, props] : byLink) {
+    (void)link;
+    std::sort(props.begin(), props.end(),
+              [](const Prop& a, const Prop& b){ return a.pktId < b.pktId; });
+    size_t acc = 0;
+    for (auto& pr : props) {
+      if (acc++ >= g.linkCapacity) { g.blocked++; continue; }  // stays queued
+      auto& q = g.nodeQ[pr.node];
+      if (q.empty() || q.front().pktId != pr.pktId) continue;
+      q.pop_front();
+      CLHeader h;
+      h.pktId = pr.pkt.pktId; h.finalDst = pr.pkt.finalDst;
+      h.srcNode = pr.pkt.srcNode; h.sendTimeNs = pr.pkt.sendNs;
+      h.cls = pr.pkt.cls; h.episode = pr.pkt.episode;
+      h.createdSlot = pr.pkt.createdSlot; h.hops = pr.pkt.hops;
+      h.prevNode = (uint8_t)pr.node; h.visitedMask = pr.pkt.visitedMask;
+      Ptr<Packet> p = Create<Packet>(1500 - h.GetSerializedSize());
+      p->AddHeader(h);
+      g.txEpisodeByUid[p->GetUid()] = pr.pkt.episode;
+      auto dev = g.devOf[{pr.node, pr.nh}];
+      bool ok = dev->Send(p, dev->GetBroadcast(), LEO_PROTO);
+      if (!ok) {
+        g.txEpisodeByUid.erase(p->GetUid());
+        g.deviceQueueDrops++;
+        g.dropReason[pr.pktId] = "device_queue_full";
       }
     }
   }
+  ExpireQueuedPackets(gslot);
+  AdmitInjections(gslot, false);
   g.incoming.clear();
 
   double now = Simulator::Now().GetSeconds();
@@ -361,6 +424,7 @@ int main(int argc, char* argv[])
   std::string deadlineStr = "30,12,20";
   double slotSec = 1.0, intraMs = INTRA_DELAY_MS, crossMs = CROSS_DELAY_MS;
   uint32_t bwKbps = 36, qsize = 64, episodeSlots = 30, linkCap = 3;
+  uint32_t numEpisodes = 0, initialPackets = 0;
   uint32_t nodeQCap = 45, maxHops = 12, port = 7341;
   CommandLine cmd;
   cmd.AddValue("input", "packets CSV (traffic only; path column ignored)", inputFile);
@@ -372,6 +436,8 @@ int main(int argc, char* argv[])
   cmd.AddValue("qsize-pkts", "device drop-tail queue (packets)", qsize);
   cmd.AddValue("slot-sec", "env slot -> ns-3 seconds", slotSec);
   cmd.AddValue("episode-slots", "env slots per episode", episodeSlots);
+  cmd.AddValue("num-episodes", "episode count (required for trailing empty episodes)", numEpisodes);
+  cmd.AddValue("initial-packets", "reset-initial packets per episode", initialPackets);
   cmd.AddValue("link-capacity", "forwards per directed link per slot", linkCap);
   cmd.AddValue("node-qsize", "per-node local queue cap (env max_queue_packets)", nodeQCap);
   cmd.AddValue("max-hops", "env max_local_hops (TTL)", maxHops);
@@ -382,7 +448,21 @@ int main(int argc, char* argv[])
   if (inputFile.empty() || outputFile.empty()) {
     std::cerr << "need --input and --output\n"; return 1;
   }
+  // PointToPointNetDevice prepends a two-byte PPP header to the 1500-byte
+  // packet before serialization.
+  double maxHopSec = bwKbps > 0
+    ? 1502.0 * 8.0 / (bwKbps * 1000.0)
+      + std::max(intraMs, crossMs) / 1000.0
+    : std::numeric_limits<double>::infinity();
+  if (episodeSlots == 0 || episodeSlots > 255 || numEpisodes > 256
+      || slotSec <= 0.0 || intraMs < 0.0 || crossMs < 0.0
+      || maxHopSec >= slotSec) {
+    std::cerr << "need 1..255 slots, <=256 episodes, and one-hop "
+              << "serialization+propagation strictly below slot-sec\n";
+    return 1;
+  }
   g.slotSec = slotSec; g.episodeSlots = episodeSlots;
+  g.numEpisodes = numEpisodes;
   g.linkCapacity = linkCap; g.nodeQCap = nodeQCap; g.maxHops = maxHops;
   g.policyName = policyName; g.output = outputFile;
   {
@@ -450,34 +530,65 @@ int main(int argc, char* argv[])
   std::ifstream in(inputFile);
   if (!in) { std::cerr << "cannot open " << inputFile << "\n"; return 1; }
   std::string line; std::getline(in, line);   // header
-  uint32_t maxGslot = 0;
+  uint32_t maxEpisode = 0;
+  bool sawEpisode = false;
   while (std::getline(in, line)) {
     if (line.empty()) continue;
     std::vector<std::string> f; std::stringstream ss(line); std::string cell;
     while (std::getline(ss, cell, ',')) f.push_back(cell);
     if (f.size() < 6) continue;
     uint32_t ep = std::stoul(f[0]), pid = std::stoul(f[1]);
+    if (ep > 255 || (g.numEpisodes > 0 && ep >= g.numEpisodes)) {
+      std::cerr << "packet episode outside configured range: " << ep << "\n";
+      return 1;
+    }
     uint32_t src = std::stoul(f[2]), dst = std::stoul(f[3]);
     uint32_t cls = std::stoul(f[4]), created = std::stoul(f[5]);
+    if (created == 0 || created > episodeSlots) {
+      std::cerr << "created_slot outside episode clock: " << created << "\n";
+      return 1;
+    }
+    bool initial = pid <= initialPackets;
+    if (initial && created != 1) {
+      std::cerr << "reset-initial packet was not created in slot 1: " << pid << "\n";
+      return 1;
+    }
     uint32_t gslot = created + ep * episodeSlots;
-    g.injects.push_back({gslot, ep * 1000000u + pid, src, dst, cls, ep, created});
-    maxGslot = std::max(maxGslot, gslot);
+    g.injects.push_back(
+        {gslot, ep * 1000000u + pid, src, dst, cls, ep, created, initial});
+    maxEpisode = std::max(maxEpisode, ep);
+    sawEpisode = true;
+  }
+  if (g.numEpisodes == 0) {
+    if (!sawEpisode) {
+      std::cerr << "empty packet trace requires --num-episodes\n";
+      return 1;
+    }
+    g.numEpisodes = maxEpisode + 1;
   }
   std::cerr << "closed loop: " << g.injects.size() << " packets, horizon "
-            << maxGslot << " slots\n";
+            << g.numEpisodes * g.episodeSlots << " slots across "
+            << g.numEpisodes << " episodes\n";
 
   Simulator::Schedule(Seconds(slotSec), &SlotBoundary, 1u);
-  Simulator::Stop(Seconds((maxGslot + 10) * slotSec + 5.0));
+  uint32_t finalBoundary = g.numEpisodes * g.episodeSlots + 1;
+  Simulator::Stop(Seconds(finalBoundary * slotSec + 5.0));
   Simulator::Run();
+
+  // Fail closed if an unusual device event survives beyond the final boundary.
+  for (uint32_t pid : g.allSent) MarkBacklog(pid);
 
   // ---- per-packet results ----
   std::ofstream out(outputFile);
   out << "packet_id,delivered,delay_ms,drop_reason\n";
-  for (uint32_t pid : g.allSent)
-    out << pid << "," << (g.deliveredDelayMs.count(pid) ? 1 : 0) << ","
-        << (g.deliveredDelayMs.count(pid) ? g.deliveredDelayMs[pid] : -1.0)
-        << "," << (g.dropReason.count(pid) ? g.dropReason[pid] : "backlog")
-        << "\n";
+  for (uint32_t pid : g.allSent) {
+    bool delivered = g.deliveredDelayMs.count(pid) != 0;
+    std::string terminal =
+        delivered ? std::string("delivered") : g.dropReason.at(pid);
+    out << pid << "," << (delivered ? 1 : 0) << ","
+        << (delivered ? g.deliveredDelayMs[pid] : -1.0)
+        << "," << terminal << "\n";
+  }
 
   std::sort(g.delaysMs.begin(), g.delaysMs.end());
   auto pct = [&](double q)->double {
@@ -506,6 +617,7 @@ int main(int argc, char* argv[])
             << ",queue_drops=" << g.queueDrops
             << ",source_drops=" << g.sourceDrops
             << ",device_queue_drops=" << g.deviceQueueDrops
+            << ",truncated_backlog=" << g.truncatedBacklog
             << ",blocked_by_link_capacity=" << g.blocked
             << ",holds=" << g.holds
             << ",decisions=" << g.decisions

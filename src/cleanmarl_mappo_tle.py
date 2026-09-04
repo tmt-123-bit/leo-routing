@@ -81,8 +81,8 @@ class Args:
     """Use a permutation-equivariant shared candidate scorer."""
     leo_project_path: str = "F:/leo-routing-preliminary-matlab"
     """Directory containing cleanmarl_leo_wrapper.py for env_type=leo."""
-    leo_variant: str = "full"
-    """LEO controlled variant: full/no_queue/no_lifetime/no_credit/no_packet_context/flat_critic."""
+    leo_variant: str = "proposed"
+    """Canonical LEO method variant; full/no_lifetime are legacy aliases."""
     leo_topology_csv: str = ""
     """Frozen TLE/Hypatia-style link snapshot CSV for env_type=leo_tle."""
     eval_steps: int = 10
@@ -361,7 +361,7 @@ def environment(env_type, env_name, env_family, agent_ids, kwargs):
         env = CleanMARLLeoMultiAgentWrapper(
             scenario=env_name,
             seed=kwargs.pop("seed", 11),
-            variant=kwargs.pop("variant", "full"),
+            variant=kwargs.pop("variant", "proposed"),
         )
     elif env_type == "leo_tle":
         project_path = kwargs.pop(
@@ -376,7 +376,7 @@ def environment(env_type, env_name, env_family, agent_ids, kwargs):
             topology_csv=kwargs.pop("topology_csv"),
             scenario=env_name,
             seed=kwargs.pop("seed", 11),
-            variant=kwargs.pop("variant", "full"),
+            variant=kwargs.pop("variant", "proposed"),
         )
     else:
         raise ValueError(f"unknown env_type: {env_type}")

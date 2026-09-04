@@ -1,0 +1,255 @@
+{
+  "completed_at_utc": "2026-09-04T06:50:02.048225Z",
+  "freeze_sha256": "df7cf104d30360df898ef8239b64789c16e0baa9e87c78c52c08a676ecb62eba",
+  "jobs": {
+    "hotspot_high_load/q_routing/seed_179055553": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "d36aaf75bfbf2e2a70aeb5bcd01ba6e7a3b03564c547284b5d7e2cfeea1f8c00",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\hotspot_high_load\\seed_179055553\\model_manifest.json",
+      "manifest_sha256": "847b74bc887a47de2434d8f8e1fe4e6eda0f814bf62c14128e04acc94441ab3a",
+      "model": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\hotspot_high_load\\seed_179055553\\model.npz",
+        "q_array_sha256": "2b16ce45508f71dcc1e654064a5a93d3f9a1cc2818bf74a67d41e9594e64b5c8",
+        "sha256": "c605a570a7affc9dd85cbfe01f512a3e9e96d752e747396284c9d755bb241a28"
+      },
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\training\\hotspot_high_load__q_routing__seed_179055553.json",
+        "sha256": "2eb18295167477d97030afd99fc7aff6712ae0c1aa863bf51d593bdf0448f3e8"
+      }
+    },
+    "hotspot_high_load/q_routing/seed_183895110": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "f12b06d7f36679bc88ee3d54e97fb932c8809d2bcc720505cf3523f98b9b7d5e",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\hotspot_high_load\\seed_183895110\\model_manifest.json",
+      "manifest_sha256": "01493c1aa99049a240928bcd9a1f5917764313413a237b2e67ac9f49e518bd55",
+      "model": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\hotspot_high_load\\seed_183895110\\model.npz",
+        "q_array_sha256": "0d2aac46fe6cc375bca93eba8327c4cb4d091a7ac2fc4517c8297baa9a2051d0",
+        "sha256": "6316b9cd5c439009aa831a7290794cc0d2b9d3e8e7ea764217e4f69e1dbeea59"
+      },
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\training\\hotspot_high_load__q_routing__seed_183895110.json",
+        "sha256": "b25d2434457b375d977001028397d477c4265ae49148eba32f862d376c1b0ed7"
+      }
+    },
+    "hotspot_high_load/q_routing/seed_2136406109": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "fe4c58d311feddd73df5da30d021021025fb6917bc056064cdf18ee142f4fb1c",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\hotspot_high_load\\seed_2136406109\\model_manifest.json",
+      "manifest_sha256": "7b959a4f2ca0ca1b2f617b1ad72bc55da5ed00e74e58428c075f150b391894db",
+      "model": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\hotspot_high_load\\seed_2136406109\\model.npz",
+        "q_array_sha256": "726c3ccb60f34333bd571ea515179c35e0645196502a327900792dafac921d89",
+        "sha256": "7928b8bca1ae9dc22cbe3bea8df71beff1b859c84d4b4547b8b8aa1982659aac"
+      },
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\training\\hotspot_high_load__q_routing__seed_2136406109.json",
+        "sha256": "7de19d9bb8b308e4be5bd2fa5b8b9114cfbe0b5544c206dcfc3a200a402b60e9"
+      }
+    },
+    "hotspot_high_load/q_routing/seed_310818925": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "620da3682ba4b67c23461b1fc46c63ab4767b5bc9efa6cf6a21808cb0554f6a2",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\hotspot_high_load\\seed_310818925\\model_manifest.json",
+      "manifest_sha256": "be3b319a2b5f411e4ec0741965f46ec5fdb29e5cdc552f101c1fbafb35bcc326",
+      "model": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\hotspot_high_load\\seed_310818925\\model.npz",
+        "q_array_sha256": "874f7c5f603029e925a4da1b769c9cd764662f0798334a4fffaf8e6192c1e94e",
+        "sha256": "6eb6611887e3da6a3feecfcf411e068c745a727ae9afb40babdfcc14000b742f"
+      },
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\training\\hotspot_high_load__q_routing__seed_310818925.json",
+        "sha256": "3ca2fda88a9c93a3f90bb40edf1011c1649ac58e8a9d2840015d041cc68950eb"
+      }
+    },
+    "hotspot_high_load/q_routing/seed_515636025": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "7554bafef08ca1db88f36214587be833a3050c9d4a951e7fa7a43d58d3ef5346",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\hotspot_high_load\\seed_515636025\\model_manifest.json",
+      "manifest_sha256": "3f18ccce668fa6264255a2de2bd20a60517da8a675312106aa76e01ece0b05bf",
+      "model": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\hotspot_high_load\\seed_515636025\\model.npz",
+        "q_array_sha256": "ffced7490557cd331c4c23ade06de43f7995cbb4b0fc517289661e6ddbba6397",
+        "sha256": "ba80e1db0d38e6bf09bcc27d74dbb2ebbf0904f961fff004a467e846c7de833b"
+      },
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\training\\hotspot_high_load__q_routing__seed_515636025.json",
+        "sha256": "995a1b77182391f759b6cced1f9f9007a2241b2a623e6f3ce5bab5e91aac3a9a"
+      }
+    },
+    "hotspot_high_load/q_routing/seed_626669596": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "cc75f16ad975a0327a25398c7ccdbc67761f650ccb07e69ce34db2f7118ddbb6",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\hotspot_high_load\\seed_626669596\\model_manifest.json",
+      "manifest_sha256": "8e511a04ffc14f17baf9d2cee7b0ef746d1f580c9a086c6c4e20e585ae11b0ff",
+      "model": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\hotspot_high_load\\seed_626669596\\model.npz",
+        "q_array_sha256": "5f27fa86266a73a0e640760879ba4f08c53045d6a5f7525205c6e36148dd0b69",
+        "sha256": "bf7dc992d7d53d5101ce5bf5eff3204b115dea70285112534a67abb052c42b87"
+      },
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\training\\hotspot_high_load__q_routing__seed_626669596.json",
+        "sha256": "6803f716afa33d0d0c9d8ab0fad7ee0c3eda80f9ad7b79fd32f4ca0d678923a0"
+      }
+    },
+    "hotspot_high_load/q_routing/seed_746965870": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "e831f43dbd39db0485803e54c23c0538176e263534fcc43027b275c3ff6f92a2",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\hotspot_high_load\\seed_746965870\\model_manifest.json",
+      "manifest_sha256": "23f9bd98d8e7cba86f0fa15f28423414265d572ea14cd373552ce16226b8a32d",
+      "model": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\hotspot_high_load\\seed_746965870\\model.npz",
+        "q_array_sha256": "29a3b826d5ade9a3ab999fe87fdff8528fbd7ce8dc6a6dfd29ad0b13933c12b8",
+        "sha256": "fc41a39fb3df20dabefa49deb7826056a39b8e6d231d8f2bc4bf07a0bf25a50a"
+      },
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\training\\hotspot_high_load__q_routing__seed_746965870.json",
+        "sha256": "1a645d442d903342ab8d656db6395ea0bff3531d8d097e842d53fbb0956ac48b"
+      }
+    },
+    "hotspot_high_load/q_routing/seed_985998595": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "01bf4ca8271912b8406b7a7f586897099c0e2b7e514b544c254cece101fbd082",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\hotspot_high_load\\seed_985998595\\model_manifest.json",
+      "manifest_sha256": "6b171f1b539e296244df74454afb1b9378a3604052b2bf3b41a508dc67bed8f9",
+      "model": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\hotspot_high_load\\seed_985998595\\model.npz",
+        "q_array_sha256": "7060521573acae853e9a701ff23ea72d330e4d9f593f7d1289246ed7a8410801",
+        "sha256": "a564b5bb88d8f6107616797aa1d533619cb456d768107de2f9df3df363cc749f"
+      },
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\training\\hotspot_high_load__q_routing__seed_985998595.json",
+        "sha256": "ecb6bc9ceb979698b2d074a65011d239c73ba6b4fbb7cc2b350042723940c1a2"
+      }
+    },
+    "medium_load/q_routing/seed_179055553": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "84e7d5b6303e09141dfbf78acb0f66526532f33fb418b940eb1e1bab3e7dbd3e",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\medium_load\\seed_179055553\\model_manifest.json",
+      "manifest_sha256": "5ea6b0fd7621f3ede5930496f262d64caafbba29119c149712f85261a203871c",
+      "model": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\medium_load\\seed_179055553\\model.npz",
+        "q_array_sha256": "336eebfb72ec1a5cb70b6c32ec14feb64c7cd3e1bf5fbb25152239b6f4b60e31",
+        "sha256": "18aeb9ba97473bde5d752b219f14ee689448d57f0bb8554bb0c89178abd1db0d"
+      },
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\training\\medium_load__q_routing__seed_179055553.json",
+        "sha256": "f2cb44a20f645be96590e49f6e38363101b3290f781eff125c2fb0be4cf2cd53"
+      }
+    },
+    "medium_load/q_routing/seed_183895110": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "20cf9dac7128df3d4e2c298c06a8c631bcf804d493ca8e7972f38fe029248156",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\medium_load\\seed_183895110\\model_manifest.json",
+      "manifest_sha256": "704853273c278e2ad1e2920400875fe6979b1ceda13a40404417e46d65c8c401",
+      "model": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\medium_load\\seed_183895110\\model.npz",
+        "q_array_sha256": "238a8aa7279f3cad4257d92e9c68b8499e247ade3d08b53510b896d88c621626",
+        "sha256": "dfab4fe60f0c5b8062d0b0e5fd55c53b2e387b9867d5509430ec62e1c2b2f876"
+      },
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\training\\medium_load__q_routing__seed_183895110.json",
+        "sha256": "e2049e27331252602f6f5729591ecfe87e984e82c505a1a1ec6eba595da97366"
+      }
+    },
+    "medium_load/q_routing/seed_2136406109": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "04dbd1a8351b8344ab174e97d752c0b4a524e77735c7fa3eb074ed21abfc218b",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\medium_load\\seed_2136406109\\model_manifest.json",
+      "manifest_sha256": "254e01b7cc87e0d7d24618e7de5b6fd3e9c6bf5af10a0406dc88f15bab88709b",
+      "model": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\medium_load\\seed_2136406109\\model.npz",
+        "q_array_sha256": "e6e3b651a549f1fa2bc1e406bd45230ce1d0a715caad5b0df7b8d229e894402a",
+        "sha256": "707540b64c3c83690388587f82320008244bf31230b97199f73f47e6b61869ac"
+      },
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\training\\medium_load__q_routing__seed_2136406109.json",
+        "sha256": "883a841cde44d7fa7fdad7f914c88c1ac1396a51697c21547b240520ab726c5b"
+      }
+    },
+    "medium_load/q_routing/seed_310818925": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "a060515c72813c4cd9e987d4fcb9385d56890fe662252eb0ecd4a2db625295b1",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\medium_load\\seed_310818925\\model_manifest.json",
+      "manifest_sha256": "377b8e4d45628b8882ed4bcc8b3c8269dd19ad0d31947cb2ae405f020876e0a0",
+      "model": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\medium_load\\seed_310818925\\model.npz",
+        "q_array_sha256": "f0bfd739d5ae1444791ef5c8e58771cd37c3caba90bc18db0fc6ebb4dde6f735",
+        "sha256": "53ecf96040fcfe7d014a90896471a07063f6d2219406e1edf9b7fae7ca19a264"
+      },
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\training\\medium_load__q_routing__seed_310818925.json",
+        "sha256": "d30125fb7d3a09c8399d1954664aefd6d7db785d4e250ef49b5080e80f5e1751"
+      }
+    },
+    "medium_load/q_routing/seed_515636025": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "5953f45919c94714380084f2e993f32d923c5f6ebb360503348332b45300fb22",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\medium_load\\seed_515636025\\model_manifest.json",
+      "manifest_sha256": "30a1ba13f0eb6962813d6524f76f6693aabfa671cd8504f773bf30e6f45093c8",
+      "model": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\medium_load\\seed_515636025\\model.npz",
+        "q_array_sha256": "cf4c8e05ddee8744c10bc2485013e8618dec1191215062f3d0d689d3025cfdc2",
+        "sha256": "ae56b40570bdb1be309c1c7c6b9f961cd8f7b7b59d743b9375335775b55de106"
+      },
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\training\\medium_load__q_routing__seed_515636025.json",
+        "sha256": "c71dd20818863919c8de901e627e76bf7334a35d83b8868697ab6aacef39d3a7"
+      }
+    },
+    "medium_load/q_routing/seed_626669596": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "fa0bc663bccdce7264d98d3585feb2803f99386d8e061cea418787bca2528342",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\medium_load\\seed_626669596\\model_manifest.json",
+      "manifest_sha256": "29ca0e3839070c02087ad908850de72d15c65fc11ddea802a61df3c47e46750c",
+      "model": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\medium_load\\seed_626669596\\model.npz",
+        "q_array_sha256": "c451235000e585b45f653b855a1aa3f843f1c2296b2fa810e35e8f72fd45e0ae",
+        "sha256": "4bfa5f08073720963144a29e0fb1bb3c91c217f302a9a1ea0da847f91182d2ca"
+      },
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\training\\medium_load__q_routing__seed_626669596.json",
+        "sha256": "2eef4c0983320a945f7d9f12e290d5c653547ac8fd50a814fc466231ccd3720a"
+      }
+    },
+    "medium_load/q_routing/seed_746965870": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "5c1704184c2e8999d8f62125f2d034ae1a4bee14e66c4838b9253bb5b7e3de41",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\medium_load\\seed_746965870\\model_manifest.json",
+      "manifest_sha256": "72adb39edb783dafe9aefdc8b05d72523ce24fab0e3e24c472b3c88f0e048ca0",
+      "model": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\medium_load\\seed_746965870\\model.npz",
+        "q_array_sha256": "3f468b5dbdf28055d8adc60e6e32e243c7178f775b3b70be36629238dc21846a",
+        "sha256": "f4bbaf3327d3e6b4404c479fc95b51eb2994ee8b317c3f70e5438bb90457c6eb"
+      },
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\training\\medium_load__q_routing__seed_746965870.json",
+        "sha256": "27c992c66e62221a1d79ced65974c44549df0cf35b8702881d60a94990cec204"
+      }
+    },
+    "medium_load/q_routing/seed_985998595": {
+      "attempt_count": 1,
+      "manifest_file_sha256": "0dcad62215a677be657d749298c4633816af38cc78d8a14c626d621d3217403a",
+      "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\medium_load\\seed_985998595\\model_manifest.json",
+      "manifest_sha256": "605f5f2eab31ea578abbaef5e4098f7900a35059977d2deb4fc5d4a8159e4f53",
+      "model": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\q_models\\medium_load\\seed_985998595\\model.npz",
+        "q_array_sha256": "f256e150b7f7dfbd133b91fc3a14f3a0be23cc8886e1a02b90a84d245a1033b3",
+        "sha256": "8a7eed671ab76f2fa42f017dfb854848d0e634508dd1f0b839bc99357b364b7d"
+      },
+      "status": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-classical-baselines-formal-v1-r3\\job_status\\training\\medium_load__q_routing__seed_985998595.json",
+        "sha256": "fe37b5618608c72b9d3bf3f870faf6681528b087b074ce721b411336c8e9ae83"
+      }
+    }
+  },
+  "schema_version": 1,
+  "sealed_test_instantiated": false,
+  "spec_sha256": "80c657cb44bdb7ed3ba89fee0e67335da2f7a22236d9ae429265b8f0a7fc03c3",
+  "study_name": "ICC-AVOIDABLE-SWITCH-CLASSICAL-BASELINES-FORMAL-v1",
+  "test_access_count": 0,
+  "test_panel_consulted": false,
+  "total_training_episodes": 8000,
+  "training_complete": true,
+  "training_job_count": 16
+}

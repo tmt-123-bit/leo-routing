@@ -1,4 +1,4 @@
-"""Run the 5-scenario x 3-seed full MAPPO training matrix with resume support."""
+"""Run the 5-scenario x 12-seed, 50k-step proposed MAPPO matrix."""
 
 from __future__ import annotations
 
@@ -13,7 +13,9 @@ from run_exp004_mappo import ALL_SCENARIOS, POLICY_SEEDS, mode_config, train_one
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output", type=Path, default=Path("experiments/archive/EXP-004-FULL"))
+    parser.add_argument(
+        "--output", type=Path, default=Path("experiments/train-main-v2")
+    )
     parser.add_argument("--cleanmarl", type=Path, default=Path("F:/cleanmarl"))
     parser.add_argument("--project", type=Path, default=Path(__file__).resolve().parent)
     parser.add_argument("--device", default="cpu")
@@ -36,7 +38,7 @@ def main():
     with ThreadPoolExecutor(max_workers=max(1, args.max_parallel)) as executor:
         future_to_job = {
             executor.submit(
-                train_one, train_args, config, scenario, seed, "full", []
+                train_one, train_args, config, scenario, seed, "proposed", []
             ): (scenario, seed)
             for scenario, seed in jobs
         }
@@ -51,7 +53,8 @@ def main():
                 print(f"failed {key}: {error}", flush=True)
     args.output.mkdir(parents=True, exist_ok=True)
     manifest = {
-        "experiment": "EXP-004-FULL-training-matrix",
+        "experiment": "EXP-004-proposed-50k-training-matrix",
+        "variant": "proposed",
         "config": config,
         "scenarios": args.scenarios,
         "policy_seeds": POLICY_SEEDS,

@@ -1,0 +1,886 @@
+{
+  "classical_baseline_freeze_bound": false,
+  "eligible_for_separate_test_authorization": false,
+  "formal_validation_gate_passed": true,
+  "independent_gate_row_count": 480,
+  "integrity_gates": {
+    "all_artifact_hashes_verified": true,
+    "all_constrained_selections_feasible": true,
+    "all_independent_gate_rows_present": true,
+    "all_independent_gate_shards_frozen": true,
+    "all_selection_recheck_rows_present": true,
+    "all_selection_recheck_shards_frozen": true,
+    "all_training_jobs_frozen": true,
+    "sealed_test_instantiated_false": true,
+    "selected_checkpoint_rechecks_match": true,
+    "statistics_use_independent_gate_only": true,
+    "test_access_count_zero": true,
+    "test_panel_consulted_false": true
+  },
+  "integrity_gates_passed": true,
+  "joint_authorization_prerequisites_complete": false,
+  "merged_panels": {
+    "independent_gate": {
+      "csv": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\formal_independent_gate_rows.csv",
+        "sha256": "fc3e01216e2dfe2d6cd3c3747ebf9a1e61c0bbe272d0dd64861270575e2e7aa6"
+      },
+      "evaluation_role": "selected_checkpoint_independent_validation_gate",
+      "jsonl": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\formal_independent_gate_rows.jsonl",
+        "sha256": "42429299620502d357fe29af140ef4af1add31c4b8e8d84b9db653a82662735a"
+      },
+      "row_count": 480,
+      "workload_seeds": [
+        77011,
+        77012,
+        77013,
+        77014,
+        77015,
+        77016,
+        77017,
+        77018,
+        77019,
+        77020
+      ]
+    },
+    "selection_recheck": {
+      "csv": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\formal_selection_recheck_rows.csv",
+        "sha256": "099dbe691ef875c5ec54608d94aaf3279162d6eecd11f60b76de4d0c97d56859"
+      },
+      "evaluation_role": "selected_checkpoint_selection_panel_recheck",
+      "jsonl": {
+        "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\formal_selection_recheck_rows.jsonl",
+        "sha256": "ff702257214b3ec4762e41b23ebaaf0a1045b9aebd4b65359d61e5ae789f94f1"
+      },
+      "row_count": 480,
+      "workload_seeds": [
+        77001,
+        77002,
+        77003,
+        77004,
+        77005,
+        77006,
+        77007,
+        77008,
+        77009,
+        77010
+      ]
+    }
+  },
+  "method_validation_gate_passed": true,
+  "next_required_stage": "classical_baseline_freeze_and_joint_protocol",
+  "paper_claim_allowed": false,
+  "promotion_decision_allowed": false,
+  "schema_version": 1,
+  "sealed_test_access_authorized": false,
+  "sealed_test_instantiated": false,
+  "selection_constraint_gate": {
+    "expected_constrained_jobs": 16,
+    "failed_job_ids": [],
+    "feasible_constrained_jobs": 16,
+    "independent_gate_budget_numerical_tolerance": 0.0,
+    "passed": true,
+    "selection_budget": 0.12,
+    "selection_feasibility_numerical_tolerance": 1e-12
+  },
+  "selection_recheck_gate": {
+    "expected_jobs": 48,
+    "matching_jobs": 48,
+    "passed": true
+  },
+  "selection_recheck_row_count": 480,
+  "shards": {
+    "independent_gate": {
+      "hotspot_high_load/qos_only_baseline/seed_179055553": {
+        "evaluation_status_file_sha256": "29ab4438fbe5eea139a37b27fdd9246c2260f403bbe9df234a0c4495ddfd426a",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__qos_only_baseline__seed_179055553.json",
+        "evaluation_status_sha256": "87055a4e377868c9a227870e9303db79fff4d7923ae58e6bdfe0ad09b19a7b9d",
+        "manifest_file_sha256": "b793b062d22aa408c11d57f8ec195a86f8b316094dd4025eebf235a8d942d7a3",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__qos_only_baseline__seed_179055553.manifest.json",
+        "manifest_sha256": "9ab2446fa39f0db51304fbba45c931f40ca2dadf2c71d26613c640a3408b4735"
+      },
+      "hotspot_high_load/qos_only_baseline/seed_183895110": {
+        "evaluation_status_file_sha256": "94626de209ac3f6dbf577b0c2d0f15fa01e217b2b37ca1498df34569f030213b",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__qos_only_baseline__seed_183895110.json",
+        "evaluation_status_sha256": "e13d8746566a5b837d7ac00582d92f5490fcc72506e3fac549951f04056b025f",
+        "manifest_file_sha256": "43e737b32103aa413b2d8498e089e8a0b8d22446153471566f14d885377267d9",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__qos_only_baseline__seed_183895110.manifest.json",
+        "manifest_sha256": "40555a67930baaa6155aa4cac2541909900d759e80f576dd0ed4e1d97eb7a1b1"
+      },
+      "hotspot_high_load/qos_only_baseline/seed_2136406109": {
+        "evaluation_status_file_sha256": "68266eddc39d8462b2dcd39de610bc0bf1342fe093bd461c94728bd462b5dd08",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__qos_only_baseline__seed_2136406109.json",
+        "evaluation_status_sha256": "236f52beac5cdb3207d730abd28b57bdd5c1f16063c62d53f41b5cf3f8faed05",
+        "manifest_file_sha256": "8fd1fc55a9b289f3af039749887c6eaab5a1faa177d5cd49394778c9910e7541",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__qos_only_baseline__seed_2136406109.manifest.json",
+        "manifest_sha256": "e4d709b32755c8fdaaba78f93a935b002d1812c09ddbcc1edb3bf7ae30407fc8"
+      },
+      "hotspot_high_load/qos_only_baseline/seed_310818925": {
+        "evaluation_status_file_sha256": "046d68ae58730cbca8a51e672a75772991c7bb2361e4daa6a237a5142af4c362",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__qos_only_baseline__seed_310818925.json",
+        "evaluation_status_sha256": "d04d2eb516b51d8dbcfc992da61e01b702b0530ff56333f0e18ec55f6e07638a",
+        "manifest_file_sha256": "7ea85fbe0390530d60ae33cfdcfafb0d0966f722380e175c38bb0719d5dbf458",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__qos_only_baseline__seed_310818925.manifest.json",
+        "manifest_sha256": "237d58926960d97df7311b3186050fda0990685bbf5d68e7da2fc0ea9dbe82c1"
+      },
+      "hotspot_high_load/qos_only_baseline/seed_515636025": {
+        "evaluation_status_file_sha256": "574acab66bbc1e77b026af843da4aab6caebda02246137b8fa2b33ed9aa6a8e7",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__qos_only_baseline__seed_515636025.json",
+        "evaluation_status_sha256": "3a70dc048ac4f1a41fe412f2842d2ffa3db89e6c6175a36f185b9709596c859e",
+        "manifest_file_sha256": "2e8361b7aea9d39f8fb00a2dd6415d74124962648946243492b5045d7f5009b9",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__qos_only_baseline__seed_515636025.manifest.json",
+        "manifest_sha256": "76639cb92bd10ee15035218779ad738c35799580b720cfe34552b66751a8804d"
+      },
+      "hotspot_high_load/qos_only_baseline/seed_626669596": {
+        "evaluation_status_file_sha256": "c6b2d9364634367645e6e6643870c2c92551d70013ea276d7adef4b2204dad2f",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__qos_only_baseline__seed_626669596.json",
+        "evaluation_status_sha256": "c48fd716594e01ed5a8f109da8b03470de3cd78e1f0c0033a6f0e790a7f024a2",
+        "manifest_file_sha256": "3db254dac005a31184670a6b74e9a7ff09f30936667883fd63e3e12e751092a3",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__qos_only_baseline__seed_626669596.manifest.json",
+        "manifest_sha256": "38acf3644d9b79d9e9e08ef356c5925d67f9e1d5b044eff37b0b5727ed1c0fe7"
+      },
+      "hotspot_high_load/qos_only_baseline/seed_746965870": {
+        "evaluation_status_file_sha256": "c61b974e7fcf45d008ea2f0236dbfb0b58c03f81369e54a327da0b1490a71aaa",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__qos_only_baseline__seed_746965870.json",
+        "evaluation_status_sha256": "a1d006f5ed5b4827c1eb2f9ca66442b76cfa27cb65250fff2e7623146860dd6d",
+        "manifest_file_sha256": "7489435a97916fb0ab74d55f688e0aa964d6d78257985c6f2c93386366674e54",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__qos_only_baseline__seed_746965870.manifest.json",
+        "manifest_sha256": "0e1d0e2a47031c4e241d266b2deaea8fe5e77f71375fca21dd1c5c046b21c95f"
+      },
+      "hotspot_high_load/qos_only_baseline/seed_985998595": {
+        "evaluation_status_file_sha256": "41b8b69912895d20c8ee012b4ad6a2f6dadce5784b246a86522b5f64455cdc25",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__qos_only_baseline__seed_985998595.json",
+        "evaluation_status_sha256": "c4328378bc07ccbd8dc80a6057a08844a128b7c80091bfb8590f20fbc0f68751",
+        "manifest_file_sha256": "ca2dc7cf02621def00e772506c135618d941d9d62c09c17b415dd50d261db253",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__qos_only_baseline__seed_985998595.manifest.json",
+        "manifest_sha256": "b97799e738214884bc53922df67f6b9d5cc9337986192a597893600f4fa36732"
+      },
+      "hotspot_high_load/qos_only_constrained/seed_179055553": {
+        "evaluation_status_file_sha256": "42445ad5d13b5d53fdd1bd0b305af7c46f5e4c6bc8f985c39d1514f59bd28e51",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__qos_only_constrained__seed_179055553.json",
+        "evaluation_status_sha256": "d213b786ccb22a28ed0b49283708ef2a49e3829aaa22367638b54546f5ca1118",
+        "manifest_file_sha256": "fec43de573e03cc06acefc598249cd202890aa87b24036affdfaad1028bc414a",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__qos_only_constrained__seed_179055553.manifest.json",
+        "manifest_sha256": "7a2962ed07516eb5180f6fd79077d53a9390c2088eab39c00ff595b8596fe953"
+      },
+      "hotspot_high_load/qos_only_constrained/seed_183895110": {
+        "evaluation_status_file_sha256": "d312372eadead2af9680fabb0bb1953dc53e3aeac8a60fc86f4c991de17cdd05",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__qos_only_constrained__seed_183895110.json",
+        "evaluation_status_sha256": "d5342fea5f40b8a846c704b3ae3abc8e5a50e07153ff50b3cd3ea7a250a8040f",
+        "manifest_file_sha256": "19e0711fc48eb782f4a9a8597b59b006e0e0d652049a6e9df95fd0f640bd08fc",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__qos_only_constrained__seed_183895110.manifest.json",
+        "manifest_sha256": "e81555f4cb9db6377290d750d1116a3711f1876d135de25a455799e3a2981b70"
+      },
+      "hotspot_high_load/qos_only_constrained/seed_2136406109": {
+        "evaluation_status_file_sha256": "e067a11efce6d151ed61c92f324196ca8639af61770e3efad98d0b7ba8541767",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__qos_only_constrained__seed_2136406109.json",
+        "evaluation_status_sha256": "dc9091f24b22f8474a7bb46b2bd56706e3ad6513d71f39cb86ba12279803518d",
+        "manifest_file_sha256": "00b8d70c1dc3fffe718160cb91ce349a38036fc17985d2f628535cad30c0bc5d",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__qos_only_constrained__seed_2136406109.manifest.json",
+        "manifest_sha256": "0020a2fb08b80933a9915f8511f08069f7430579fbe198f5a6f07874394801f6"
+      },
+      "hotspot_high_load/qos_only_constrained/seed_310818925": {
+        "evaluation_status_file_sha256": "3cdec0114d6c33c3d21b3456cbfadf23849400d2761e42a80bae8c45f2cbdd99",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__qos_only_constrained__seed_310818925.json",
+        "evaluation_status_sha256": "f9dbc7d90ed2be34dffb7f8ee59114c86e72b00b24dbf1b28a59488be6f46ee1",
+        "manifest_file_sha256": "1fea205db6bc768df3e03adbd4b15d74f7259bc50391e1c9e4f79c162bcaf554",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__qos_only_constrained__seed_310818925.manifest.json",
+        "manifest_sha256": "3bae8ee32b0f5d67d23eac7e7ba17d78c0a55a5ee4e039ab51de80890850f538"
+      },
+      "hotspot_high_load/qos_only_constrained/seed_515636025": {
+        "evaluation_status_file_sha256": "db4ee233fc2ba384a4910b402070a1c831bc8ff9e0617990c743dd49ff502579",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__qos_only_constrained__seed_515636025.json",
+        "evaluation_status_sha256": "19f341aed1ab5b8ea7166bb6dc2b2c6799f4af0e9f2bffaaea265b30ae671ad5",
+        "manifest_file_sha256": "7b5fa1a227e5fddc8f704df8f6bd10ecbc24e22f3946e4e7c0a7097b05850658",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__qos_only_constrained__seed_515636025.manifest.json",
+        "manifest_sha256": "0828d78278e7f20be84384e587f67ba373110723467128731396f54a263393b7"
+      },
+      "hotspot_high_load/qos_only_constrained/seed_626669596": {
+        "evaluation_status_file_sha256": "2829d6574bc70b738376c47fe586be609c1e4e2c2cc4fdba14f66531ca11625a",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__qos_only_constrained__seed_626669596.json",
+        "evaluation_status_sha256": "54406562c00281ed3f89fbf3358eb30b6886293da60ddae62827f51652c152d2",
+        "manifest_file_sha256": "d1a20935251d86061285075f9777fa6b8e9577ce681016c954ac13b3e6cddaba",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__qos_only_constrained__seed_626669596.manifest.json",
+        "manifest_sha256": "5b46ec2e66b10cd78cf2904a436b8d6d34ffb0485d1a1407c9fad4fecdef6e74"
+      },
+      "hotspot_high_load/qos_only_constrained/seed_746965870": {
+        "evaluation_status_file_sha256": "17ccc5d3f93e1cbb08344e38218f39d7af8a9427b6fd74c12f88b2d846211f1a",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__qos_only_constrained__seed_746965870.json",
+        "evaluation_status_sha256": "28b33fb207f9352446583042fc919d9e5497aceabe8b7e0779e7f019bcc6bcd6",
+        "manifest_file_sha256": "5bdce4123188c17a4c3a709f60fba4c0ce212c70a7571fbd771569bcdb11d414",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__qos_only_constrained__seed_746965870.manifest.json",
+        "manifest_sha256": "d89d7f18f1ba660bc915a809e616340756271aef2eae07409197c9138398f80c"
+      },
+      "hotspot_high_load/qos_only_constrained/seed_985998595": {
+        "evaluation_status_file_sha256": "659f64d3fbdef4331c5a25d12914ff2a71a09e09f49893fa60c4f92fa0d8ca2f",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__qos_only_constrained__seed_985998595.json",
+        "evaluation_status_sha256": "7259a9c9e3f4f3be2e3b810f52ad4b6b7ded50e47a80c055f371ab287d13fb4f",
+        "manifest_file_sha256": "3ecf5f56449b343bf0b6c57f93da9b28b8ec3ba4ebdd46c07f57a4702376a50b",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__qos_only_constrained__seed_985998595.manifest.json",
+        "manifest_sha256": "7c1744c02cd4126eea0f51fd8dbe10351a2cc20066a0d222345833b9cd165bed"
+      },
+      "hotspot_high_load/reward_shaped_control/seed_179055553": {
+        "evaluation_status_file_sha256": "480e8a6681551c23d571ae7425fbd4ec61315bad81f0dc78ac5239e2418203e2",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__reward_shaped_control__seed_179055553.json",
+        "evaluation_status_sha256": "49b94b44a65822fdee26a1bf1eccab3dede3d96581ad8aa8ee6a552025637bbf",
+        "manifest_file_sha256": "d2bcfa0ae6aaa266040963013894be8c1b83e978e2c4e51b2f3b2eabc968343d",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__reward_shaped_control__seed_179055553.manifest.json",
+        "manifest_sha256": "fe8209b761c1613b6333f5b285ef8772ab048d1df8e8ccf30d2d45ad4faecc19"
+      },
+      "hotspot_high_load/reward_shaped_control/seed_183895110": {
+        "evaluation_status_file_sha256": "6567a1f7f72eb55a43c0a8bd9066c70e5d1c07e21415081a5de436696b02fcab",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__reward_shaped_control__seed_183895110.json",
+        "evaluation_status_sha256": "45cf9415ca2e3783c46c667d77be3916a978dbc96c8ad46e720c3e9c492cfe4e",
+        "manifest_file_sha256": "b8d77f0039aacc7bc0a547f20959d855e60bb9ed3f92f8b4a405a604833aa439",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__reward_shaped_control__seed_183895110.manifest.json",
+        "manifest_sha256": "e9a3ef3b8d9dc806b3f6f3834a53aaf44189e5d2f3e9da50c02b4853aa153525"
+      },
+      "hotspot_high_load/reward_shaped_control/seed_2136406109": {
+        "evaluation_status_file_sha256": "6735136b0bac769d6e31e070ed7c7076e7cb745688badfe29ca5b610757f2f03",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__reward_shaped_control__seed_2136406109.json",
+        "evaluation_status_sha256": "14bbbf4444f8a73cd0e619d188b21c20434b657051e257b9d6c27ec59d5a3648",
+        "manifest_file_sha256": "61c577f348dd80bea15825b8b644c23ae1e4ed18a527691ff90f30342644f59e",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__reward_shaped_control__seed_2136406109.manifest.json",
+        "manifest_sha256": "13824e0912d5a15e768fe28a3b2692a66a5bddb7a561349d23f9de6daff2cbf5"
+      },
+      "hotspot_high_load/reward_shaped_control/seed_310818925": {
+        "evaluation_status_file_sha256": "0b9ea06bbc72b637c4a9c32a8b2f8e544f3661d259fd17c623a8942db77aeb2f",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__reward_shaped_control__seed_310818925.json",
+        "evaluation_status_sha256": "b7b1b756e0822875f17d38eeaaba002a1d489d84906de30b75615d47f885b902",
+        "manifest_file_sha256": "e8a61dfce95fe879ab1af3b999eb163e9b54a167428b2bee8c8a3eecd2023607",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__reward_shaped_control__seed_310818925.manifest.json",
+        "manifest_sha256": "43e41a9733b446f261035a048c12674adcd7915d42dbe4c6d88891e318aac57c"
+      },
+      "hotspot_high_load/reward_shaped_control/seed_515636025": {
+        "evaluation_status_file_sha256": "c5461905150846913c7fc75fe3f5a644aaf42a4201d3c0d57865c74b4a8f99d8",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__reward_shaped_control__seed_515636025.json",
+        "evaluation_status_sha256": "d66af1eb8b2a449e73e9a731db83fd44a461ed3415eaca70f8b7abcc2057aae8",
+        "manifest_file_sha256": "3d6f2d310d8f40f979d19e12b841a3a6b1b744d2b0838da5d671b622cb9d4266",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__reward_shaped_control__seed_515636025.manifest.json",
+        "manifest_sha256": "063655aac21119e35601ebefe8507a087995e2093d6efe6687d11b3adda970da"
+      },
+      "hotspot_high_load/reward_shaped_control/seed_626669596": {
+        "evaluation_status_file_sha256": "5b3cb4e862353c207f3fd557b77250b489aa180f90e8230dc0cbe64b2b989dc9",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__reward_shaped_control__seed_626669596.json",
+        "evaluation_status_sha256": "db524ec397b44d95c224ace45efe6fa65ccfb9335b1c05045e24642ff4981c8e",
+        "manifest_file_sha256": "40417152a6323e63bd95e166fa797364a0b05cc38c2c41e113a4736b14d5c982",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__reward_shaped_control__seed_626669596.manifest.json",
+        "manifest_sha256": "a54f826dac8b0146f999626f87ccbca94778d6e8b82b770a4617a5708dba0805"
+      },
+      "hotspot_high_load/reward_shaped_control/seed_746965870": {
+        "evaluation_status_file_sha256": "a54739ae8d478a466121b13b8cd9d721a8d3e09498ecbc98256d1d144510967f",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__reward_shaped_control__seed_746965870.json",
+        "evaluation_status_sha256": "c3f2c9097f8037f83b7c73a5a7ef9bdae3fb112f4e4206884bda8a9a39f1f5a6",
+        "manifest_file_sha256": "4040106ce3c50cdda7cc114e930208d79ffea2c6ba42afafc3ab3753266ced14",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__reward_shaped_control__seed_746965870.manifest.json",
+        "manifest_sha256": "e32527e03d314526f80301340df06796e511e7cf9bcc12132162a26908043ab7"
+      },
+      "hotspot_high_load/reward_shaped_control/seed_985998595": {
+        "evaluation_status_file_sha256": "a3f322b989680f2febbd630f747b4ec132776f3bc0ec13c8d6a2d15f2a37792c",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\hotspot_high_load__reward_shaped_control__seed_985998595.json",
+        "evaluation_status_sha256": "ea82d55d57d3a2a75446ce6e3f41ac281df224d1edc00a5b817a961b9a05d030",
+        "manifest_file_sha256": "5432b41e9c4ea0b592a4b0d91fb79847e5c4fdffe772b0708f7b7e492bf7b4c7",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\hotspot_high_load__reward_shaped_control__seed_985998595.manifest.json",
+        "manifest_sha256": "421acb950933d877cd120ac706e48d1eb7e839d2d415847dde82d1f1e15a7e49"
+      },
+      "medium_load/qos_only_baseline/seed_179055553": {
+        "evaluation_status_file_sha256": "c3e3c9643805d773cfd7af38549cebe719315543e6069d61cf2dea3c54c96e18",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__qos_only_baseline__seed_179055553.json",
+        "evaluation_status_sha256": "d66b9ef7f8c60221e0484a2713e079f1bb34d57e8414792838e98572edd2b3a8",
+        "manifest_file_sha256": "f72006884e1050c452c63a13e7b197d386cd99135352158112f8acd8759c9f7a",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__qos_only_baseline__seed_179055553.manifest.json",
+        "manifest_sha256": "00f4befde89e7ab461fecd1e601bd61d4db616a23747bc6035cd4186b27f8db6"
+      },
+      "medium_load/qos_only_baseline/seed_183895110": {
+        "evaluation_status_file_sha256": "c79f8ac5f84d0ce5e1c9f96f59caf9337ceb974bcebe629de5b4e1ca4fc0c75a",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__qos_only_baseline__seed_183895110.json",
+        "evaluation_status_sha256": "efe8d6d5c6902a1a913f3590f731c2ab53c3ff7611e40869667bd98709261f42",
+        "manifest_file_sha256": "4e6d0618d26387981c4a8f798d9733005a342f5605b1925153ef73eaa0cbf149",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__qos_only_baseline__seed_183895110.manifest.json",
+        "manifest_sha256": "f1bde236f6438dc64000c57f0275caff0f53e790833df116aa009840f8dc0d87"
+      },
+      "medium_load/qos_only_baseline/seed_2136406109": {
+        "evaluation_status_file_sha256": "4ba470d46b6a437f105b37ccb9daabc49c6559afb6c0acc4d12a2ac903931b04",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__qos_only_baseline__seed_2136406109.json",
+        "evaluation_status_sha256": "b71d6ad04b36d89b383e24ce8a90885df47b584ffe2e9db936638604dfad5cdc",
+        "manifest_file_sha256": "8ff10a27d06c7d61279d68f4f88c0ea4adc2c00bb2e3f511d9ca39de3dcbbc6b",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__qos_only_baseline__seed_2136406109.manifest.json",
+        "manifest_sha256": "6e6bd170c4ebf92cf605b56a4cee598d64251e94dc42bf61e1c3e2141e6aa165"
+      },
+      "medium_load/qos_only_baseline/seed_310818925": {
+        "evaluation_status_file_sha256": "15c48f46e04d9d985542782dfbd09c7df9157974995929dd58215010ee4c8cfb",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__qos_only_baseline__seed_310818925.json",
+        "evaluation_status_sha256": "1f65c56c935c4963bf7f0a3048f27c8cd4513d748dcb8be0ae575658693cad09",
+        "manifest_file_sha256": "1f1d7b1a69118c7414c2f1d284347e5e9ecc9d0bfa6ab05e06882aca657cebbf",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__qos_only_baseline__seed_310818925.manifest.json",
+        "manifest_sha256": "d6a703f2c49772e095196867bfae535c9c2604423fe28202f09d27bf0a43a1aa"
+      },
+      "medium_load/qos_only_baseline/seed_515636025": {
+        "evaluation_status_file_sha256": "42fd9c032c259c000de9090e1da662952edb639d6cc828747b0686ba6ecf2a7d",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__qos_only_baseline__seed_515636025.json",
+        "evaluation_status_sha256": "7bb4426d08967a86e239e4f18d28017bdd413f503b9121351618874644b0b459",
+        "manifest_file_sha256": "797ad37140f93bb8e7e42a699c2188994f0c2970b2c08baef8d61567874dc84b",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__qos_only_baseline__seed_515636025.manifest.json",
+        "manifest_sha256": "9f281108e74e62a7d3d667216adec40e85b510e583de2035a8ecade232d8e2b2"
+      },
+      "medium_load/qos_only_baseline/seed_626669596": {
+        "evaluation_status_file_sha256": "28cb5c8af88d23b15386b9dfd5886bb50ae7d75ee1d658e10ce683fd1c68300b",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__qos_only_baseline__seed_626669596.json",
+        "evaluation_status_sha256": "5214a17e9c60aff7c56f4c811015b1a04b4355d621d73b938b7e89eb2c09bd1d",
+        "manifest_file_sha256": "6a749d7a5ba5579600fbc24b0fc4a0d128da660bdb811239eed58f70a01082ee",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__qos_only_baseline__seed_626669596.manifest.json",
+        "manifest_sha256": "5629fc8defe168e6d12173c39fcafc90615adf9e971d1be80857d62bd9c55a83"
+      },
+      "medium_load/qos_only_baseline/seed_746965870": {
+        "evaluation_status_file_sha256": "f36e24de2d93f7ae71a9e15695dbcbb21c898dbb5074a3311955ce633668bb7e",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__qos_only_baseline__seed_746965870.json",
+        "evaluation_status_sha256": "f9057e6f843d0fd0d6951f5aeedf0bdc7a48538e370dd8cfb8ae2ecbe485e358",
+        "manifest_file_sha256": "d94daa6fefaa828d30b8b85c96b285c2d0660b68b9e31060c1c111e3e8f3769b",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__qos_only_baseline__seed_746965870.manifest.json",
+        "manifest_sha256": "f6eba05268a246bb61ba1c9751d89d39c31067e0e0d6ea8995d25f60a4a4d8d1"
+      },
+      "medium_load/qos_only_baseline/seed_985998595": {
+        "evaluation_status_file_sha256": "f552fa24fa416ac9388442454d19ba12575314ea8bfbc5fcbb6481ae7a1d68d0",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__qos_only_baseline__seed_985998595.json",
+        "evaluation_status_sha256": "2c380278b598563bac9084463c7c20fd940069c919a3a54a0b0d8a532c7e04d5",
+        "manifest_file_sha256": "ab61c5b255f4680a6af9797c5ec7729fcb2370de73dc85c47c56bcdb35ac70bd",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__qos_only_baseline__seed_985998595.manifest.json",
+        "manifest_sha256": "c692b217e33bd72a63d27e8cda174776791ee9dee01ccf23957cbdf4737e2b18"
+      },
+      "medium_load/qos_only_constrained/seed_179055553": {
+        "evaluation_status_file_sha256": "2ffba51732cf68e013cc6e07931573d095592d2c77c93e69e333983ff99ae2ce",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__qos_only_constrained__seed_179055553.json",
+        "evaluation_status_sha256": "cdf9750717cacd0392f16e81ad980be534cb361a65686e96cc5beb5b167dc30b",
+        "manifest_file_sha256": "993e9ca9e7d5cd87d9cf38e0e61248df2784ccec75f30d15a797e79612ac8b34",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__qos_only_constrained__seed_179055553.manifest.json",
+        "manifest_sha256": "4c0ad24d3dbb3821fd1d6bdac2664b5f6e6aaaafa5343754793277f5a569ae91"
+      },
+      "medium_load/qos_only_constrained/seed_183895110": {
+        "evaluation_status_file_sha256": "c7be62925193ce904df737896d8c7c746bd7e927c71e8f6386825d11f805a61b",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__qos_only_constrained__seed_183895110.json",
+        "evaluation_status_sha256": "dcb4bfed56e9ac55608165c6ac57cf9a474c4280f8942f953f2af98fb9fe1bb5",
+        "manifest_file_sha256": "a35f8ade07c180398d707acc65bc685a91225b40bbc3149f5fedb322161fed45",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__qos_only_constrained__seed_183895110.manifest.json",
+        "manifest_sha256": "31f6555dd655047674026438b828b97d00c0fb77a96f77181e362d63579be68d"
+      },
+      "medium_load/qos_only_constrained/seed_2136406109": {
+        "evaluation_status_file_sha256": "37ecf3faa9c05b24075658ee83e9ff2ce7a2667c0b0d7dba8ce5984a1745d3bb",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__qos_only_constrained__seed_2136406109.json",
+        "evaluation_status_sha256": "072107783a84f505489ce841d0df4d972daac56d9db12efa18670d21dfc41464",
+        "manifest_file_sha256": "44fc2dc4e748d4726f9ea5c56dac7cba8ce4b00dc06a0b0bdb399650f0a5ad45",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__qos_only_constrained__seed_2136406109.manifest.json",
+        "manifest_sha256": "0df25abb901c1912a0b76cd8c497c732476b4808c67b6f06fd4d51abd1449272"
+      },
+      "medium_load/qos_only_constrained/seed_310818925": {
+        "evaluation_status_file_sha256": "29f971d00ccc90e70a9968f74cd44ba2344dd58e4eab76b23ec29745aea35d70",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__qos_only_constrained__seed_310818925.json",
+        "evaluation_status_sha256": "47ea73fb68b020ae90aa7d1cfc0001cc6df36baff516adb6b09d66e66b59bf41",
+        "manifest_file_sha256": "f239fe1153d8ad9a09333ee6757d681c004d139696c44d55feea12c23e6dbef4",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__qos_only_constrained__seed_310818925.manifest.json",
+        "manifest_sha256": "598c1bd469fb56f89e2dab5a152ad10f85aa45b0ed401220dbed05fc90de121b"
+      },
+      "medium_load/qos_only_constrained/seed_515636025": {
+        "evaluation_status_file_sha256": "a0de2e3c9c32bb128e80b964ec7ee18fe0f42a310cbca64394ce52147568c313",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__qos_only_constrained__seed_515636025.json",
+        "evaluation_status_sha256": "b0245c6f1c276011ffdf07d89b88f8ffcdc1be90ceb3e1dd46568f7df059663c",
+        "manifest_file_sha256": "00cdb75d020eeaefaf321e6c9d36c3a01f862337cf0fe44190e131263a7fdb51",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__qos_only_constrained__seed_515636025.manifest.json",
+        "manifest_sha256": "8c97cbe8ea0f9bc073ebb847b36fbd9eaa7217c4a1e4afbdf5516a9e014cd56d"
+      },
+      "medium_load/qos_only_constrained/seed_626669596": {
+        "evaluation_status_file_sha256": "14c84efdfa11ef57b6b4bd2d980590e973d39bdc33d96dc56489b95cc2fc86d6",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__qos_only_constrained__seed_626669596.json",
+        "evaluation_status_sha256": "01f9772d99b1cef865b852441ee750e1d167e5993e8f326dbf0551b8532d693b",
+        "manifest_file_sha256": "60c7e5f7ac61b5cdd74e6bfd78b30fa5a5056e0e681e628faa509c3ae3116894",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__qos_only_constrained__seed_626669596.manifest.json",
+        "manifest_sha256": "701277170bd8025c32041cec5d78dd0bc7b3d93db3a8906c8edbebd5d4212c54"
+      },
+      "medium_load/qos_only_constrained/seed_746965870": {
+        "evaluation_status_file_sha256": "4e7ba5003c1d1e1cd6499f125b70d55505d8564b634aa5fff018a5b7b805c455",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__qos_only_constrained__seed_746965870.json",
+        "evaluation_status_sha256": "46c538276064ca6a33dcf100b80fd398f9ab2d8cdbd4296366bc5f40b7b3ae9e",
+        "manifest_file_sha256": "6992efac3b2ce75679b75835b0a967da205556bb573e0bc9e23d6fe49c30842b",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__qos_only_constrained__seed_746965870.manifest.json",
+        "manifest_sha256": "eeb20fd9b17ba7d753b57215705172242e86dd70359710c59806f2f517c046db"
+      },
+      "medium_load/qos_only_constrained/seed_985998595": {
+        "evaluation_status_file_sha256": "2c55700a46109509a157a8e8ca33db0b211dcb2c489bc1acabbf6ca770daf011",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__qos_only_constrained__seed_985998595.json",
+        "evaluation_status_sha256": "920290c20d150ac981e4423dbad384099780362851a293689d0f891069b9e131",
+        "manifest_file_sha256": "412d71d440fdb4cddd8031bedc9907448a4110191baf999df63f24e7b0d14193",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__qos_only_constrained__seed_985998595.manifest.json",
+        "manifest_sha256": "ad62333cf4b336cdc1fcc3aef0f5899239cd718efac2060f380d32e623925158"
+      },
+      "medium_load/reward_shaped_control/seed_179055553": {
+        "evaluation_status_file_sha256": "4acd3c4a19ef88c4b7c04252b3aa46ed27c1fd138f7bbc210b0841c869cca799",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__reward_shaped_control__seed_179055553.json",
+        "evaluation_status_sha256": "557fb2ab68d9e6a609cf1daa516d31f19da06b528b4f1c24db5b59c0c4f67ed2",
+        "manifest_file_sha256": "6bcfb3fbb1b2fabde255b4118821c9295bdd776864a3daf151b3f814c53d8418",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__reward_shaped_control__seed_179055553.manifest.json",
+        "manifest_sha256": "cfaae182e04fcf848554e2c9609137605cc7503689d862868fe1ba7f7e522ca6"
+      },
+      "medium_load/reward_shaped_control/seed_183895110": {
+        "evaluation_status_file_sha256": "75c56627748c860f72c5c7c3c13020bab02b5e2fc1125d61c01d9ef115d5bf72",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__reward_shaped_control__seed_183895110.json",
+        "evaluation_status_sha256": "3f1ff0bfd7e1e5bb6f0278da70a560fb276694fbaf514e151fdbf566f0a2447a",
+        "manifest_file_sha256": "ede3cd8f0f36ced0a68530da798b664fc49b6a5179b4c27d1f6ba97e67721bb1",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__reward_shaped_control__seed_183895110.manifest.json",
+        "manifest_sha256": "e81d5734de27cd98250a55e80837802086487fa3cac0d21001b25e1236609db3"
+      },
+      "medium_load/reward_shaped_control/seed_2136406109": {
+        "evaluation_status_file_sha256": "c8425f3ce97fd9d0539f21bd94093a7270fff474f93378f749c475df8bd667cc",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__reward_shaped_control__seed_2136406109.json",
+        "evaluation_status_sha256": "871c6494b156459b2247c41b67cd2898e4b7674492d3fd212a7d6565635e2ef2",
+        "manifest_file_sha256": "68bbbefc0378fb1547ef0e31c441c3b118d7b1440ae440d4debadda076a67453",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__reward_shaped_control__seed_2136406109.manifest.json",
+        "manifest_sha256": "5d99cbca57fe1f9b543365c07e03bbc981ebc0d38dcf4d4c1f916be9129a9a06"
+      },
+      "medium_load/reward_shaped_control/seed_310818925": {
+        "evaluation_status_file_sha256": "d6e1b108ce235803908944081538051569cef2f6a287f4bf9d2d384821d3e387",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__reward_shaped_control__seed_310818925.json",
+        "evaluation_status_sha256": "7a6a51d548545dfbc4f5f279703acffd16ecbe6f3e0e6453c04ccc034fbd820c",
+        "manifest_file_sha256": "6c1f83e31841ed00299dc3de05747fa77e11cd5c2556b6fc062341bd3e482dfc",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__reward_shaped_control__seed_310818925.manifest.json",
+        "manifest_sha256": "723e056a0f676dd6aeba7f293ce61464ddf2d36cdb87b5c77e1f57c5a8ebcd7d"
+      },
+      "medium_load/reward_shaped_control/seed_515636025": {
+        "evaluation_status_file_sha256": "e986935d7d6aa4435dbed63ecbd2739c05a2a7e0fea4c0a191d762fc604789e2",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__reward_shaped_control__seed_515636025.json",
+        "evaluation_status_sha256": "fa58bcd8fca5a22e961d2b2cc39c81a853d7f2fb054b18bf34ad139baa00d615",
+        "manifest_file_sha256": "a3d9ad93d5019b975412e983a1329c128ff13e1896e5d02a8840ab1e8202f785",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__reward_shaped_control__seed_515636025.manifest.json",
+        "manifest_sha256": "fd99da2099a79f9802f8d0c4f444bfa67913f95117b2cbc8ef40b1d6b164867f"
+      },
+      "medium_load/reward_shaped_control/seed_626669596": {
+        "evaluation_status_file_sha256": "02583a9cb69dffdd924ac732ab40e8a685e77e8a5f662933215c67284b64fdfe",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__reward_shaped_control__seed_626669596.json",
+        "evaluation_status_sha256": "9aaa7fe3e6e90aa7c483d408b1be4be77d9ad4536d16a6144ce6bded8fd8a90c",
+        "manifest_file_sha256": "0a9825545c8753259bd81e8133328e36d14a231ac5d85a70df9eec21dcaf8de5",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__reward_shaped_control__seed_626669596.manifest.json",
+        "manifest_sha256": "cb5dab421d78c79d32dcedc595ceb6a1e1e4e9cb244125c1ac0fc97198b1b55a"
+      },
+      "medium_load/reward_shaped_control/seed_746965870": {
+        "evaluation_status_file_sha256": "8303ed31cc4c1bad457b79254e85387878d957cc0418118a45ae56fd4705e05b",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__reward_shaped_control__seed_746965870.json",
+        "evaluation_status_sha256": "33ea21c74d09f19c51e3e85c8d08344d8dad12b6561f958a22c67f72fe6da1ad",
+        "manifest_file_sha256": "4196ac70b1b97a6a5e12f94c89d207a3a6112ac5ddff8571448e74303c6c4db5",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__reward_shaped_control__seed_746965870.manifest.json",
+        "manifest_sha256": "43482ad91b30cdc728640b7c60df142ae49c1f2c97067cf5128e67257edc2506"
+      },
+      "medium_load/reward_shaped_control/seed_985998595": {
+        "evaluation_status_file_sha256": "87536f18b36835f91216eb8d7e7501e899940d5e571aca051baeb5b0e748729f",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\independent_gate\\medium_load__reward_shaped_control__seed_985998595.json",
+        "evaluation_status_sha256": "93f12bc7f5ef1f04a18fb762f656baef441b2d5718b9372b31f66bc195fd202d",
+        "manifest_file_sha256": "4faf8599519b638a8097ee6a2fd15120116a0ddec6030f0659e6449111c896c6",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\independent_gate\\medium_load__reward_shaped_control__seed_985998595.manifest.json",
+        "manifest_sha256": "4d3ec8fb2dae5b3e292336f970aa9d5a1ef6c993edfd80f05cf10e8ef76f9019"
+      }
+    },
+    "selection_recheck": {
+      "hotspot_high_load/qos_only_baseline/seed_179055553": {
+        "evaluation_status_file_sha256": "0265a72297cd892684a09222c4afdc500eee10e8e6b80a63e35e2ece1e683127",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__qos_only_baseline__seed_179055553.json",
+        "evaluation_status_sha256": "dee680b700047d161ce82bf99872df2f096df9a2c714bbf77856bc41ea206fd8",
+        "manifest_file_sha256": "317d719b88f52a35e8ac70222cd3f1a78bd7228bcac2d7df368899afbde8e0a8",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__qos_only_baseline__seed_179055553.manifest.json",
+        "manifest_sha256": "75bc84f095b59fa3ded04fd347bdaadc13cccd9b276ab1bb9042246a3c0320cb"
+      },
+      "hotspot_high_load/qos_only_baseline/seed_183895110": {
+        "evaluation_status_file_sha256": "c488c907f82bc2913c45e69141270d3081df3e787e80709ce84af3320deb6698",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__qos_only_baseline__seed_183895110.json",
+        "evaluation_status_sha256": "175fc8383c9b73a19435068b2c027795f78682bf2713c2530359dc69b88124af",
+        "manifest_file_sha256": "734f2084e7fe69a4670f5af0477fa02aab52c22865e44fb33e5d8a52a6f14e18",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__qos_only_baseline__seed_183895110.manifest.json",
+        "manifest_sha256": "169e62c7cf2e4eba3d696f3ac25ca8473eb9530fb71f62e522c5c41c1268f883"
+      },
+      "hotspot_high_load/qos_only_baseline/seed_2136406109": {
+        "evaluation_status_file_sha256": "02e5ecce09bf1d0e2f8ecbed11bb47572d6fac6edc14981a330b832541230106",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__qos_only_baseline__seed_2136406109.json",
+        "evaluation_status_sha256": "26a0b43b2666a32bbed48c4959b375ae24de0325448dda12280cd260efe8570a",
+        "manifest_file_sha256": "69a893e963d9e53814b932460eac5b85b55a94b8292080d93f63eca3e80dd18e",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__qos_only_baseline__seed_2136406109.manifest.json",
+        "manifest_sha256": "fcae7937e134f4158820a343c2c4d4d07868c9475c0b46bbaf78263e5794bab5"
+      },
+      "hotspot_high_load/qos_only_baseline/seed_310818925": {
+        "evaluation_status_file_sha256": "2ce42fa0d3b57c350c4e7c94e8e6640d3026e16f76a8d83e7585c5481744dca9",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__qos_only_baseline__seed_310818925.json",
+        "evaluation_status_sha256": "3cb95ec7ca217156b50b1cca929f7dac2e6dd9296f31c164542e1d9683e47b08",
+        "manifest_file_sha256": "9ba5446760b792bf2bfcee29cd14000eec59016dcff3373c042ff207d2d37d33",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__qos_only_baseline__seed_310818925.manifest.json",
+        "manifest_sha256": "2edeb63bab5a604ee416fb00246fe2663f6bea8d8000458fcc4bcde39fd7044a"
+      },
+      "hotspot_high_load/qos_only_baseline/seed_515636025": {
+        "evaluation_status_file_sha256": "a1f193745dfdfb6ec1230a6b9115e0816f80257654d2928974e982a0fdcd14db",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__qos_only_baseline__seed_515636025.json",
+        "evaluation_status_sha256": "1133f79d9e40309b6b54268cd01c8292a2f20379983e5640f9da7fc858f75549",
+        "manifest_file_sha256": "e4012627bd8891b5b89b8894a30680b4a5359e97b4f549e628be71de51c69405",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__qos_only_baseline__seed_515636025.manifest.json",
+        "manifest_sha256": "d601d2d3545b1233aed789ecabf3e828915c59fe392e44c5bd785777492720a1"
+      },
+      "hotspot_high_load/qos_only_baseline/seed_626669596": {
+        "evaluation_status_file_sha256": "116a980f9a37c1d3abdafcafddc03bf55695a31aec8b0b86bd9214902ab2f00b",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__qos_only_baseline__seed_626669596.json",
+        "evaluation_status_sha256": "187193ac93c7d418fba1ca6865f894c249b94ed628b3c059a5799156f47f2359",
+        "manifest_file_sha256": "8412b0d564890c39aece2d5863cf8ae6f20a7fe051e75397d1fc18035414096e",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__qos_only_baseline__seed_626669596.manifest.json",
+        "manifest_sha256": "18086377d38a3a15e1b57c71251eedad7ccb50c11c434c2fc10e8353ba02a239"
+      },
+      "hotspot_high_load/qos_only_baseline/seed_746965870": {
+        "evaluation_status_file_sha256": "3498dd7632086fe66f240cced7269949fdc34be4700f0c41cdb949df4497e455",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__qos_only_baseline__seed_746965870.json",
+        "evaluation_status_sha256": "b0479d88736e4abe4d84bdf6fa0bf2431be530dc7319fa11411f48b0150cb8e9",
+        "manifest_file_sha256": "f02042b3c61186a18ad8074aada7ca07bf22b7488fd6acfc145fe3f6dbaaf573",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__qos_only_baseline__seed_746965870.manifest.json",
+        "manifest_sha256": "b49e4eb6b756b722d213dd8d20fe8a3ec71af5ed2bef072053f4aea6d4b5a117"
+      },
+      "hotspot_high_load/qos_only_baseline/seed_985998595": {
+        "evaluation_status_file_sha256": "4c9b1833acfbc90443f3a9c9c9a94ca59cadae94712e79a711fc85f1e81166f4",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__qos_only_baseline__seed_985998595.json",
+        "evaluation_status_sha256": "6a0df1077dcdd42c252ee313b39e9c4519425d088e716e87f1bea6ee2bd12d57",
+        "manifest_file_sha256": "75e367d4a81b3f9aee4b306e9ee5bbdd6b87841da8f52341b35c05b87cbb5bc9",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__qos_only_baseline__seed_985998595.manifest.json",
+        "manifest_sha256": "62e5ea2e958085c05d13c39d95ce8a7d99772271a672312867386139650b12e4"
+      },
+      "hotspot_high_load/qos_only_constrained/seed_179055553": {
+        "evaluation_status_file_sha256": "4b1e7a5ea20d805fba12d76c8347f564b9eb4e6731f3a92dcf596ec6f2cc46d8",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__qos_only_constrained__seed_179055553.json",
+        "evaluation_status_sha256": "bd7418f7b66922584de5505778f99bf537e67439e096b810837b26bb1f29ee01",
+        "manifest_file_sha256": "1f09eac1a89a57308f075bf349ffe10bc0db0c0bf774df96ec0f845203c53975",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__qos_only_constrained__seed_179055553.manifest.json",
+        "manifest_sha256": "ebc323a71e3cdeeb516b36452b4ae222c39f480a50db1195f0c12ddb0a7d2c89"
+      },
+      "hotspot_high_load/qos_only_constrained/seed_183895110": {
+        "evaluation_status_file_sha256": "636c01baa94fa478372d70e338350272797a34ab761e286c54c0b92c30701a0c",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__qos_only_constrained__seed_183895110.json",
+        "evaluation_status_sha256": "0910e04b0de77f59cb38452e1f8684c413cd58c5b138f188738de093f5964572",
+        "manifest_file_sha256": "86dcb4e54915b48b5bbb933d4fca5df83d68f7a8fc36a1da9e6434d23f37c1ee",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__qos_only_constrained__seed_183895110.manifest.json",
+        "manifest_sha256": "581c93131d7f95d56ca66c870e148f661ea96e458d3c1059804e842b93b8bf35"
+      },
+      "hotspot_high_load/qos_only_constrained/seed_2136406109": {
+        "evaluation_status_file_sha256": "9c8d524216b62e4beb14c290cf92bd76cceff7c40d260ecdc7bf2333e3e61fd8",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__qos_only_constrained__seed_2136406109.json",
+        "evaluation_status_sha256": "c8a1194a68af62286d1b52f4de38f7db142d530649e6fb4ba712a2c39b1dff06",
+        "manifest_file_sha256": "418a6c87282adfc141cf75058aaecb0ccb860e55db9039397f0974104de49f47",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__qos_only_constrained__seed_2136406109.manifest.json",
+        "manifest_sha256": "c9340b795f58d4ce4f6bfe3efbe31bab83c9701691bccb8d8195c252ad5f9300"
+      },
+      "hotspot_high_load/qos_only_constrained/seed_310818925": {
+        "evaluation_status_file_sha256": "2919745d000c3ba3ab4ab48ccb46fcc45c3c9e95f05d352183730791d813cd14",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__qos_only_constrained__seed_310818925.json",
+        "evaluation_status_sha256": "b280cd55d3d202d04465ed98d41cc46183fa7b6c1b3edd7d11655037da9f6226",
+        "manifest_file_sha256": "8d52d7de538471326a27e1ffaf8f5ab34853dca1b4fc7ceb410ce36cd13cbb6f",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__qos_only_constrained__seed_310818925.manifest.json",
+        "manifest_sha256": "46d141a8b79beddf073f0a1519a0f8aaceffbe86af179bbf5721afe5be55e43c"
+      },
+      "hotspot_high_load/qos_only_constrained/seed_515636025": {
+        "evaluation_status_file_sha256": "3afffed81dc3701cda1bc22e788beaa15c8df965b3be16639f19c80dcb0e4078",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__qos_only_constrained__seed_515636025.json",
+        "evaluation_status_sha256": "3a3a3b1e9af2b4836f8520cda3c4407b79e34446f6aeaf80af15d15e07da3192",
+        "manifest_file_sha256": "5e032416d9cdd276d44621f6f837975c1472e173d9614acc7f117a621d9c6405",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__qos_only_constrained__seed_515636025.manifest.json",
+        "manifest_sha256": "03e097cac92ffc0d8063ccd8745d1309e746e1d413981fa1797161a49b724f4e"
+      },
+      "hotspot_high_load/qos_only_constrained/seed_626669596": {
+        "evaluation_status_file_sha256": "a819ac02d5ed5d8639aaf87b9a8af6839868a76add52535814fbeb40509b3154",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__qos_only_constrained__seed_626669596.json",
+        "evaluation_status_sha256": "280e106ed39fe33c28c73ef0851ab390e0488842a50ef552b1a14f5d80818a74",
+        "manifest_file_sha256": "9479196da955866d18e20afdfa2761521527102cc8ec4039b6d6c327cf7f6bfb",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__qos_only_constrained__seed_626669596.manifest.json",
+        "manifest_sha256": "2f0d5f234e72db748923afe02570d32c4f91c174606ab969c3d00300e08e9a13"
+      },
+      "hotspot_high_load/qos_only_constrained/seed_746965870": {
+        "evaluation_status_file_sha256": "2965f6aee1f62ac9848ae8607fb93a41a499019db9cbb952516252d234ef176b",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__qos_only_constrained__seed_746965870.json",
+        "evaluation_status_sha256": "ff00b888188e9daf8c9e7f0420818551c4dbe049f619e447011c4a60d6191492",
+        "manifest_file_sha256": "0dd112e7f37dec9dd47f5ca37690a51a21dcd1e9a806f5460413d0930ccf92fb",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__qos_only_constrained__seed_746965870.manifest.json",
+        "manifest_sha256": "417fbfc1a82bc3e920970ef0c548ff0d7b87887b9ae2ee94a0bfbd856f7337dd"
+      },
+      "hotspot_high_load/qos_only_constrained/seed_985998595": {
+        "evaluation_status_file_sha256": "5eeda90cdd426ac71210c2dae39a0e75cbed6628aa36817c291c0850488d5a6e",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__qos_only_constrained__seed_985998595.json",
+        "evaluation_status_sha256": "04869aecf769b2269c28e1fa20c9c3c22135891ea99415dfdcb3cfaae3c4ec98",
+        "manifest_file_sha256": "a551a86784b83d71c25416d7c30a7fcf18ac4c70fc6bb534dc0f468c9ec1d372",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__qos_only_constrained__seed_985998595.manifest.json",
+        "manifest_sha256": "05db01956b0ca5c8b156590eed4c75bbfefc4cfe1ac85f5f5ecaf53cd88cd358"
+      },
+      "hotspot_high_load/reward_shaped_control/seed_179055553": {
+        "evaluation_status_file_sha256": "649cbe0ce784c63ed35cb78eaa00896bd6364a323d2e3ac26ad30aa38e72f393",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__reward_shaped_control__seed_179055553.json",
+        "evaluation_status_sha256": "5b05a6d8e4210e1854b5b502f72de1d75e62585f4e76adc109d7b02f80cfbb79",
+        "manifest_file_sha256": "00cd788b58f1cefe778525f2627c8d445ce4bfe24dcb5612cfd61b541f3dbb3d",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__reward_shaped_control__seed_179055553.manifest.json",
+        "manifest_sha256": "7ccab8d61decc1ed1bad19e1d4f9f736f79475aaeb46669cd594b8f56a1151d8"
+      },
+      "hotspot_high_load/reward_shaped_control/seed_183895110": {
+        "evaluation_status_file_sha256": "95cac4ba977b40cbcd839cb7b19be4c98006dc60efea2c48970f4f32402d819a",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__reward_shaped_control__seed_183895110.json",
+        "evaluation_status_sha256": "904f2de44f1146f8567f2f56671a6bfcc489d23a9360e01ac47408dbc5873aa8",
+        "manifest_file_sha256": "ac9ed744b4be2e95d864cdf3ed18ab6e838a3473e471edc8729650c615435be3",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__reward_shaped_control__seed_183895110.manifest.json",
+        "manifest_sha256": "9b9b99e7097bca8b63767056a24c3b96982f1437a596eb41c89d71d123419f78"
+      },
+      "hotspot_high_load/reward_shaped_control/seed_2136406109": {
+        "evaluation_status_file_sha256": "175ac8a4cc29641bbac77f10ccfd7dd1a4036cd02a541522e85e68d33d0c7d7b",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__reward_shaped_control__seed_2136406109.json",
+        "evaluation_status_sha256": "1fc36058470ffa9665feddf898547c56b6579df3bb53bdba08e3cd035eb7d93f",
+        "manifest_file_sha256": "a5181776b1878efdc69989d1a62e64280b2447a6ca3b02b93525473a7d0d398f",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__reward_shaped_control__seed_2136406109.manifest.json",
+        "manifest_sha256": "15f81266ceb6bfe7fa89ce29fa1688ba432c094e590e4a7299f483527e06ec4c"
+      },
+      "hotspot_high_load/reward_shaped_control/seed_310818925": {
+        "evaluation_status_file_sha256": "ff052a418f6e1b44597c72dcbbc86bf67f14d605ce09c10fdd771f6d797522dd",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__reward_shaped_control__seed_310818925.json",
+        "evaluation_status_sha256": "9fce21e22e179139a2d9c57b4dfb453b6048a48b2c6259b218e5fbfaf64cb745",
+        "manifest_file_sha256": "223511c745c7946431f2f7ca4f64dff8572c84be091518949cafd75968f48a55",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__reward_shaped_control__seed_310818925.manifest.json",
+        "manifest_sha256": "9ec04b1f01122c78f458830148896c41f99b94a2e4e9d95c0e24c7f5a8bc6f1a"
+      },
+      "hotspot_high_load/reward_shaped_control/seed_515636025": {
+        "evaluation_status_file_sha256": "294a03c6b114fbf3d5ed280567a7128e6fb4d6f170f93a4d0ad5c6a44aa0f847",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__reward_shaped_control__seed_515636025.json",
+        "evaluation_status_sha256": "46478927a0a091cf2d494f79d928c924c642dcdd573909fa5a400cf2d9e9cfab",
+        "manifest_file_sha256": "55919f2ec6f95f03811a6c65bf6ad2a0efe88fd6e4bb401c4cc173b118c30283",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__reward_shaped_control__seed_515636025.manifest.json",
+        "manifest_sha256": "87b8ca885f4d31b503c1ad96e936f9b6706e8c228f5e66c5f332275f93d6c2d7"
+      },
+      "hotspot_high_load/reward_shaped_control/seed_626669596": {
+        "evaluation_status_file_sha256": "011965a318b5a77e979f38ef156a997d11541b5c217090204b900586606c47bd",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__reward_shaped_control__seed_626669596.json",
+        "evaluation_status_sha256": "63016b5fbdbf1def97cd71d1be817e3f6ebc14c7891ce6a43644745816de0b90",
+        "manifest_file_sha256": "fe079bb228d00ccfbc4cb2318509ce06e5b937c881f3e4264fcded763062fd36",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__reward_shaped_control__seed_626669596.manifest.json",
+        "manifest_sha256": "73ce010482e65d904655e13e0ff5bc573fd5f33c0adf13db63f34be3ecd4d934"
+      },
+      "hotspot_high_load/reward_shaped_control/seed_746965870": {
+        "evaluation_status_file_sha256": "1a2621e8c7e2c78f0e5d4ab558e8001191e9de2e4f2eeab0cb07ce1d70f7fa2c",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__reward_shaped_control__seed_746965870.json",
+        "evaluation_status_sha256": "80ae34770365a2172e4ee1bf4ce81bb0f5ead85c0755f597fd54415d79e99036",
+        "manifest_file_sha256": "6a8b83f18c7db2ed0e510cd0c6d2b7787af8b32de86ee14c19d5dfecd612f557",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__reward_shaped_control__seed_746965870.manifest.json",
+        "manifest_sha256": "024b3dd498aa3e804f08680aa5d73c9071d3ac8b4bd05ac696ffacfd806a8768"
+      },
+      "hotspot_high_load/reward_shaped_control/seed_985998595": {
+        "evaluation_status_file_sha256": "cd726af84494d8daf77f80229d91742bf54ce0f73a06262a978ea6de9d361037",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\hotspot_high_load__reward_shaped_control__seed_985998595.json",
+        "evaluation_status_sha256": "009dc2472a9aa6ca0d53ef8d8e04bf8dec6bab0ec973f686ae0d190fd9e14b8f",
+        "manifest_file_sha256": "e164dc6674e53758a53110d70edc827adf4b691b9edeab65d3f3b856ce66e859",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\hotspot_high_load__reward_shaped_control__seed_985998595.manifest.json",
+        "manifest_sha256": "b02b0ccf890c65a6cb66e76cfef1980d35986cc7d37e84ccb652aa2a3d233bc4"
+      },
+      "medium_load/qos_only_baseline/seed_179055553": {
+        "evaluation_status_file_sha256": "ad739212c58c39a83fab42832d8da1336b8fd6b9a7dcaa72e189500f7400d580",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__qos_only_baseline__seed_179055553.json",
+        "evaluation_status_sha256": "384c706250f69ad2b014e55cfdf300e0fe5130438437fa67eb8af5712f326dd7",
+        "manifest_file_sha256": "edae97191158e672c2da41369d39c0c0a23522025bfca73569d76c41fd6cf4ad",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__qos_only_baseline__seed_179055553.manifest.json",
+        "manifest_sha256": "7ede1e8c3cc2a121c267dd23f21e3809c076a4da3465555fb30d6748b969e9da"
+      },
+      "medium_load/qos_only_baseline/seed_183895110": {
+        "evaluation_status_file_sha256": "c23c02fac6b4868f616f020e65918243004e02b79b1eb6dc117201cacaf8d78f",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__qos_only_baseline__seed_183895110.json",
+        "evaluation_status_sha256": "1178b3aab8954f0a5420be7ee741c9744cb1237f903084749e05d3d1a1bd4b33",
+        "manifest_file_sha256": "a3880d880e52182a487522978514c8ca07befbcf6522e01393161490eb4956ce",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__qos_only_baseline__seed_183895110.manifest.json",
+        "manifest_sha256": "c472b66bdb6c407158e30570eb4006da7f1e55d85ae1cd21f9cbad43040fa419"
+      },
+      "medium_load/qos_only_baseline/seed_2136406109": {
+        "evaluation_status_file_sha256": "90f4a5f958292f81d38c74f05b379c370f282991036ba371aea42159ddecb192",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__qos_only_baseline__seed_2136406109.json",
+        "evaluation_status_sha256": "baca098f4e76e856aac6cf0d90460d59d1fce4a427f668bc6751092c393be554",
+        "manifest_file_sha256": "31884b6e461115239d1fa179d68c79f9e8438640f3c58d2f2988927158b1d5e8",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__qos_only_baseline__seed_2136406109.manifest.json",
+        "manifest_sha256": "bba5fdc690aa5eee470ccbab08883a7175e12fbffdf92a1102fa5f829f11c16f"
+      },
+      "medium_load/qos_only_baseline/seed_310818925": {
+        "evaluation_status_file_sha256": "46d40589b31cb863c77aec6d42efe8ae38fc6414fc7f4c195125287ede556001",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__qos_only_baseline__seed_310818925.json",
+        "evaluation_status_sha256": "6070f2478ac5767be2f70b30dfcc042bf07b38bad19f32ddb5ec9182d0bd1f3b",
+        "manifest_file_sha256": "d80a0073b44ff11514e9f80ec3be11f762a2b61e5435146c8dd2cc53c8728711",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__qos_only_baseline__seed_310818925.manifest.json",
+        "manifest_sha256": "71990d0e156ec559dbd96a67b3d0f3a48684788990f2106d1d158d36fe5a8e26"
+      },
+      "medium_load/qos_only_baseline/seed_515636025": {
+        "evaluation_status_file_sha256": "4423cbd37d388e13391bf202e599c9347ac4681f6150f1e3fcd9cde4918c7ca5",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__qos_only_baseline__seed_515636025.json",
+        "evaluation_status_sha256": "e2b490abba464427c20541220f6fbc431b06e23147bbb4f241e6feb973498118",
+        "manifest_file_sha256": "d3faf92eb15fb84f44a80e94959db1071ae98c3af9ff1dd547c6020277a94942",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__qos_only_baseline__seed_515636025.manifest.json",
+        "manifest_sha256": "37d9e87539c70bb4c0ac10df9074d80caa599a05c98c626909f639f90e3000c8"
+      },
+      "medium_load/qos_only_baseline/seed_626669596": {
+        "evaluation_status_file_sha256": "0451e28b866cf8581752dd58c3c87acdd758b2d06d911a7d8214ce9299478398",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__qos_only_baseline__seed_626669596.json",
+        "evaluation_status_sha256": "ce37968b32e1987ec0fb5075187f22d43632b70ae422c278bb2cc35b77559465",
+        "manifest_file_sha256": "723a71298b9746608032296b1559e62389c843bc5d72710f301c33bf6064f2d4",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__qos_only_baseline__seed_626669596.manifest.json",
+        "manifest_sha256": "91f6929aa5832113e9e6241cdfa261730da7b996853b4c110d6e41295c5dee86"
+      },
+      "medium_load/qos_only_baseline/seed_746965870": {
+        "evaluation_status_file_sha256": "19868a8fecd84a979bb840a15a568d9044df0517af39e40ffd602ec5ea4dd286",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__qos_only_baseline__seed_746965870.json",
+        "evaluation_status_sha256": "087973c8bc29ea1e6d45012eac0cfc1b8cac15bbfc5951caec22f09292dbce88",
+        "manifest_file_sha256": "c7d7b95cfa6985f27edc5d44ce3920fec7e501035c651622794fcfdd4e6ec3ed",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__qos_only_baseline__seed_746965870.manifest.json",
+        "manifest_sha256": "714e4aee74224ea63aa6827730220d8933a72891fb6b57e58a344f6236286e3f"
+      },
+      "medium_load/qos_only_baseline/seed_985998595": {
+        "evaluation_status_file_sha256": "aeae9124962cb3a35c2ac0c20c6343673e528769651c17a490259c986f9fcc98",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__qos_only_baseline__seed_985998595.json",
+        "evaluation_status_sha256": "ebcb6cb35da87de7c4c2325417a4d4ffce330d9840aee5d3bc8b69899e6e5708",
+        "manifest_file_sha256": "dcae4bba558e0bb2e802646931515f10575edd8632ad297d6d06ec44387c3f64",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__qos_only_baseline__seed_985998595.manifest.json",
+        "manifest_sha256": "196e3c1147dcc71ad894effa94d2290133936e1e55fd2e9e43e98f68e8f6f67a"
+      },
+      "medium_load/qos_only_constrained/seed_179055553": {
+        "evaluation_status_file_sha256": "80fb85b851ba19b9cad51cc70851d4ed97f12fa521da9ee1c134b373f7de6860",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__qos_only_constrained__seed_179055553.json",
+        "evaluation_status_sha256": "46cdde720325e8d90ea24d7c8f8e5b9864dc1727eaa3a9308078605a684fb47b",
+        "manifest_file_sha256": "5120014555c238f30ddbd67fb89a5218b67f07c8a2b3e6f9017ea5a26190b251",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__qos_only_constrained__seed_179055553.manifest.json",
+        "manifest_sha256": "cb4a47aa474385eb3033e72614e77adb38cb5357c49acaeb436d4178e35164de"
+      },
+      "medium_load/qos_only_constrained/seed_183895110": {
+        "evaluation_status_file_sha256": "991d18979241d7731d8e6f1734aac4b1465754a3b79b88aa8d151d997078ba9f",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__qos_only_constrained__seed_183895110.json",
+        "evaluation_status_sha256": "c9db025a63aa5f48bd80a90799442eff7c415a4bc99b37ba860178df188e46c1",
+        "manifest_file_sha256": "297a460edb9b24e77b14f01474cb58fba95511546ff1bb60a15c298434ae67c2",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__qos_only_constrained__seed_183895110.manifest.json",
+        "manifest_sha256": "d06e4363c5964dff8e3427675b5836bcccb80bc110ea0a9d13343cdd9c38c740"
+      },
+      "medium_load/qos_only_constrained/seed_2136406109": {
+        "evaluation_status_file_sha256": "ba6e74bfbdaa7f5e7f49c09a07ce5c0a67beaee4c29bab2a9f142088a9e51d3c",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__qos_only_constrained__seed_2136406109.json",
+        "evaluation_status_sha256": "108a6d3237cfbb83417e7f059e1232af6b3dda3ecd16c4e0f84900d3aec33164",
+        "manifest_file_sha256": "0d0fc2a909209bdccac23573b9dab1fa9c2050abd21e0220b7f509ce943b2855",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__qos_only_constrained__seed_2136406109.manifest.json",
+        "manifest_sha256": "77ce654561ae87bb1d02cd1deabe2b0590571406850d2c70f02b61b97026809b"
+      },
+      "medium_load/qos_only_constrained/seed_310818925": {
+        "evaluation_status_file_sha256": "c925a54f0cb3d48a72fe1e8ca9c94232588c675c4a0a32f4eb7da9da831cf6c8",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__qos_only_constrained__seed_310818925.json",
+        "evaluation_status_sha256": "06cba5969b010218eb76c6624c5eae72d754e62407b697815d14bde37a96bff5",
+        "manifest_file_sha256": "500b42c50897c9fa7d348b995db8f44f252606c9f88dd4e81dee590c9a51f384",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__qos_only_constrained__seed_310818925.manifest.json",
+        "manifest_sha256": "a62157d562a62bf2edcb5f3696dfe1cf7c82f8105ebf43da2bd1e1e4c05c7720"
+      },
+      "medium_load/qos_only_constrained/seed_515636025": {
+        "evaluation_status_file_sha256": "cfe381efbbc7706f297e99150fdd5c7e9453502d2c9510ad153a560b3a195b51",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__qos_only_constrained__seed_515636025.json",
+        "evaluation_status_sha256": "6faf81566fd2cef991614bdbbd2961b5f0d14505300217c9a37f1277a1d70268",
+        "manifest_file_sha256": "f71f2e4dd276fd356f5673251de02fdfd91b4541b52cf07ab5eb2e7197569a1e",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__qos_only_constrained__seed_515636025.manifest.json",
+        "manifest_sha256": "4e562c912f31582ca15d1d3fc8bc8b505fd94a68bbb00e2bc227777a67521eba"
+      },
+      "medium_load/qos_only_constrained/seed_626669596": {
+        "evaluation_status_file_sha256": "ff2c7e7ef2a92efb44b63178e90210926e5eac1d3bba4d21ee80393fdeb67b50",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__qos_only_constrained__seed_626669596.json",
+        "evaluation_status_sha256": "5f3072c403329af22e45b1dfcdc597b0eec2e39a207ee65df65c81c79fb45f86",
+        "manifest_file_sha256": "b97f830a353d8ec2ebefb538954e7f51473c948054c3a5cab2093e8893852767",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__qos_only_constrained__seed_626669596.manifest.json",
+        "manifest_sha256": "c886cc5bfc39080e7fc948bf3026c065b9103786dbbc7cc016bdea99109640ef"
+      },
+      "medium_load/qos_only_constrained/seed_746965870": {
+        "evaluation_status_file_sha256": "cb74cf8826e775d22889da5841ba4c0440e87bd06919d2d4772c6f3afd4fd36a",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__qos_only_constrained__seed_746965870.json",
+        "evaluation_status_sha256": "7b59784b3e1d7ad0a6188175ca4915a192f3974d878c1c5c88ebface20366ac4",
+        "manifest_file_sha256": "e78952f20251b90c8a25a09148645e9bc340279390474aff69d2067934c5bf36",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__qos_only_constrained__seed_746965870.manifest.json",
+        "manifest_sha256": "c0629fc3968a4f3a6fe180a609a68a7ea41e697eb13b7f1867f1db05de91cc42"
+      },
+      "medium_load/qos_only_constrained/seed_985998595": {
+        "evaluation_status_file_sha256": "0a66e402d4f734ccea710c265e0fe8bdbe835fc498f5513ae607f88cfb415b31",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__qos_only_constrained__seed_985998595.json",
+        "evaluation_status_sha256": "6c5536757206780969a679747c90691793ee21385f24b2849532f736f51a1aa0",
+        "manifest_file_sha256": "fdc3e328b8168ba4b542f67b7b76289a2359c6df2bbb3d09506678200cb6acbd",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__qos_only_constrained__seed_985998595.manifest.json",
+        "manifest_sha256": "64141ce7d6c660240cfbe0374711682f896bc2a802d8e41e9c5cac5068fb6a0c"
+      },
+      "medium_load/reward_shaped_control/seed_179055553": {
+        "evaluation_status_file_sha256": "e12078f17a171a776b95e1ec2c76de5b4fdb6b68a4c24ba13d5be942ec1fb7f6",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__reward_shaped_control__seed_179055553.json",
+        "evaluation_status_sha256": "2ef01168cd91c38deccd11c2f82bbd6607a036f16fb8f40d196d3ba122f7c274",
+        "manifest_file_sha256": "d51881e02a8bdbe47b0d9133d569ab4b2f00e216bda77800fa019b34feafd30a",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__reward_shaped_control__seed_179055553.manifest.json",
+        "manifest_sha256": "75f6714bca720f9500ac5a14aa300c8a175f7b5c19559ebc2d9919b322dacef8"
+      },
+      "medium_load/reward_shaped_control/seed_183895110": {
+        "evaluation_status_file_sha256": "8988c7e1a6ac9bd9b5fca8c88d3a4bb8e86aa424d7dbda5dabc570776d67d619",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__reward_shaped_control__seed_183895110.json",
+        "evaluation_status_sha256": "7e7d310f2a33a47f9352bfb5d7acbb5c498ba519d224396d4842004925fc677c",
+        "manifest_file_sha256": "a52acaf4e27591d086633e45f8c4a14c4544465cfe6baef31daf4453c776c511",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__reward_shaped_control__seed_183895110.manifest.json",
+        "manifest_sha256": "11d4059bf33e52a95d30c1d5843fcad4cff2f9a84cf03fc0f3d1bebd4cccf8d1"
+      },
+      "medium_load/reward_shaped_control/seed_2136406109": {
+        "evaluation_status_file_sha256": "3c8f58497a348659afb0c7497ff5fa481ac756157c13e71129b3bb63385e0405",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__reward_shaped_control__seed_2136406109.json",
+        "evaluation_status_sha256": "57549a4f94611ea05eae0147ecd650f01d0bb37396edbb6febb9f6c0fd663882",
+        "manifest_file_sha256": "2524b71bced3dcf3c1d8283f706575e438f0b3eacaf75ed277cf8628ef190afe",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__reward_shaped_control__seed_2136406109.manifest.json",
+        "manifest_sha256": "c4ea880e58879bac7663b8703fdd2a245725c2cc65c4fcd87e2556f4327e251f"
+      },
+      "medium_load/reward_shaped_control/seed_310818925": {
+        "evaluation_status_file_sha256": "ccda6a81397894551b4cb0ad26a108f2c77bb3e01ca70c9105d3fab49d9203ec",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__reward_shaped_control__seed_310818925.json",
+        "evaluation_status_sha256": "ff364ac9e8a424d5ac571bfa981d9ca2cc2f05775cd1778d45245e2999b9b6af",
+        "manifest_file_sha256": "74331fb1b434a06570845eb13f59d5e9fbb0510293d53dfaa4342e0f952ea443",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__reward_shaped_control__seed_310818925.manifest.json",
+        "manifest_sha256": "a9033ddf1828e0c88339e8ef4763178fa67492daf0324ca84c8312f44d4d5b2a"
+      },
+      "medium_load/reward_shaped_control/seed_515636025": {
+        "evaluation_status_file_sha256": "e4e8272cbd53625055e4f21eda7c97c9c907aacd0c72b72341e3f59cbf70d04a",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__reward_shaped_control__seed_515636025.json",
+        "evaluation_status_sha256": "e35158b144a66879aae17955b9f8ebfd1b9f56636e6a97356a0b87bdb16fe617",
+        "manifest_file_sha256": "6a3dac242797140d64be89e22958104af173430363b6bc6e88d435b1e23716c8",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__reward_shaped_control__seed_515636025.manifest.json",
+        "manifest_sha256": "c6420c28e2c404ec8cf32ab1b0f5b8efa92f33258cef57aac42c7c7cd69f7964"
+      },
+      "medium_load/reward_shaped_control/seed_626669596": {
+        "evaluation_status_file_sha256": "f66b90bf57fd5d34fb3d3b28b6348f149c9cb4e1190b2e3635a407444023768c",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__reward_shaped_control__seed_626669596.json",
+        "evaluation_status_sha256": "e0806d8eccdef7693ba2766e3cdfe9287ae08859578fd5f432e849472c174223",
+        "manifest_file_sha256": "622ad73e246e812b23308b56ce5cec4f9adef3d4a6209d6a54ccf1b314f3b8b6",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__reward_shaped_control__seed_626669596.manifest.json",
+        "manifest_sha256": "e78dad98c6e8e46723d8819f0314293c2f83c8555f35d073d184433e7011c033"
+      },
+      "medium_load/reward_shaped_control/seed_746965870": {
+        "evaluation_status_file_sha256": "fe46356d6b5a0d8a63a255c8b8386663632e24bcfe525d60d656493f61240094",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__reward_shaped_control__seed_746965870.json",
+        "evaluation_status_sha256": "e8828db5a9004b6418c96c46dcd7b879e0ca367ac38091f0a4082aed900850db",
+        "manifest_file_sha256": "169c54c78c7f6b4f5b1d957f1a72db96e35bc7d5331a7a5b2b6a5c8f7e396266",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__reward_shaped_control__seed_746965870.manifest.json",
+        "manifest_sha256": "ea0ecfe5d58643045b286d823873b2554cdf03477d92624e34bb5c49e7906047"
+      },
+      "medium_load/reward_shaped_control/seed_985998595": {
+        "evaluation_status_file_sha256": "78d71697d6cc6900f81bd28d6693479bac07885f3b5873ab8c220540a1cfbba6",
+        "evaluation_status_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\job_status\\validation\\selection_recheck\\medium_load__reward_shaped_control__seed_985998595.json",
+        "evaluation_status_sha256": "38e92257ab79b4621a07d2850eaa0400b36a4a58d93c7d698288328028ab8571",
+        "manifest_file_sha256": "0f78e37aa32a69ce9e203e9c82fa3952668b0384c9c499246e326b710bb54e5b",
+        "manifest_path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\validation_shards\\selection_recheck\\medium_load__reward_shaped_control__seed_985998595.manifest.json",
+        "manifest_sha256": "5c85e350f2b291e237c3f200fa4d14f5d5dd01c52ebd5465f1947b79a5b29340"
+      }
+    }
+  },
+  "spec_sha256": "58fd1e77faafefcb67631c3a568116ad60ce2ba3c90c12de1262d6a3709caaf6",
+  "statistical_validation_gate_passed": true,
+  "statistics": {
+    "input_evaluation_role": "selected_checkpoint_independent_validation_gate",
+    "input_panel": "independent_gate",
+    "input_row_count": 480,
+    "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\formal_validation_statistics.json",
+    "report_sha256": "733825a6823147bbfe02343614135b546864a047e1a9e0db35a0bfb423724a84",
+    "selection_rows_included": false,
+    "sha256": "30f430bf6729b005d82b9aee7f8f1a07dc051c509790c92c52244878549e7131"
+  },
+  "study_name": "ICC-AVOIDABLE-SWITCH-CONSTRAINT-FORMAL-v1",
+  "test_access_count": 0,
+  "test_panel_consulted": false,
+  "training_freeze_sha256": "153b5cd85305f3f4c9a03fd549eea3e06785a0d1a447b96ec9005098c7d25742",
+  "validation_complete": true,
+  "validation_freeze_sha256": "d3c039657802e9c784c82cec31024e5098b31e5a3e217e69bbc64dad5a8469d6",
+  "validation_row_count": 960
+}

@@ -1,135 +1,182 @@
-# LEO 星座 MAPPO 分布式路由
+# LEO Routing with Constraint-Aware MAPPO
 
-24 星 Walker-Delta LEO 星座上的分布式下一跳路由研究:每颗卫星是一个 agent,共享参数的候选-邻居 Actor(MAPPO,CTDE),团队奖励 + 零均值局部 credit。对照基线包括集中式 SPF/ECMP、表格 Q-routing、逐节点 DQN、陈旧链路状态 SPF。验证链路三级:自建 slot 环境 → ns-3 包级重放(路径验证)→ ns-3 闭环(策略在 ns-3 事件循环内基于真实队列状态决策)。
+这个仓库研究动态 LEO 星座中的分布式下一跳路由。每颗卫星作为一个 agent，使用共享参数的候选邻居 Actor 做本地决策；训练阶段使用图 Critic，部署阶段只需要本地包状态、缓存下一跳和一跳链路/队列信息。
 
-## 目录结构
+当前主线不是继续堆奖励项，而是直接约束“本来可以不换路、但策略仍然换了下一跳”的决策。代码、训练协议、经典基线和一次性 sealed test 都已经冻结。
 
+## 当前结果
+
+正式实验包含两个 24 星场景、3 个 MAPPO 方法、3 个经典方法、8 个独立 policy seed 和 50 个未见 workload。sealed panel 共 4,100 行，没有缺失或重复。
+
+主比较是 `qos_only_constrained` 相对同奖励、同结构的 `qos_only_baseline`：
+
+| 场景 | 投递率差值 | 95% CI | 可避免切换率差值 | 95% CI |
+|---|---:|---:|---:|---:|
+| `medium_load` | -0.958 pp | [-1.587, -0.182] pp | -15.219 pp | [-19.739, -10.357] pp |
+| `hotspot_high_load` | +0.772 pp | [+0.353, +1.188] pp | -36.245 pp | [-40.872, -31.305] pp |
+
+两个场景都通过了预先写定的四个门限：
+
+- 投递率单侧 95% 下界不低于 -2 pp；
+- 可避免切换率差值的单侧上界低于 0；
+- constrained 策略的切换率单侧上界不高于 12%；
+- 每个 policy seed 的切换率都不高于 12%。
+
+中负载并不是“无损提升”：投递率下降约 0.96 pp，只是仍在预设的 2 pp non-inferiority 容差内。热点场景下 constrained MAPPO 的投递率也低于 Q-routing（0.2945 对 0.3114）。仓库和论文都保留这两个结果。
+
+![Sealed-test effects](paper/icc2027/fig_sealed_results.png)
+
+## 方法
+
+### 决策级可避免切换
+
+对每个 contention 之前的有效路由决策：
+
+```text
+o = 1  当缓存下一跳和至少一个替代下一跳都可行
+c = 1  当 o = 1 且策略选择了不同下一跳
+R = sum(c) / sum(o)
 ```
-src/          全部 Python/C++ 源码(环境、训练、评估、基线、ns-3、图表)
-experiments/  实验输出(CSV 数据 + manifest;checkpoint 被 .gitignore 排除,仅存本地)
-figures/      出版级图(每个 .png 配 .pdf)
-data/         真实 TLE 与导出拓扑(Starlink / OneWeb,2026-07-15)
-run_preliminary_leo_routing.m   早期 MATLAB 原型(项目起点,保留存档)
-setup_venv_f.sh / requirements*.txt   环境与依赖
-run_reproduction.sh   全管线复现入口(smoke / repro / budget / mde)
+
+首次选路、缓存链路已经失效后的强制切换、`NO_OP` 和 padding 都不进入分子。计数发生在 contention 之前，因此不会因为后续链路竞争失败而漏掉策略已经提出的切换。
+
+### Candidate-set MAPPO
+
+- 26 维候选特征，覆盖队列、链路状态、几何进展、包上下文和缓存信息；
+- 共享候选编码器和对称池化，候选顺序变化只会重排 logits；
+- 不可行动作在采样前 mask；
+- 图 Critic 只在 centralized training 中使用；
+- team reward 加零均值 local credit；
+- PPO 使用 GAE、value clipping、可行动作归一化 entropy 和 KL 约束。
+
+约束臂的 Actor loss 为：
+
+```text
+L_actor = L_PPO + lambda * C_surrogate
+
+lambda_next = clip(lambda + 0.05 * (R_rollout - 0.12), 0, 5)
 ```
 
-## src/ 源码一览
+`lambda` 每个完整 rollout 更新一次。它是经验约束控制器，不是 CPO，也不提供逐轨迹的硬保证。
 
-**环境与核心**
-| 文件 | 说明 |
+## 实验设计
+
+| 项目 | 设置 |
 |---|---|
-| `leo_marl_env.py` | 单 agent 底层路由环境(拓扑、链路、包生命周期) |
-| `leo_multiagent_env.py` | 多 agent 环境:24 星、slot 时钟、队列/链路容量/到达过程、26 维候选特征、动作屏蔽 |
-| `mappo_design.py` | MAPPO 设计层:动作屏蔽、零均值局部 credit、团队奖励 |
-| `mappo_evaluation.py` | 评估与基线策略(GlobalDijkstra / OSPF-ECMP / Q-routing / heuristic) |
-| `cleanmarl_leo_multiagent_wrapper.py` | CleanMARL 训练接口的向量化 wrapper |
-| `tle_topology_builder.py` + `data/` | 从真实 TLE 构建星间拓扑 |
+| 星座 | 4 planes x 6 satellites |
+| 场景 | `medium_load`, `hotspot_high_load` |
+| MAPPO arms | QoS baseline, constrained, reward-shaped control |
+| Policy seeds | 每个 arm/scenario 8 个 |
+| 训练预算 | 50,000 target steps，实际完整 rollout 边界 50,040 |
+| 训练 workloads | 76001--76200 |
+| checkpoint selection | 77001--77010 |
+| independent gate | 77011--77020 |
+| sealed test | 78001--78050，只实例化一次 |
+| 经典基线 | Q-routing, OSPF-ECMP, Global Dijkstra |
 
-**训练入口**
-| 文件 | 说明 |
-|---|---|
-| `run_exp004_mappo.py` | 主训练入口(`--mode quick|full`,`--scenario`,经 `/f/cleanmarl` 的 MAPPO trainer 执行) |
-| `run_full_training_matrix.py` | 5 场景 × 8 seed 全矩阵训练 |
-| `run_ablation_experiments.py` / `run_ablation_training_shard.py` | 消融(no_credit / flat_critic / lifetime 等) |
-| `run_tle_training_experiment.py` | 真实 TLE 拓扑上训练 |
-| `run_exp005_diagnostics.py` | 训练诊断 |
+Q-routing 每个场景、每个 policy identity 重新训练 500 episodes。OSPF-ECMP 使用 8 个路由随机身份；Global Dijkstra 是确定性的，只使用一个 sentinel identity。
 
-**基线与评估实验**
-| 文件 | 说明 |
-|---|---|
-| `run_dqn_baseline.py` + `dqn_baseline.py` | 逐节点 DQN(神经 Q-routing)基线 |
-| `run_stale_baseline.py` | 陈旧链路状态 SPF(K=1/3/5/10) |
-| `run_fault_sweep.py` / `run_load_sweep.py` | 故障率 / 外生负载扫描 |
-| `run_scale_experiment.py` / `run_qrouting_scale_experiment.py` | 星座规模迁移(n24→n132)与 Q 表规模对照 |
-| `run_realism_transfer.py` | 真实 TLE(Starlink/OneWeb)零样本迁移 |
-| `run_reward_sensitivity.py` | 奖励权重敏感性 |
-| `compute_mde.py` / `analyze_transfer_stats.py` | 统计功效与配对检验 |
+统计推断以 policy seed 为独立单位，不把 50 个 workload 当成 50 次独立训练。置信区间使用 5,000 次 crossed bootstrap，同时重采样 seed 行和 workload 列；敏感性检验枚举 `2^8` 个 sign flips，并对四个主检验做 Holm 校正。
 
-**ns-3 验证(WSL2 Ubuntu-22.04,ns-3.48,用户 nsuser,`~/ns-3.48`)**
-| 文件 | 说明 |
-|---|---|
-| `ns3_trace_extractor.py` | 从 slot 环境导出包级 trace(episode/包/链路 CSV)供 ns-3 读取 |
-| `ns3_leo_validation.cc` | ns-3 包级重放:预计算路径在 ns-3 事件循环里执行 |
-| `ns3_closed_loop.cc` | ns-3 闭环:每 slot 上报自身队列/HOL 包/逐链路 TX,等待策略决策后执行 |
-| `ns3_closed_loop_server.py` | Windows 侧策略服务器:用 env 同一套特征代码从 ns-3 状态重建 26 维候选特征 |
-| `ns3_policy_bridge.py` + `ns3_policy_protocol.schema.json` | 检查点加载与 slot 级决策协议 |
-| `run_ns3_closed_loop.py` | 编排:构建 scratch 程序、起服务器、经 WSL NAT 网关连 ns-3 |
-| `run_ns3_sweep.sh` / `run_ns3_dyn_sweep.sh` / `dbg_ns3.sh` | 负载/动态场景批量重放 |
+## 仓库结构
 
-**图表生成**
-| 文件 | 输出 |
-|---|---|
-| `make_figures.py` | fig1–fig4(主结果/分场景/尾延迟与均衡/消融)+ Table I |
-| `make_convergence_figure.py` / `make_fairness_figure.py` | 收敛曲线 / 公平性 |
-| `make_{fault,load,reward}_sweep_figure.py` | 各 sweep 图 |
-| `make_scale_figure.py` / `make_realism_figure.py` / `make_tle_figure.py` | 规模迁移 / 真实拓扑 |
-| `make_qscale_figure.py` | Q 表规模崩溃 vs MAPPO 零样本 |
-| `make_ns3_figure.py` / `make_ns3_dynamic_figure.py` / `make_ns3_closedloop_figure.py` | ns-3 三级验证图 |
-| `make_deployment_cost.py` / `analyze_hotspot.py` / `make_results_summary.py` | 部署代价 / hotspot 机制分解 / 汇总表 |
+```text
+src/          环境、MAPPO、基线、统计、实验 runner 和测试
+docs/         预注册协议、修订记录和 claim boundary
+experiments/  紧凑结果、冻结文件和公开的 sealed rows
+figures/      历史实验图表
+paper/        ICC 2027 草稿、图和参考文献
+data/         TLE 与导出的 24 星拓扑
+```
 
-**测试**:`cd src && python -m unittest test_mappo_design`(28 个用例)
+这次正式结果对应：
 
-## experiments/ 目录说明
+```text
+experiments/avoidable-switch-constraint-formal-v1-r2/
+experiments/avoidable-switch-classical-baselines-formal-v1-r3/
+experiments/avoidable-switch-joint-sealed-test-v1/
+```
 
-**主结果**
-| 目录 | 内容 | 生成入口 |
-|---|---|---|
-| `train-main/` | 主训练(5 场景 × 8 seed,`no_lifetime` 变体) | `run_full_training_matrix.py` |
-| `eval-main/` | 主评估:5 场景 × 8 seed × 50 held-out episodes,全策略同信息集 | `run_exp004_mappo.py` 评估段 |
-| `ablation/` | 消融(no_credit −8.8pp 等) | `run_ablation_experiments.py` |
-| `train-budget-*` / `qrouting-budget-*` / `eval-budget-*` | 训练预算 x2k/x10k 的 MAPPO 与平价重训 Q-routing | `run_reproduction.sh budget` |
+前两个目录在 GitHub 中只保留顶层 preregistration、aggregate rows、statistics 和 freeze。训练 checkpoint、逐 job 状态、重复 JSONL 和运行日志留在本地，不进入 Git。sealed test 的公开数据以 `sealed_test_rows.csv` 为准。
 
-**泛化与机制**
-| 目录 | 内容 | 生成入口 |
-|---|---|---|
-| `sweep-fault/` `sweep-load/` `sweep-reward/` | 故障率 / 外生负载 / 奖励权重扫描 | `run_fault_sweep.py` 等 |
-| `sweep-scale/` | 星座规模 n24→n132 零样本迁移 | `run_scale_experiment.py` |
-| `sweep-realism/` | 真实 TLE(Starlink/OneWeb)拓扑迁移 | `run_realism_transfer.py` |
-| `qscale-transfer/` | Q 表跨规模部署崩溃 vs MAPPO 零样本对照 | `run_qrouting_scale_experiment.py` |
-| `dqn-baseline/` | 逐节点 DQN 五场景结果 | `run_dqn_baseline.py --scenario <name>` |
-| `stale-spf/` | 陈旧链路 SPF(K=1/3/5/10) | `run_stale_baseline.py` |
-| `deployment-cost/` | 参数量/内存/MACs/决策时延 | `make_deployment_cost.py` |
-| `hotspot-mechanism/` | hotspot 场景丢包机制分解 | `analyze_hotspot.py` |
+## 安装
 
-**ns-3 验证**
-| 目录 | 内容 | 生成入口 |
-|---|---|---|
-| `ns3-trace16/` | 16 episode 包级 trace(闭环输入) | `ns3_trace_extractor.py` |
-| `ns3-replay/` `ns3-replay-dyn/` | ns-3 包级重放(静态负载 / 动态断链) | `run_ns3_sweep.sh` 等 |
-| `ns3-closedloop/` | ns-3 闭环 16 episodes 正式结果 | `run_ns3_closed_loop.py` |
-| `ns3-closedloop-5ep/` | 闭环 5 episode 冒烟测试 | 同上 |
-| `archive/` | 历史代次数据(早期 EXP-004/005、修正前 sweep、repro-check 等),仅存档 | — |
-
-## 快速开始
+Python 3.10 或 3.11 均可。PyTorch/CUDA 版本请按本机驱动选择，其余依赖：
 
 ```bash
-# 环境(Windows + F 盘 venv;CUDA torch 在 RTX 3070 上训练)
-bash setup_venv_f.sh            # 或直接用 /f/leo-venv/Scripts/python.exe
+python -m venv .venv
+source .venv/bin/activate       # Windows PowerShell: .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-
-# 冒烟训练(~1 分钟)
-/f/leo-venv/Scripts/python.exe src/run_exp004_mappo.py --cleanmarl F:/cleanmarl \
-    --project F:/leo-routing-preliminary-matlab/src --mode quick --scenario medium_load
-
-# 全管线复现(smoke / repro / budget / mde 四个子命令)
-bash run_reproduction.sh
-
-# 测试
-cd src && /f/leo-venv/Scripts/python.exe -m unittest test_mappo_design
 ```
 
-ns-3 验证需要 WSL2(用户 `nsuser`,`~/ns-3.48`):
+MAPPO trainer 目前通过 CleanMARL 兼容入口运行。正式训练 runner 会记录源码、依赖、CUDA 设备和 checkpoint hash；不要直接修改已冻结目录继续训练。
+
+## 测试
+
+在仓库根目录执行：
 
 ```bash
-/f/leo-venv/Scripts/python.exe src/run_ns3_closed_loop.py \
-    --scenario medium_load --workload-seeds 21001,...,21016 --policies mappo,dijkstra
+cd src
+python -m unittest discover -p "test_*.py"
 ```
 
-闭环架构:ns-3 每 slot 边界把自身原始状态(队列长度、HOL 包字段、到达数、逐有向链路传输量)经 TCP 发给策略服务器;服务器用环境同一套 `_candidate_features`/`_mask_reason` 代码重建候选特征(几何项来自环境模型,队列/带宽/竞争项来自 ns-3 实际数据面),MAPPO 或 Dijkstra 决策后由 ns-3 真实 FIFO 数据面执行——策略条件化的正是 ns-3 自己的队列,环路闭合。
+只检查本次 constraint/sealed-test 链路：
 
-## 关键结果速览
+```bash
+cd src
+python -m unittest \
+  test_avoidable_switch_constraint \
+  test_avoidable_switch_constraint_formal \
+  test_formal_avoidable_switch_statistics \
+  test_avoidable_switch_classical_baselines_formal \
+  test_avoidable_switch_joint_sealed_test
+```
 
-主评估(`eval-main/`,全策略同信息集,投递率):MAPPO 0.913/0.788/0.290/0.759/0.763(low/medium/hotspot/frequent/fault),对集中式 SPF/ECMP 领先 +4.9~+5.3pp(p≤1.2e-9);表格 Q-routing 平价重训后与 MAPPO 打平(±0.6pp)——MAPPO 的差异化在零样本迁移:Q 表跨星座部署崩溃(n132 仅 9.2MB 表也训不满),MAPPO 零样本保持 ≥oracle 至 4.6× 规模。ns-3 三级验证一致:重放 +6.1pp、动态 +4.8pp、闭环 +7.4pp(16/16 episodes,Wilcoxon p=4.3e-4)。
+sealed workloads 已经按协议使用过一次。不要删除输出目录后重新跑 test panel，也不要用 test 结果重新选 seed、checkpoint 或场景。公开结果的只读入口是：
 
-所有比较均无变体不对称(基线与 MAPPO 使用同一动作屏蔽信息集);历史修正前的数据保存在 `archive/` 与各目录 `superseded_*` 子目录中,可复查。
+```text
+experiments/avoidable-switch-joint-sealed-test-v1/sealed_test_statistics.json
+experiments/avoidable-switch-joint-sealed-test-v1/sealed_test_rows.csv
+```
+
+## 冻结记录
+
+```text
+MAPPO training freeze
+153b5cd85305f3f4c9a03fd549eea3e06785a0d1a447b96ec9005098c7d25742
+
+MAPPO validation freeze
+d3c039657802e9c784c82cec31024e5098b31e5a3e217e69bbc64dad5a8469d6
+
+Classical training freeze
+df7cf104d30360df898ef8239b64789c16e0baa9e87c78c52c08a676ecb62eba
+
+Classical gate freeze
+36bac779a6961ce38eb6872ec0f9cfa3953898ceb00d9b5bd7f10ce80fbc3a1e
+
+Joint sealed-test authorization
+9e2c173b0399adf52adeb575ffb11742d2c3452eb0d50bb6bdccdac22ceed653
+
+Final sealed-test freeze
+c5cc82c7edb96add6e8da1275924e83cf159e65a2062184d52f3364ad8e508a9
+```
+
+协议细节见：
+
+- [`docs/AVOIDABLE_SWITCH_CONSTRAINT_FORMAL_V1.md`](docs/AVOIDABLE_SWITCH_CONSTRAINT_FORMAL_V1.md)
+- [`docs/AVOIDABLE_SWITCH_CLASSICAL_BASELINES_FORMAL_V1.md`](docs/AVOIDABLE_SWITCH_CLASSICAL_BASELINES_FORMAL_V1.md)
+- [`docs/AVOIDABLE_SWITCH_JOINT_SEALED_TEST_V1.md`](docs/AVOIDABLE_SWITCH_JOINT_SEALED_TEST_V1.md)
+
+## 结果边界
+
+目前证据支持的说法很具体：在这个 24 星 slot simulator 的两个已测试负载场景中，显式 decision-level constraint 相对匹配的 QoS-only MAPPO 大幅降低了可避免切换率，并通过预设的投递率 non-inferiority 门限。
+
+它还不能说明：
+
+- 对任意 LEO 星座和流量都有效；
+- 优于所有经典路由方法；
+- 已经验证控制面收敛或真实信令开销；
+- 能零样本扩展到大星座；
+- 已达到工程部署条件。
+
+下一步更有价值的是在 TLE/SGP4 或 Hypatia/ns-3 环境中做独立外部验证，而不是继续调整这次 sealed result。

@@ -1,0 +1,37 @@
+% Requires graphicx and booktabs; place inside a two-column table* environment.
+\begingroup
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{@{}lrrrcc@{}}
+\toprule
+\multicolumn{6}{c}{(a) Packet delivery} \\
+Scenario & MAPPO & Q-routing & $\Delta$ delivery [95\% CI] (pp) & M$>$Q seeds & Raw exact / retro. Holm $p$ \\
+\midrule
+Low load & 0.912803 & 0.912197 & +0.060606 [-0.143939, +0.280398] & 6/8 & 0.1875 / 0.375 \\
+Medium load & 0.787982 & 0.784557 & +0.342448 [+0.042936, +0.666667] & 8/8 & 0.0078125 / 0.0390625 \\
+Hotspot & 0.289930 & 0.308555 & -1.862500 [-2.104025, -1.641988] & 0/8 & 0.0078125 / 0.0390625 \\
+Frequent break & 0.758568 & 0.752096 & +0.647135 [+0.283854, +1.040397] & 8/8 & 0.0078125 / 0.0390625 \\
+Fault links & 0.763359 & 0.762135 & +0.122396 [-0.305990, +0.566439] & 4/8 & 0.4921875 / 0.4921875 \\
+\midrule
+\multicolumn{6}{c}{(b) Network-wide next-hop switching} \\
+Scenario & MAPPO & Q-routing & $\Delta$ switches [95\% CI] & Reduction (seeds) & Raw exact / retro. Holm $p$ \\
+\midrule
+Low load & 0.9325 & 2.2200 & -1.2875 [-1.7800, -0.8000] & 58.00\% (8/8) & 0.0078125 / 0.0390625 \\
+Medium load & 31.0325 & 59.0875 & -28.0550 [-33.3728, -21.1774] & 47.48\% (8/8) & 0.0078125 / 0.0390625 \\
+Hotspot & 138.8925 & 186.3325 & -47.4400 [-66.9434, -28.2348] & 25.46\% (8/8) & 0.0078125 / 0.0390625 \\
+Frequent break & 54.7875 & 76.9925 & -22.2050 [-27.9927, -16.6049] & 28.84\% (8/8) & 0.0078125 / 0.0390625 \\
+Fault links & 44.5725 & 65.8950 & -21.3225 [-27.2728, -15.2293] & 32.36\% (8/8) & 0.0078125 / 0.0390625 \\
+\bottomrule
+\end{tabular}
+}%
+\par\smallskip
+\begin{minipage}{\linewidth}
+\footnotesize Retrospective, non-confirmatory seed-level analysis. $\Delta=$ MAPPO $-$ Q-routing; a negative switch $\Delta$ means fewer accepted changes, and reduction is $-\Delta$ divided by the Q-routing mean. Parentheses report policy seeds with fewer switches. Means first average the 50 paired workloads within each policy seed and then average the eight seed means. Raw exact $p$ is from a two-sided policy-seed sign-flip test; retrospective Holm adjustment is applied separately by endpoint across its five Q-routing scenario comparisons. Intervals use a 5,000-resample crossed pigeonhole bootstrap over policy and workload seeds. Switch counts are network-wide accepted changes to per-satellite $(satellite,destination,class)$ cached next hops.
+\end{minipage}
+\endgroup
+% Retrospective seed-level reanalysis; not confirmatory evidence.
+% M = MAPPO; Q = Q-routing. Differences are M minus Q.
+% Holm p-values are a retrospective sensitivity analysis over the five Q-routing scenarios.
+% Every switching row has raw exact p=0.0078125 and retrospective Holm p=0.0390625.
+% Workload episodes are paired repeated measurements; policy seed is the inference unit.

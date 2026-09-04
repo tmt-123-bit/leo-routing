@@ -16,9 +16,42 @@ import random
 from typing import Deque, Dict, Iterable, List, Optional, Sequence, Tuple
 
 from leo_marl_env import EnvConfig, LeoRoutingEnv, LinkState, SCENARIOS
+from variant_definitions import VariantDefinition, resolve_variant
 
 
 NO_OP = 0
+ROUTE_SWITCH_FEATURE_INDEX = 17
+ROUTE_URGENCY_FEATURE_INDEX = 20
+ROUTE_CLASS_2_FEATURE_INDEX = 23
+CANDIDATE_FEATURE_SCHEMA_VERSION = 1
+BASE_CANDIDATE_FEATURE_NAMES = (
+    "current_queue_ratio",
+    "candidate_queue_ratio",
+    "link_delay_ratio",
+    "remaining_bandwidth_ratio",
+    "link_load_rho",
+    "link_reliability",
+    "remaining_link_lifetime_ratio",
+    "previous_contention_ratio",
+    "destination_progress",
+    "candidate_orbit_u",
+    "candidate_orbit_w",
+    "current_orbit_u",
+    "current_orbit_w",
+    "destination_orbit_u",
+    "destination_orbit_w",
+    "remaining_hop_ratio",
+    "used_hop_ratio",
+    "route_switch_indicator",
+    "visited_satellite_ratio",
+    "topology_time_phase",
+    "deadline_normalized_waiting_age",
+    "traffic_class_0",
+    "traffic_class_1",
+    "traffic_class_2",
+    "candidate_already_visited",
+    "candidate_is_previous_node",
+)
 EVENT_ORDER = (
     "freeze_snapshot",
     "validate_joint_actions",
@@ -38,6 +71,33 @@ MULTIAGENT_LOADS = {
 }
 
 
+def candidate_feature_schema(
+    *,
+    queue_trend_feature: bool = False,
+    downstream_bottleneck_feature: bool = False,
+) -> Dict[str, object]:
+    names = list(BASE_CANDIDATE_FEATURE_NAMES)
+    if queue_trend_feature:
+        names.append("candidate_queue_trend")
+    if downstream_bottleneck_feature:
+        names.append("downstream_continuation_headroom")
+    body = {
+        "schema_version": CANDIDATE_FEATURE_SCHEMA_VERSION,
+        "feature_names": names,
+    }
+    encoded = json.dumps(
+        body,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=True,
+    ).encode("ascii")
+    return {
+        **body,
+        "schema_id": f"leo_multi_candidate_features_v1_dim_{len(names)}",
+        "sha256": hashlib.sha256(encoded).hexdigest(),
+    }
+
+
 @dataclass
 class MultiAgentConfig:
     env: EnvConfig = field(default_factory=EnvConfig)
@@ -52,7 +112,7 @@ class MultiAgentConfig:
     packet_class_deadlines: Tuple[int, ...] = (30, 12, 20)
     packet_class_delay_weights: Tuple[float, ...] = (1.0, 1.8, 1.2)
     packet_class_reliability_floor: Tuple[float, ...] = (0.86, 0.88, 0.94)
-    variant: str = "full"
+    variant: str = "proposed"
     credit_weight: float = 0.25
     global_delay_weight: float = 1.0
     global_queue_weight: float = 0.8
@@ -84,11 +144,42 @@ class SynchronousLeoMultiAgentEnv:
 
     def __init__(self, cfg: Optional[MultiAgentConfig] = None):
         self.cfg = cfg or MultiAgentConfig()
+        class_contracts = {
+            "packet_class_probabilities": self.cfg.packet_class_probabilities,
+            "packet_class_deadlines": self.cfg.packet_class_deadlines,
+            "packet_class_delay_weights": self.cfg.packet_class_delay_weights,
+            "packet_class_reliability_floor": (
+                self.cfg.packet_class_reliability_floor
+            ),
+        }
+        invalid_class_fields = [
+            name for name, values in class_contracts.items() if len(values) != 3
+        ]
+        if invalid_class_fields:
+            raise ValueError(
+                "fixed candidate schema requires exactly three traffic classes: "
+                + ", ".join(invalid_class_fields)
+            )
+        self.variant_definition: VariantDefinition = resolve_variant(self.cfg.variant)
+        self.cfg.variant = self.variant_definition.name
         self.rng = random.Random(self.cfg.seed)
         self.base = LeoRoutingEnv(self.cfg.env)
         self.n_agents = self.cfg.env.n_sats
         self.max_degree = self.base.max_degree
-        self.candidate_feature_dim = self.base.candidate_feature_dim + 6
+        self.candidate_feature_dim = (
+            self.base.candidate_feature_dim
+            + 6
+            + int(self.variant_definition.queue_trend_feature)
+            + int(self.variant_definition.downstream_bottleneck_feature)
+        )
+        self.candidate_schema = candidate_feature_schema(
+            queue_trend_feature=self.variant_definition.queue_trend_feature,
+            downstream_bottleneck_feature=(
+                self.variant_definition.downstream_bottleneck_feature
+            ),
+        )
+        if len(self.candidate_schema["feature_names"]) != self.candidate_feature_dim:
+            raise RuntimeError("candidate feature schema dimension mismatch")
         self.action_size = self.max_degree + 1
         self.slot = 1
         self.next_packet_id = 1
@@ -113,7 +204,11 @@ class SynchronousLeoMultiAgentEnv:
         self.previous_selected_edges: set[Tuple[int, int]] = set()
         self.previous_blocked_edges: set[Tuple[int, int]] = set()
         self.previous_contention = [0 for _ in range(self.n_agents + 1)]
+        self.previous_queue_lengths = [0 for _ in range(self.n_agents + 1)]
         self.switch_count = 0
+        self.avoidable_switch_count = 0
+        self.forced_switch_count = 0
+        self.switch_opportunity_count = 0
 
     @classmethod
     def from_scenario(cls, name: str, seed: int = 11):
@@ -159,7 +254,11 @@ class SynchronousLeoMultiAgentEnv:
         self.previous_selected_edges = set()
         self.previous_blocked_edges = set()
         self.previous_contention = [0 for _ in range(self.n_agents + 1)]
+        self.previous_queue_lengths = [0 for _ in range(self.n_agents + 1)]
         self.switch_count = 0
+        self.avoidable_switch_count = 0
+        self.forced_switch_count = 0
+        self.switch_opportunity_count = 0
 
         if initial_pairs is None:
             initial_pairs = self._sample_initial_pairs(self.cfg.initial_packets)
@@ -172,6 +271,7 @@ class SynchronousLeoMultiAgentEnv:
             else:
                 raise ValueError("initial packet tuple must be (src, dst) or (src, dst, class)")
             self._create_packet(src, dst, traffic_class=traffic_class)
+        self.previous_queue_lengths = self._queue_lengths()
         self._refresh_graph()
         observations = self.observe()
         return observations, {
@@ -192,6 +292,7 @@ class SynchronousLeoMultiAgentEnv:
         if len(actions) != self.n_agents:
             raise ValueError(f"expected {self.n_agents} actions, got {len(actions)}")
         self._refresh_graph()
+        frozen_queue_lengths = self._queue_lengths()
         frozen_obs = self.observe()
         frozen_graph = dict(self.graph)
         delivered_before = set(self.delivered)
@@ -204,6 +305,9 @@ class SynchronousLeoMultiAgentEnv:
         proposals: List[Dict] = []
         mask_ledger: Dict[int, Dict] = {}
         immediate_drops: List[Tuple[int, int, str]] = []
+        decision_avoidable_switch_costs = [False for _ in range(self.n_agents)]
+        decision_switch_opportunities = [False for _ in range(self.n_agents)]
+        decision_forced_switches = [False for _ in range(self.n_agents)]
 
         for sat in order:
             obs = frozen_obs[sat - 1]
@@ -231,15 +335,35 @@ class SynchronousLeoMultiAgentEnv:
             next_hop = obs["neighbor_ids"][action - 1]
             packet = self.packets[obs["hol_packet_id"]]
             edge = frozen_graph[(sat, next_hop)]
-            reward = self._forward_reward(packet, sat, next_hop, edge)
-            is_switch = self._is_route_switch(packet, sat, next_hop)
+            switch_context = self._route_switch_context(
+                packet,
+                sat,
+                next_hop,
+                obs,
+            )
+            decision_avoidable_switch_costs[sat - 1] = bool(
+                switch_context["is_avoidable_switch"]
+            )
+            decision_switch_opportunities[sat - 1] = bool(
+                switch_context["has_switch_opportunity"]
+            )
+            decision_forced_switches[sat - 1] = bool(
+                switch_context["is_forced_switch"]
+            )
+            reward = self._forward_reward(
+                packet,
+                sat,
+                next_hop,
+                edge,
+                switch_context=switch_context,
+            )
             proposals.append(
                 {
                     "sat": sat,
                     "packet_id": packet.packet_id,
                     "next_hop": next_hop,
                     "reward": reward,
-                    "is_switch": is_switch,
+                    **switch_context,
                     "edge_delay_ms": edge.delay_ms,
                 }
             )
@@ -268,6 +392,9 @@ class SynchronousLeoMultiAgentEnv:
             packet = self.packets[packet_id]
             self.route_cache[(sat, packet.dst, packet.traffic_class)] = next_hop
             self.switch_count += int(item["is_switch"])
+            self.avoidable_switch_count += int(item["is_avoidable_switch"])
+            self.forced_switch_count += int(item["is_forced_switch"])
+            self.switch_opportunity_count += int(item["has_switch_opportunity"])
 
         for item in blocked:
             local_rewards[item["sat"] - 1] -= self.cfg.env.w_load
@@ -348,7 +475,11 @@ class SynchronousLeoMultiAgentEnv:
             if active
         ]
         local_mean = sum(active_local) / max(1, len(active_local))
-        credit_weight = 0.0 if self.cfg.variant == "no_credit" else self.cfg.credit_weight
+        credit_weight = (
+            self.cfg.credit_weight
+            if self.variant_definition.centered_local_credit
+            else 0.0
+        )
         if self.cfg.shared_reward:
             agent_rewards = [
                 global_reward
@@ -394,14 +525,21 @@ class SynchronousLeoMultiAgentEnv:
         self.last_transition = transition
         self.trace.append(transition)
         self._decay_load()
+        self.previous_queue_lengths = frozen_queue_lengths
         self.slot += 1
         self.validate_invariants()
 
         terminated = len(self._backlog_ids()) == 0 and self.cfg.exogenous_packets_per_slot == 0
         truncated = self.slot > self.cfg.episode_slots
         next_obs = self.observe()
+        class_delivery_ratios = self.class_delivery_ratios()
         info = {
             **transition,
+            # Decision-level constraint accounting is intentionally excluded
+            # from transition/trace so historical trace hashes remain stable.
+            "decision_avoidable_switch_costs": decision_avoidable_switch_costs,
+            "decision_switch_opportunities": decision_switch_opportunities,
+            "decision_forced_switches": decision_forced_switches,
             "delivered": len(self.delivered),
             "dropped": len(self.dropped),
             "backlog": len(self._backlog_ids()),
@@ -410,10 +548,30 @@ class SynchronousLeoMultiAgentEnv:
             "drop_rate": len(self.dropped) / max(1, len(self.generated)),
             "average_delay_slots": self.average_delivery_delay_slots(),
             "routing_switches": self.switch_count,
+            "avoidable_routing_switches": self.avoidable_switch_count,
+            "forced_routing_switches": self.forced_switch_count,
+            "switch_opportunities": self.switch_opportunity_count,
+            "avoidable_switch_rate": self.avoidable_switch_count
+            / max(1, self.switch_opportunity_count),
+            "class_0_delivery_ratio": class_delivery_ratios[0],
+            "class_1_delivery_ratio": class_delivery_ratios[1],
+            "class_2_delivery_ratio": class_delivery_ratios[2],
             "trace_hash": self.trace_hash(),
             "global_state": self.global_state(),
         }
         return next_obs, agent_rewards, terminated, truncated, info
+
+    def class_delivery_ratios(self) -> List[float]:
+        ratios = []
+        for traffic_class in range(len(self.cfg.packet_class_probabilities)):
+            generated = [
+                packet_id
+                for packet_id in self.generated
+                if self.packets[packet_id].traffic_class == traffic_class
+            ]
+            delivered = sum(packet_id in self.delivered for packet_id in generated)
+            ratios.append(delivered / max(1, len(generated)))
+        return ratios
 
     def global_state(self) -> Dict:
         self._refresh_graph()
@@ -425,7 +583,7 @@ class SynchronousLeoMultiAgentEnv:
             u, w = self.base.orbital_geodetic_coord(sat, self.slot)
             queue_ratio = (
                 0.0
-                if self.cfg.variant == "no_queue"
+                if not self.variant_definition.queue_features
                 else len(self.queues[sat]) / max(1, self.cfg.max_queue_packets)
             )
             if self.queues[sat]:
@@ -453,33 +611,34 @@ class SynchronousLeoMultiAgentEnv:
                     len(set(packet.visited)) / max(1, self.n_agents),
                     min(1.0, wait_ratio),
                 ]
-                if self.cfg.variant == "no_packet_context":
+                if not self.variant_definition.packet_context:
                     packet_features = [1.0] + [0.0] * 12
             else:
                 packet_features = [0.0] * 13
-            node_features.append(
-                [
-                    queue_ratio,
-                    u,
-                    w,
-                    *packet_features,
-                    *[
-                        float(x)
-                        for x in observations[sat - 1]["action_mask"]
-                    ],
-                    min(
-                        1.0,
-                        self.previous_contention[sat]
-                        / max(1, self.max_degree),
-                    ),
-                    float(
-                        any(
-                            src == sat
-                            for src, _ in self.previous_selected_edges
-                        )
-                    ),
-                ]
-            )
+            node_feature = [
+                queue_ratio,
+                u,
+                w,
+                *packet_features,
+                *[
+                    float(x)
+                    for x in observations[sat - 1]["action_mask"]
+                ],
+                min(
+                    1.0,
+                    self.previous_contention[sat]
+                    / max(1, self.max_degree),
+                ),
+                float(
+                    any(
+                        src == sat
+                        for src, _ in self.previous_selected_edges
+                    )
+                ),
+            ]
+            if self.variant_definition.queue_trend_feature:
+                node_feature.append(self._queue_trend(sat))
+            node_features.append(node_feature)
 
         edge_feature_dim = 11
         edge_features = [
@@ -500,7 +659,7 @@ class SynchronousLeoMultiAgentEnv:
                 edge.rho,
                 edge.reliability,
                 min(1.0, edge.t_rem / self.cfg.env.t_safe)
-                * float(self.cfg.variant != "no_lifetime"),
+                * float(self.variant_definition.lifetime_feature),
                 float(edge.is_cross),
                 float((src, dst) in feasible_edges),
                 float((src, dst) in self.previous_selected_edges),
@@ -519,7 +678,7 @@ class SynchronousLeoMultiAgentEnv:
                 / max(1, self.cfg.env.max_steps),
                 len(self._backlog_ids())
                 / max(1, self.n_agents * self.cfg.max_queue_packets)
-                * float(self.cfg.variant != "no_queue"),
+                * float(self.variant_definition.queue_features),
                 len(self.delivered) / generated,
                 len(self.dropped) / generated,
                 sum(self.previous_contention)
@@ -552,6 +711,12 @@ class SynchronousLeoMultiAgentEnv:
         for count in self.last_transition.get("link_counts", {}).values():
             if count > self.cfg.link_capacity_packets:
                 raise AssertionError("directed link capacity exceeded")
+        if self.switch_count != (
+            self.avoidable_switch_count + self.forced_switch_count
+        ):
+            raise AssertionError("route-switch accounting is inconsistent")
+        if self.avoidable_switch_count > self.switch_opportunity_count:
+            raise AssertionError("avoidable switches exceed switch opportunities")
 
     def average_delivery_delay_slots(self) -> float:
         if not self.delivery_slots:
@@ -598,6 +763,8 @@ class SynchronousLeoMultiAgentEnv:
                 for pid, p in sorted(self.packets.items())
             },
         }
+        if self.variant_definition.queue_trend_feature:
+            state["previous_queue_lengths"] = self.previous_queue_lengths
         payload = json.dumps(state, sort_keys=True, separators=(",", ":"))
         return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
@@ -664,16 +831,16 @@ class SynchronousLeoMultiAgentEnv:
         base_features = [
             len(self.queues[u])
             / max(1, self.cfg.max_queue_packets)
-            * float(self.cfg.variant != "no_queue"),
+            * float(self.variant_definition.queue_features),
             len(self.queues[v])
             / max(1, self.cfg.max_queue_packets)
-            * float(self.cfg.variant != "no_queue"),
+            * float(self.variant_definition.queue_features),
             edge.delay_ms / self.cfg.env.d_ref_ms,
             self._remaining_bandwidth(u, v) / self.cfg.env.capacity_mbps,
             edge.rho,
             edge.reliability,
             min(1.0, edge.t_rem / self.cfg.env.t_safe)
-            * float(self.cfg.variant != "no_lifetime"),
+            * float(self.variant_definition.lifetime_feature),
             self.previous_contention[v] / max(1, self.max_degree),
             self.base._progress_value(u, v, packet.dst),
             vu,
@@ -699,10 +866,49 @@ class SynchronousLeoMultiAgentEnv:
             float(v in packet.visited),
             float(packet.previous_node == v),
         ]
-        if self.cfg.variant == "no_packet_context":
+        if not self.variant_definition.packet_context:
             for index in [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]:
                 features[index] = 0.0
+        if self.variant_definition.queue_trend_feature:
+            features.append(self._queue_trend(v))
+        if self.variant_definition.downstream_bottleneck_feature:
+            features.append(self._continuation_headroom(packet, v))
         return features
+
+    def _queue_lengths(self) -> List[int]:
+        return [0] + [
+            len(self.queues[sat]) for sat in range(1, self.n_agents + 1)
+        ]
+
+    def _queue_trend(self, sat: int) -> float:
+        delta = len(self.queues[sat]) - self.previous_queue_lengths[sat]
+        normalized = delta / max(1, self.cfg.max_queue_packets)
+        return max(-1.0, min(1.0, normalized))
+
+    def _continuation_headroom(self, packet: RoutedPacket, candidate: int) -> float:
+        """Best current two-hop queue/bandwidth headroom after ``candidate``."""
+
+        if candidate == packet.dst:
+            return 1.0
+        headrooms = []
+        for neighbor in self.base._neighbors(candidate):
+            if self._mask_reason(packet, candidate, neighbor) != "feasible":
+                continue
+            edge = self.graph[(candidate, neighbor)]
+            queue_headroom = 1.0 - (
+                len(self.queues[neighbor])
+                / max(1, self.cfg.max_queue_packets)
+            )
+            bandwidth_headroom = self._remaining_bandwidth(candidate, neighbor) / max(
+                1e-12, edge.capacity_mbps
+            )
+            headrooms.append(
+                min(
+                    max(0.0, min(1.0, queue_headroom)),
+                    max(0.0, min(1.0, bandwidth_headroom)),
+                )
+            )
+        return max(headrooms, default=0.0)
 
     def _mask_reason(self, packet: RoutedPacket, u: int, v: int) -> str:
         if v in packet.visited:
@@ -719,7 +925,7 @@ class SynchronousLeoMultiAgentEnv:
         ]
         if edge.reliability < reliability_floor:
             return "reliability"
-        if self.cfg.variant != "no_lifetime" and edge.t_rem < self.cfg.env.t_safe:
+        if self.variant_definition.hard_lifetime_mask and edge.t_rem < self.cfg.env.t_safe:
             return "lifetime"
         return "feasible"
 
@@ -780,9 +986,9 @@ class SynchronousLeoMultiAgentEnv:
             for (src, dst), edge in frozen_graph.items()
         ]
         load_imbalance = 1.0 - self._jain_index(utilizations)
-        switch_cost = sum(bool(item["is_switch"]) for item in accepted) / max(
-            1, active_count
-        )
+        switch_cost = sum(
+            self._switch_cost_applies(item) for item in accepted
+        ) / max(1, active_count)
         throughput_reward = len(delivered_this_slot) / max(1, active_count)
         hello_payload_bytes = (
             self.cfg.env.bytes_node_id
@@ -801,7 +1007,7 @@ class SynchronousLeoMultiAgentEnv:
 
         queue_weight = (
             0.0
-            if self.cfg.variant == "no_queue"
+            if not self.variant_definition.queue_reward
             else self.cfg.global_queue_weight
         )
         team_reward = (
@@ -834,29 +1040,84 @@ class SynchronousLeoMultiAgentEnv:
             return 1.0
         return total * total / (len(values) * squares)
 
-    def _forward_reward(self, packet: RoutedPacket, u: int, v: int, edge: LinkState) -> float:
+    def _forward_reward(
+        self,
+        packet: RoutedPacket,
+        u: int,
+        v: int,
+        edge: LinkState,
+        *,
+        switch_context: Optional[Dict[str, bool]] = None,
+    ) -> float:
         delay_weight = self.cfg.env.w_delay * self.cfg.packet_class_delay_weights[
             packet.traffic_class
         ]
+        if switch_context is None:
+            if not self.variant_definition.switch_reward:
+                switch_cost_applies = False
+            elif self.variant_definition.avoidable_switch_cost_only:
+                raise ValueError(
+                    "avoidable-only switch reward requires frozen switch context"
+                )
+            else:
+                switch_cost_applies = self._is_route_switch(packet, u, v)
+        else:
+            switch_cost_applies = self._switch_cost_applies(switch_context)
         return (
             -delay_weight * edge.delay_ms / self.cfg.env.d_ref_ms
             -self.cfg.env.w_queue
             * len(self.queues[v])
             / max(1, self.cfg.max_queue_packets)
-            * float(self.cfg.variant != "no_queue")
+            * float(self.variant_definition.queue_reward)
             -self.cfg.env.w_load * edge.rho
             -self.cfg.env.w_risk * (1.0 - edge.reliability)
             -self.cfg.env.w_lifetime
             * self.cfg.env.t_safe
             / max(self.cfg.env.t_safe, edge.t_rem)
-            * float(self.cfg.variant != "no_lifetime")
+            * float(self.variant_definition.lifetime_reward)
             +self.cfg.env.w_progress * self.base._progress_value(u, v, packet.dst)
-            -self.cfg.env.w_switch * float(self._is_route_switch(packet, u, v))
+            -self.cfg.env.w_switch * float(switch_cost_applies)
         )
+
+    def _switch_cost_applies(self, switch_context: Dict[str, bool]) -> bool:
+        if not self.variant_definition.switch_reward:
+            return False
+        if self.variant_definition.avoidable_switch_cost_only:
+            return bool(switch_context["is_avoidable_switch"])
+        return bool(switch_context["is_switch"])
 
     def _is_route_switch(self, packet: RoutedPacket, sat: int, next_hop: int) -> bool:
         previous = self.route_cache.get((sat, packet.dst, packet.traffic_class))
         return previous is not None and previous != next_hop
+
+    def _route_switch_context(
+        self,
+        packet: RoutedPacket,
+        sat: int,
+        next_hop: int,
+        observation: Dict,
+    ) -> Dict[str, bool]:
+        previous = self.route_cache.get((sat, packet.dst, packet.traffic_class))
+        is_switch = previous is not None and previous != next_hop
+        if previous is None:
+            cached_route_feasible = False
+            has_switch_opportunity = False
+        else:
+            feasible_next_hops = {
+                observation["neighbor_ids"][action - 1]
+                for action in range(1, len(observation["action_mask"]))
+                if observation["action_mask"][action]
+            }
+            cached_route_feasible = previous in feasible_next_hops
+            has_switch_opportunity = cached_route_feasible and any(
+                candidate != previous for candidate in feasible_next_hops
+            )
+        return {
+            "is_switch": is_switch,
+            "is_avoidable_switch": is_switch and cached_route_feasible,
+            "is_forced_switch": is_switch and not cached_route_feasible,
+            "has_switch_opportunity": has_switch_opportunity,
+        }
 
     def _waiting_ratio(self, packet: RoutedPacket) -> float:
         deadline = self.cfg.packet_class_deadlines[packet.traffic_class]

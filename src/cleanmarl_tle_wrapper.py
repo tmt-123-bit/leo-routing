@@ -16,7 +16,7 @@ class CleanMARLTLEWrapper(CleanMARLLeoMultiAgentWrapper):
         topology_csv: str | Path,
         scenario: str = "medium_load",
         seed: int = 11,
-        variant: str = "full",
+        variant: str = "proposed",
     ):
         provider = HypatiaTopologyProvider.from_csv(topology_csv)
         env_cfg = EnvConfig(
