@@ -961,7 +961,7 @@ def load_checkpoint_policy(
     actor.load_state_dict(actor_state)
     actor.eval()
 
-    def policy(observation: np.ndarray, mask: np.ndarray) -> np.ndarray:
+    def actor_logits(observation: np.ndarray, mask: np.ndarray) -> torch.Tensor:
         observation = np.asarray(observation, dtype=np.float32)
         mask = np.asarray(mask, dtype=bool)
         expected_observation_shape = (
@@ -980,7 +980,15 @@ def load_checkpoint_policy(
         )
         action_mask = torch.from_numpy(mask).bool().to(device)
         with torch.no_grad():
-            return actor(candidates, action_mask).argmax(dim=-1).cpu().numpy()
+            return actor(candidates, action_mask)
+
+    def policy(observation: np.ndarray, mask: np.ndarray) -> np.ndarray:
+        return actor_logits(observation, mask).argmax(dim=-1).cpu().numpy()
+
+    def action_logits(observation: np.ndarray, mask: np.ndarray) -> np.ndarray:
+        return actor_logits(observation, mask).cpu().numpy()
+
+    setattr(policy, "action_logits", action_logits)
 
     checkpoint_schema = {
         "candidate_feature_dim": feature_dim,
