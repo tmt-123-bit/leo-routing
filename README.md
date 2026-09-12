@@ -63,8 +63,6 @@
 
 中负载下少投递了约 0.96 pp，并非无损改进，只是没有超过预先允许的 2 pp。热点场景相对普通 MAPPO 多投递约 0.77 pp，但仍低于 Q-routing（0.2945 对 0.3114）。
 
-![Sealed-test effects](paper/icc2027/fig_sealed_results.png)
-
 ## 和传统路由思路相比
 
 几种方法解决问题的着力点不一样：
@@ -151,7 +149,6 @@ src/          环境、MAPPO、基线、统计、实验 runner 和测试
 docs/         预注册协议、修订记录和 claim boundary
 experiments/  紧凑结果、冻结文件和公开的 sealed rows
 figures/      历史实验图表
-paper/        ICC 2027 草稿、图和参考文献
 data/         TLE 与导出的 24 星拓扑
 ```
 
