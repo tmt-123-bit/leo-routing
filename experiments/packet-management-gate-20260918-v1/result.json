@@ -1,0 +1,7 @@
+{
+  "stage": "gate",
+  "episodes": 160,
+  "system_mean": 0.336175,
+  "q_base_mean": 0.316825,
+  "gate_pass": true
+}
