@@ -1,0 +1,15 @@
+{
+  "status": "complete",
+  "episodes": 420,
+  "exogenous_pairings_verified": 20,
+  "elapsed_seconds": 113.15460649999977,
+  "development_screen_pass": false,
+  "output_sha256": {
+    "episodes.jsonl": "c80cc15145b46857634b36bb518792e9f20c4a61a804eceebbaf7858b4f8893c",
+    "manifest.json": "288b242da05c2bdca1a483a0fb51c6f8aa708fdbd3fc7bab2031abc4e3ee802a",
+    "packets.jsonl.gz": "c5ff6ff07dfb04257b7e3435b5f2bd2defe8251bfedaf9c017755e2b219d2aa2",
+    "paired_effects.json": "293e4f1544e348279c9d90f7fa2f3b692c42fe36b107cab9fcc1276b4e2fd707",
+    "summary.csv": "ff04d33685934dce81424da504b9c51ef62d03072ac40ed047185c04033cbbe7",
+    "summary.json": "79825f9d63786b9fda11872014ddbc07c4e1c46d1cbab4d684f4bf0c156dca29"
+  }
+}

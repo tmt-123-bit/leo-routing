@@ -1,0 +1,194 @@
+[
+  {
+    "scenario": "medium_load",
+    "method": "qos_only_constrained",
+    "paired_seeds": [
+      {
+        "policy_seed": 179055553,
+        "delivery_diff_pp": 0.8333333333333337,
+        "treatment_switch_rate": 0.028598218471636194,
+        "purged_infeasible": 176
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_diff_pp": 0.625,
+        "treatment_switch_rate": 0.043087121212121215,
+        "purged_infeasible": 187
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_diff_pp": 0.8333333333333359,
+        "treatment_switch_rate": 0.03675417661097852,
+        "purged_infeasible": 173
+      }
+    ],
+    "delivery_diff_pp": 0.76388888888889,
+    "mean_success_delay_relative_change": 0.0011591898695464768,
+    "mean_success_hops_relative_change": 0.0002391471872495258,
+    "gates": {
+      "every_seed_delivery_nondecreasing": true,
+      "mean_delivery_positive": true,
+      "constrained_purge_switch_rate_within_12pct": true,
+      "mean_success_delay_increase_at_most_5pct": true,
+      "mean_success_hops_increase_at_most_1pct": true
+    },
+    "development_screen_pass": true,
+    "paper_claim_allowed": false
+  },
+  {
+    "scenario": "medium_load",
+    "method": "q_routing",
+    "paired_seeds": [
+      {
+        "policy_seed": 179055553,
+        "delivery_diff_pp": 0.6770833333333326,
+        "treatment_switch_rate": 0.24473561066916238,
+        "purged_infeasible": 161
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_diff_pp": 0.6249999999999978,
+        "treatment_switch_rate": 0.2580037664783427,
+        "purged_infeasible": 158
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_diff_pp": 0.5729166666666663,
+        "treatment_switch_rate": 0.24777099953073675,
+        "purged_infeasible": 162
+      }
+    ],
+    "delivery_diff_pp": 0.6249999999999989,
+    "mean_success_delay_relative_change": 0.0018517512817689912,
+    "mean_success_hops_relative_change": -0.00044413471756010736,
+    "gates": {
+      "every_seed_delivery_nondecreasing": true,
+      "mean_delivery_positive": true,
+      "constrained_purge_switch_rate_within_12pct": true,
+      "mean_success_delay_increase_at_most_5pct": true,
+      "mean_success_hops_increase_at_most_1pct": true
+    },
+    "development_screen_pass": true,
+    "paper_claim_allowed": false
+  },
+  {
+    "scenario": "medium_load",
+    "method": "persistent_global_dijkstra",
+    "paired_seeds": [
+      {
+        "policy_seed": -1,
+        "delivery_diff_pp": 0.5208333333333337,
+        "treatment_switch_rate": 0.0,
+        "purged_infeasible": 214
+      }
+    ],
+    "delivery_diff_pp": 0.5208333333333337,
+    "mean_success_delay_relative_change": -0.0002349224054386534,
+    "mean_success_hops_relative_change": -0.0003467604589950657,
+    "gates": {
+      "every_seed_delivery_nondecreasing": true,
+      "mean_delivery_positive": true,
+      "constrained_purge_switch_rate_within_12pct": true,
+      "mean_success_delay_increase_at_most_5pct": true,
+      "mean_success_hops_increase_at_most_1pct": true
+    },
+    "development_screen_pass": true,
+    "paper_claim_allowed": false
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "method": "qos_only_constrained",
+    "paired_seeds": [
+      {
+        "policy_seed": 179055553,
+        "delivery_diff_pp": 2.5600000000000014,
+        "treatment_switch_rate": 0.040495474035254886,
+        "purged_infeasible": 2230
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_diff_pp": 2.2,
+        "treatment_switch_rate": 0.0,
+        "purged_infeasible": 1872
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_diff_pp": 2.4000000000000012,
+        "treatment_switch_rate": 0.014850299401197605,
+        "purged_infeasible": 1920
+      }
+    ],
+    "delivery_diff_pp": 2.3866666666666676,
+    "mean_success_delay_relative_change": 0.010432388849418292,
+    "mean_success_hops_relative_change": 0.014175621160682569,
+    "gates": {
+      "every_seed_delivery_nondecreasing": true,
+      "mean_delivery_positive": true,
+      "constrained_purge_switch_rate_within_12pct": true,
+      "mean_success_delay_increase_at_most_5pct": true,
+      "mean_success_hops_increase_at_most_1pct": false
+    },
+    "development_screen_pass": false,
+    "paper_claim_allowed": false
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "method": "q_routing",
+    "paired_seeds": [
+      {
+        "policy_seed": 179055553,
+        "delivery_diff_pp": 2.219999999999999,
+        "treatment_switch_rate": 0.3817843000232937,
+        "purged_infeasible": 1712
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_diff_pp": 2.5399999999999996,
+        "treatment_switch_rate": 0.38192011212333565,
+        "purged_infeasible": 1720
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_diff_pp": 2.2399999999999993,
+        "treatment_switch_rate": 0.3673373888628919,
+        "purged_infeasible": 1737
+      }
+    ],
+    "delivery_diff_pp": 2.3333333333333326,
+    "mean_success_delay_relative_change": 0.005456878765222273,
+    "mean_success_hops_relative_change": 0.009584344724628732,
+    "gates": {
+      "every_seed_delivery_nondecreasing": true,
+      "mean_delivery_positive": true,
+      "constrained_purge_switch_rate_within_12pct": true,
+      "mean_success_delay_increase_at_most_5pct": true,
+      "mean_success_hops_increase_at_most_1pct": true
+    },
+    "development_screen_pass": true,
+    "paper_claim_allowed": false
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "method": "persistent_global_dijkstra",
+    "paired_seeds": [
+      {
+        "policy_seed": -1,
+        "delivery_diff_pp": 1.96,
+        "treatment_switch_rate": 0.0,
+        "purged_infeasible": 1813
+      }
+    ],
+    "delivery_diff_pp": 1.96,
+    "mean_success_delay_relative_change": 0.0030361487396552977,
+    "mean_success_hops_relative_change": 0.006720876491617789,
+    "gates": {
+      "every_seed_delivery_nondecreasing": true,
+      "mean_delivery_positive": true,
+      "constrained_purge_switch_rate_within_12pct": true,
+      "mean_success_delay_increase_at_most_5pct": true,
+      "mean_success_hops_increase_at_most_1pct": true
+    },
+    "development_screen_pass": true,
+    "paper_claim_allowed": false
+  }
+]

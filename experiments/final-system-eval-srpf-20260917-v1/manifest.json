@@ -1,0 +1,82 @@
+{
+  "role": "development_final_system_eval",
+  "runner_sha256": "58a606e8137ebc321c13665c4bece3dedef43ea6c988e7e5f694ec67caeb6e50",
+  "created_utc": "2026-09-16T20:46:41Z",
+  "scenario": "hotspot_high_load",
+  "load": 16,
+  "workloads": [
+    910141,
+    910142,
+    910143,
+    910144,
+    910145,
+    910146,
+    910147,
+    910148,
+    910149,
+    910150
+  ],
+  "train_root": "F:\\leo-routing-preliminary-matlab\\outputs\\dev-srpf-train-20260917",
+  "primary_endpoint": "mean 8-seed system delivery vs mean Q-routing base delivery on the same panel; success iff relative gain >= 0.10",
+  "supportive_endpoints": [
+    "per-seed relative gain vs Q-routing base all positive",
+    "system per-seed avoidable-switch rate <= 0.12"
+  ],
+  "fairness_contrast": "Q-routing with identical purge+SRPF environment, always reported",
+  "decomposition_arm": "system without SRPF (purge + direct only)",
+  "checkpoint_selection": "argmax validation delivery among training candidates within the 12% switch budget; selection uses training validation records only, never this panel",
+  "system_checkpoints": {
+    "179055553": {
+      "path": "F:\\leo-routing-preliminary-matlab\\outputs\\dev-srpf-train-20260917\\seed_179055553\\leo_multi__hotspot_high_load__seed-179055553__2026-09-17_02-31-29__DEV-SRPF-ENV-CONSTRAINED-v1\\validation_candidate_step_4800.pt",
+      "sha256": "2d86141c0ff5ad322871da4d0b2c3a414abf2d8e2c09b1345762f0696684bf05",
+      "validation_delivery": 0.3198
+    },
+    "183895110": {
+      "path": "F:\\leo-routing-preliminary-matlab\\outputs\\dev-srpf-train-20260917\\seed_183895110\\leo_multi__hotspot_high_load__seed-183895110__2026-09-17_02-49-50__DEV-SRPF-ENV-CONSTRAINED-v1\\validation_candidate_step_9600.pt",
+      "sha256": "8bdce109a0805b2a6bdd536e50e487b8479ddf59ad9d6f8e390c63b9cae4cf4f",
+      "validation_delivery": 0.31799999999999995
+    },
+    "310818925": {
+      "path": "F:\\leo-routing-preliminary-matlab\\outputs\\dev-srpf-train-20260917\\seed_310818925\\leo_multi__hotspot_high_load__seed-310818925__2026-09-17_03-08-37__DEV-SRPF-ENV-CONSTRAINED-v1\\validation_candidate_step_4800.pt",
+      "sha256": "d24d2ec6ac4951466b899f061ab8d51c0af91454453fd1f8f0b23fe93a0a632d",
+      "validation_delivery": 0.3168
+    },
+    "515636025": {
+      "path": "F:\\leo-routing-preliminary-matlab\\outputs\\dev-srpf-train-20260917\\seed_515636025\\leo_multi__hotspot_high_load__seed-515636025__2026-09-17_03-27-56__DEV-SRPF-ENV-CONSTRAINED-v1\\validation_candidate_step_4800.pt",
+      "sha256": "8f9a2227089b194b2891803afa17932028707d92ca55011b5a327f78f1086cf3",
+      "validation_delivery": 0.31939999999999996
+    },
+    "626669596": {
+      "path": "F:\\leo-routing-preliminary-matlab\\outputs\\dev-srpf-train-20260917\\seed_626669596\\leo_multi__hotspot_high_load__seed-626669596__2026-09-17_03-43-30__DEV-SRPF-ENV-CONSTRAINED-v1\\validation_candidate_step_14400.pt",
+      "sha256": "3ab78348bf4aeeb06fc8de4fce44118d166794245eec0a104386d5b4bee44755",
+      "validation_delivery": 0.3216
+    },
+    "746965870": {
+      "path": "F:\\leo-routing-preliminary-matlab\\outputs\\dev-srpf-train-20260917\\seed_746965870\\leo_multi__hotspot_high_load__seed-746965870__2026-09-17_03-59-06__DEV-SRPF-ENV-CONSTRAINED-v1\\validation_candidate_step_19200.pt",
+      "sha256": "671143a674a4676cf0661e27178eb7239ccfb231cae8c3045c5aaea08672d699",
+      "validation_delivery": 0.321
+    },
+    "985998595": {
+      "path": "F:\\leo-routing-preliminary-matlab\\outputs\\dev-srpf-train-20260917\\seed_985998595\\leo_multi__hotspot_high_load__seed-985998595__2026-09-17_04-14-51__DEV-SRPF-ENV-CONSTRAINED-v1\\validation_candidate_step_9600.pt",
+      "sha256": "cc7b77b44cf21851ce2294d6aa909f0124170a74db82dd3ea6e4ac93a177c3c7",
+      "validation_delivery": 0.3172
+    },
+    "2136406109": {
+      "path": "F:\\leo-routing-preliminary-matlab\\outputs\\dev-srpf-train-20260917\\seed_2136406109\\leo_multi__hotspot_high_load__seed-2136406109__2026-09-17_04-30-23__DEV-SRPF-ENV-CONSTRAINED-v1\\validation_candidate_step_4800.pt",
+      "sha256": "248b7225d741dbb60b1f8a8caa8790baf5d19f7dc8ed8f75a7bd9d213ca4d2c9",
+      "validation_delivery": 0.3196
+    }
+  },
+  "q_routing_seeds": [
+    179055553,
+    183895110,
+    310818925,
+    515636025,
+    626669596,
+    746965870,
+    985998595,
+    2136406109
+  ],
+  "training": false,
+  "sealed_test_access": false
+}

@@ -1,0 +1,13 @@
+{
+  "status": "complete",
+  "episodes": 420,
+  "exogenous_pairings_verified": 20,
+  "elapsed_seconds": 112.26777309999943,
+  "output_sha256": {
+    "episodes.jsonl": "89477061cb898f4e25730ff282ef20dd11ce5bc15301037ef86111335e92cc02",
+    "manifest.json": "19e180e582a51b4125ca2ec03c1f5cb6347983d2e608d7f0640340e974bab9f7",
+    "paired_effects.json": "f342d958bb9b604ae485808e7c104bad8f35cf42b2984f3ffd85ec596c1c7527",
+    "summary.csv": "767f4cc7479185a94fb3da63e312287d8519bbe1e7060d74b2a1d7aa1faf3e1a",
+    "summary.json": "8bd6ed4fda62444e55929f3924daa8a691296e962da908e0c671704d0e085744"
+  }
+}

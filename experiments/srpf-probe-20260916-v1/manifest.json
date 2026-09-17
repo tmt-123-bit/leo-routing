@@ -1,0 +1,80 @@
+{
+  "role": "single_change_development_probe",
+  "source_manifest_sha256": "44265ddea77e2bef1e16364ed3216fc01c629bfc405794feb4806ca0e5827bc7",
+  "runner_sha256": "193feb461c3fb899593e0da6873872d9b13dd0fd9a0e29677a3b1160ef47dabc",
+  "policy_seeds": [
+    179055553,
+    183895110,
+    310818925
+  ],
+  "artifacts": [
+    {
+      "scenario": "medium_load",
+      "method": "qos_only_constrained",
+      "seed": 179055553,
+      "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\checkpoints\\medium_load\\qos_only_constrained\\seed_179055553\\leo_multi__medium_load__seed-179055553__2026-09-03_23-03-08__ICC-AVOIDABLE-SWITCH-CONSTRAINT-FORMAL-v1-qos_only_constrained\\validation_best.pt",
+      "sha256": "67dae57acea5755e8fe2b9d294bcb4df2da3af7f305b8f894f1ec2251e1c0386"
+    },
+    {
+      "scenario": "medium_load",
+      "method": "qos_only_constrained",
+      "seed": 183895110,
+      "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\checkpoints\\medium_load\\qos_only_constrained\\seed_183895110\\leo_multi__medium_load__seed-183895110__2026-09-04_00-05-30__ICC-AVOIDABLE-SWITCH-CONSTRAINT-FORMAL-v1-qos_only_constrained\\validation_best.pt",
+      "sha256": "c6bc93be2a63cd4b752188ef88279317a96309f2a608717a829bc8cba75f1eff"
+    },
+    {
+      "scenario": "medium_load",
+      "method": "qos_only_constrained",
+      "seed": 310818925,
+      "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\checkpoints\\medium_load\\qos_only_constrained\\seed_310818925\\leo_multi__medium_load__seed-310818925__2026-09-04_00-18-23__ICC-AVOIDABLE-SWITCH-CONSTRAINT-FORMAL-v1-qos_only_constrained\\validation_best.pt",
+      "sha256": "f72875545a8c3cdc712b5853e54a86d611f6b144d093b1aa38793b0c5f99ecd2"
+    },
+    {
+      "scenario": "hotspot_high_load",
+      "method": "qos_only_constrained",
+      "seed": 179055553,
+      "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\checkpoints\\hotspot_high_load\\qos_only_constrained\\seed_179055553\\leo_multi__hotspot_high_load__seed-179055553__2026-09-04_01-33-30__ICC-AVOIDABLE-SWITCH-CONSTRAINT-FORMAL-v1-qos_only_constrained\\validation_best.pt",
+      "sha256": "ff298f63edf49a3216144a6965319a96869a6f2f31298d4ccbdda310b16b8cdd"
+    },
+    {
+      "scenario": "hotspot_high_load",
+      "method": "qos_only_constrained",
+      "seed": 183895110,
+      "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\checkpoints\\hotspot_high_load\\qos_only_constrained\\seed_183895110\\leo_multi__hotspot_high_load__seed-183895110__2026-09-04_02-45-09__ICC-AVOIDABLE-SWITCH-CONSTRAINT-FORMAL-v1-qos_only_constrained\\validation_best.pt",
+      "sha256": "9f307a12cfd8b24e34265f83bfb940c3391b6bb115533b20b5e360f0ad0126e5"
+    },
+    {
+      "scenario": "hotspot_high_load",
+      "method": "qos_only_constrained",
+      "seed": 310818925,
+      "path": "F:\\leo-routing-preliminary-matlab\\experiments\\avoidable-switch-constraint-formal-v1-r2\\checkpoints\\hotspot_high_load\\qos_only_constrained\\seed_310818925\\leo_multi__hotspot_high_load__seed-310818925__2026-09-04_03-00-10__ICC-AVOIDABLE-SWITCH-CONSTRAINT-FORMAL-v1-qos_only_constrained\\validation_best.pt",
+      "sha256": "0d35f2a0a3c6bc6c50ce68532c33ea0c0623df9173471b1fc3e19676ac48ef6c"
+    }
+  ],
+  "workloads": [
+    910061,
+    910062,
+    910063,
+    910064,
+    910065,
+    910066,
+    910067,
+    910068,
+    910069,
+    910070
+  ],
+  "loads": {
+    "medium_load": 6,
+    "hotspot_high_load": 16
+  },
+  "arms": [
+    "base",
+    "purge",
+    "purge_srpf"
+  ],
+  "intervention": "arm purge replicates the infeasibility purge; arm purge_srpf additionally reorders each queue at slot boundaries by ascending optimistic BFS hop distance (remaining deliverable slots minus optimistic BFS hop distance, stable packet-ID tie-break); environment-side, applied identically to every policy arm; no change to weights, masks, rewards, admission, or switch accounting",
+  "training": false,
+  "sealed_test_access": false,
+  "gates_predeclared": "per scenario, method and treatment: all seed delivery differences >=0; mean >0; constrained treatment switch rates <=0.12; seed-mean relative success-delay increase <=5%; success-hop increase <=1%",
+  "interpretation": "development screening, no formal significance or promotion claim"
+}

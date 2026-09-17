@@ -39,6 +39,19 @@ def _apply_reward_overrides(env_cfg: EnvConfig) -> None:
             setattr(env_cfg, k, float(v))
 
 
+def _purge_env_requested() -> str:
+    """Opt-in LEO_PURGE_INFEASIBLE swaps in a development purge environment.
+
+    "1": remove certainly-undeliverable queued packets at slot boundaries
+    (deadline/horizon bound versus optimistic BFS hop distance, one extra slot
+    of margin). "2": additionally reorder each queue by ascending remaining hop
+    distance (SRPF). Unset or any other value keeps the stock environment, so
+    frozen runs are unaffected. Development use only; formal experiments must
+    record this flag in their manifest.
+    """
+    return os.environ.get("LEO_PURGE_INFEASIBLE", "").strip()
+
+
 class CleanMARLLeoMultiAgentWrapper:
     def __init__(
         self,
@@ -63,7 +76,17 @@ class CleanMARLLeoMultiAgentWrapper:
         elif seed is not None:
             cfg.seed = seed
             cfg.env.seed = seed
-        self.env = SynchronousLeoMultiAgentEnv(cfg)
+        purge_mode = _purge_env_requested()
+        if purge_mode == "1":
+            from run_infeasible_drop_probe import PurgeInfeasibleEnv
+
+            self.env = PurgeInfeasibleEnv(cfg)
+        elif purge_mode == "2":
+            from run_srpf_probe import LeastSlackEnv as SrpfPurgeEnv
+
+            self.env = SrpfPurgeEnv(cfg)
+        else:
+            self.env = SynchronousLeoMultiAgentEnv(cfg)
         self.n_agents = self.env.n_agents
         self.max_degree = self.env.max_degree
         self.feature_dim = self.env.candidate_feature_dim

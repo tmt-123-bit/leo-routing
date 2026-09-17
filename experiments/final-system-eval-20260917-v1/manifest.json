@@ -1,0 +1,81 @@
+{
+  "role": "development_final_system_eval",
+  "runner_sha256": "6bf1c74ae54313e65a07894c5388df93024c004f79887c6f4b7bd435a66ad370",
+  "created_utc": "2026-09-16T18:21:42Z",
+  "scenario": "hotspot_high_load",
+  "load": 16,
+  "workloads": [
+    910121,
+    910122,
+    910123,
+    910124,
+    910125,
+    910126,
+    910127,
+    910128,
+    910129,
+    910130
+  ],
+  "primary_endpoint": "mean 8-seed system delivery vs mean Q-routing base delivery on the same panel; success iff relative gain >= 0.10",
+  "supportive_endpoints": [
+    "per-seed relative gain vs Q-routing base all positive",
+    "system per-seed avoidable-switch rate <= 0.12"
+  ],
+  "fairness_contrast": "Q-routing with identical purge+SRPF environment, always reported",
+  "decomposition_arm": "system without SRPF (purge + direct only)",
+  "checkpoint_selection": "argmax validation delivery among training candidates within the 12% switch budget; selection uses training validation records only, never this panel",
+  "system_checkpoints": {
+    "179055553": {
+      "path": "..\\outputs\\dev-purge-train-20260916\\seed_179055553\\leo_multi__hotspot_high_load__seed-179055553__2026-09-16_23-19-25__DEV-PURGE-ENV-CONSTRAINED-v1\\validation_candidate_step_4800.pt",
+      "sha256": "491bd3f0606c3dcd876887e7ab136eb035dd866aa6caa8944d7cc6ea73d67f0b",
+      "validation_delivery": 0.308
+    },
+    "183895110": {
+      "path": "..\\outputs\\dev-purge-train-20260916\\seed_183895110\\leo_multi__hotspot_high_load__seed-183895110__2026-09-17_00-11-58__DEV-PURGE-ENV-CONSTRAINED-v1\\validation_candidate_step_4800.pt",
+      "sha256": "a8f9c745f19cc32accb88697fbb0cc355529a1e6f575b0e6de206c414a5aeec8",
+      "validation_delivery": 0.307
+    },
+    "310818925": {
+      "path": "..\\outputs\\dev-purge-train-20260916\\seed_310818925\\leo_multi__hotspot_high_load__seed-310818925__2026-09-17_00-29-12__DEV-PURGE-ENV-CONSTRAINED-v1\\validation_candidate_step_4800.pt",
+      "sha256": "aa9fc8332383259ee232df45a6fdc28c225a7f2996c8cb882587dd2c08a9235b",
+      "validation_delivery": 0.3134
+    },
+    "515636025": {
+      "path": "..\\outputs\\dev-purge-train-20260916\\seed_515636025\\leo_multi__hotspot_high_load__seed-515636025__2026-09-17_00-46-30__DEV-PURGE-ENV-CONSTRAINED-v1\\validation_candidate_step_4800.pt",
+      "sha256": "76fc86d1817a1b9ea3abc25a7069e45e2085bdfbd062b7ea7ce1fe6e04d34ddc",
+      "validation_delivery": 0.2952
+    },
+    "626669596": {
+      "path": "..\\outputs\\dev-purge-train-20260916\\seed_626669596\\leo_multi__hotspot_high_load__seed-626669596__2026-09-17_01-06-22__DEV-PURGE-ENV-CONSTRAINED-v1\\validation_candidate_step_9600.pt",
+      "sha256": "a68fd2cf079b697f60d8e69107533b61b9c057b53685907fa4c5e16d687f3747",
+      "validation_delivery": 0.30579999999999996
+    },
+    "746965870": {
+      "path": "..\\outputs\\dev-purge-train-20260916\\seed_746965870\\leo_multi__hotspot_high_load__seed-746965870__2026-09-17_01-25-26__DEV-PURGE-ENV-CONSTRAINED-v1\\validation_candidate_step_4800.pt",
+      "sha256": "6f91c445670c92701e2d69c7f766612d10f0c6a8833b599a14e4b9a6ce24cec5",
+      "validation_delivery": 0.3094
+    },
+    "985998595": {
+      "path": "..\\outputs\\dev-purge-train-20260916\\seed_985998595\\leo_multi__hotspot_high_load__seed-985998595__2026-09-17_01-44-53__DEV-PURGE-ENV-CONSTRAINED-v1\\validation_candidate_step_4800.pt",
+      "sha256": "79c89d7e3c1f009faefc93b409e78193804096d874b1bc6f822b76c81a89e99a",
+      "validation_delivery": 0.3072
+    },
+    "2136406109": {
+      "path": "..\\outputs\\dev-purge-train-20260916\\seed_2136406109\\leo_multi__hotspot_high_load__seed-2136406109__2026-09-17_02-02-43__DEV-PURGE-ENV-CONSTRAINED-v1\\validation_candidate_step_4800.pt",
+      "sha256": "c93d2a5e71dc99b44643cfee0bef3c4d1c5dea2bf141dded1bef58d1c7fb0948",
+      "validation_delivery": 0.31499999999999995
+    }
+  },
+  "q_routing_seeds": [
+    179055553,
+    183895110,
+    310818925,
+    515636025,
+    626669596,
+    746965870,
+    985998595,
+    2136406109
+  ],
+  "training": false,
+  "sealed_test_access": false
+}

@@ -1,0 +1,7 @@
+{
+  "status": "complete",
+  "output_sha256": {
+    "manifest.json": "62c6b09fd47cf3db0fcaefc2f1c1c7a8a69190e83b4b1eb7b8132faf118a7f07",
+    "sweep.json": "1c16a47816dd734ead0605f4f21b4dfe0b60ff78eda539725d9a8f734ee72696"
+  }
+}

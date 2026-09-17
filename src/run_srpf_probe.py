@@ -1,0 +1,305 @@
+"""Single-change development probe: shortest-remaining-path-first queue
+ordering on top of the infeasibility purge.
+
+Arm ``purge`` replicates the infeasibility-drop intervention. Arm ``purge_srpf``
+additionally reorders every queue at slot boundaries so the head-of-line packet
+is the one closest to its destination by optimistic BFS hop distance
+(shortest-remaining-path-first, stable packet-ID tie-break). The reorder is
+environment-side and applied identically to every policy arm; arrival and
+physical event pairing is asserted between paired episodes.
+"""
+
+import argparse
+import csv
+import gzip
+from collections import defaultdict, deque
+from dataclasses import asdict
+from pathlib import Path
+import time
+
+import numpy as np
+import torch
+
+from leo_marl_env import EnvConfig, SCENARIOS
+from leo_multiagent_env import MULTIAGENT_LOADS, MultiAgentConfig
+from mappo_evaluation import evaluate_policy_with_constraint_metrics, load_checkpoint_policy
+from run_development_load_diagnostics import (
+    DiagnosticWrapper,
+    PersistentDijkstraPolicy,
+    aggregate,
+    canonical,
+    packet_accounting,
+    read_json,
+    sha,
+    write_json,
+)
+import run_development_load_diagnostics as diagnostics
+import run_avoidable_switch_classical_baselines_formal as classical
+from run_infeasible_drop_probe import PurgeInfeasibleEnv
+
+LOADS = {"medium_load": 6, "hotspot_high_load": 16}
+WORKLOAD_SEEDS = list(range(910061, 910071))
+BASE_METHODS = ("qos_only_constrained", "q_routing", "persistent_global_dijkstra")
+ARMS = ("base", "purge", "purge_srpf")
+
+if "early_infeasible" not in diagnostics.DROP_REASONS:
+    diagnostics.DROP_REASONS = diagnostics.DROP_REASONS + ("early_infeasible",)
+
+
+class LeastSlackEnv(PurgeInfeasibleEnv):
+    """Purge certainly-infeasible packets, then order queues by remaining hops."""
+
+    reorder_queues = True
+
+    def _purge_infeasible_packets(self):
+        if self.slot > self.cfg.episode_slots:
+            return
+        if not any(self.queues.values()):
+            return
+        self._refresh_graph()
+        reverse = defaultdict(list)
+        for (u, v), edge in self.graph.items():
+            if u >= 1 and v >= 1 and edge.available:
+                reverse[v].append(u)
+        distances = {}
+        for sat in range(1, self.n_agents + 1):
+            for packet_id in self.queues[sat]:
+                dst = self.packets[packet_id].dst
+                if dst not in distances:
+                    distances[dst] = self._bfs_distances(dst, reverse)
+        for sat in range(1, self.n_agents + 1):
+            if not self.queues[sat]:
+                continue
+            kept = deque()
+            for packet_id in self.queues[sat]:
+                packet = self.packets[packet_id]
+                deadline = self.cfg.packet_class_deadlines[packet.traffic_class]
+                deadline_bound = packet.created_slot + deadline - 1
+                horizon_bound = self.cfg.episode_slots
+                effective_bound = min(deadline_bound, horizon_bound)
+                bound_source = "deadline" if deadline_bound <= horizon_bound else "horizon"
+                remaining = effective_bound - self.slot
+                dist = distances[packet.dst].get(sat)
+                if dist is not None and dist > remaining + self.safety_margin_slots:
+                    self._drop_packet(packet_id, self.drop_reason_name)
+                    self.purged_count += 1
+                    self.purged_by_class[packet.traffic_class] += 1
+                    self.purged_by_bound[bound_source] += 1
+                else:
+                    kept.append(packet_id)
+            if self.reorder_queues:
+                def remaining_hops(packet_id):
+                    packet = self.packets[packet_id]
+                    dist = distances[packet.dst].get(sat)
+                    dist = dist if dist is not None else 10 ** 6
+                    return (dist, packet_id)
+                self.queues[sat] = deque(sorted(kept, key=remaining_hops))
+            else:
+                self.queues[sat] = kept
+
+
+class LeastSlackDiagnosticWrapper(DiagnosticWrapper):
+    def __init__(self, *args, arm: str = "base", **kwargs):
+        super().__init__(*args, **kwargs)
+        if arm == "base":
+            return
+        env = PurgeInfeasibleEnv if arm == "purge" else LeastSlackEnv
+        self.env = env(self.env.cfg)
+
+
+def run_episode(scenario, load, policy_name, policy, policy_seed, workload_seed, arm):
+    initial, _ = MULTIAGENT_LOADS[scenario]
+    cfg = MultiAgentConfig(
+        env=EnvConfig(seed=workload_seed, scenario=SCENARIOS[scenario]),
+        initial_packets=initial, exogenous_packets_per_slot=load,
+        seed=workload_seed, variant="qos_only",
+    )
+    wrapper = LeastSlackDiagnosticWrapper(scenario=scenario, cfg=cfg, arm=arm)
+    result = evaluate_policy_with_constraint_metrics(
+        scenario, policy_name, policy, policy_seed, [workload_seed],
+        wrapper_factory=lambda _: wrapper, variant="qos_only",
+    )[0]
+    row = asdict(result)
+    extra, packets = packet_accounting(wrapper.env)
+    row.update(extra)
+    row.update(
+        load=load, initial_packets=wrapper.env.cfg.initial_packets,
+        physical_sha256=wrapper.physical_digest.hexdigest(),
+        accepted_forwards=wrapper.accepted_count, blocked_proposals=wrapper.blocked_count,
+        purged_infeasible=int(getattr(wrapper.env, "purged_count", 0)),
+    )
+    if row["decision_switch_opportunities"] == 0:
+        row["decision_avoidable_switch_rate"] = None
+    if row["delivered"] == 0:
+        row["average_delay_slots"] = row["p95_delay_slots"] = None
+    if sum(row[f"drop_{r}"] for r in diagnostics.DROP_REASONS) != row["dropped"]:
+        raise AssertionError("drop partition mismatch")
+    return row, packets
+
+
+def assess(rows):
+    effects = []
+    for scenario in LOADS:
+        for method in BASE_METHODS:
+            seeds = sorted({r["policy_seed"] for r in rows
+                            if r["policy"] == method and r["scenario"] == scenario})
+            for treatment in ("purge", "purge_srpf"):
+                seed_effects, delay_effects, hop_effects, new_rates = [], [], [], []
+                paired_rows = []
+                for seed in seeds:
+                    reference = {r["workload_seed"]: r for r in rows
+                                 if (r["scenario"], r["policy_seed"], r["policy"]) == (scenario, seed, method)}
+                    treat = {r["workload_seed"]: r for r in rows
+                             if (r["scenario"], r["policy_seed"], r["policy"]) == (scenario, seed, method + "_" + treatment)}
+                    if reference.keys() != treat.keys():
+                        raise AssertionError("unpaired workloads")
+                    delivery_diff = float(np.mean(
+                        [treat[w]["delivery_ratio"] - reference[w]["delivery_ratio"] for w in reference]))
+                    opp = sum(r["decision_switch_opportunities"] for r in treat.values())
+                    rate = sum(r["decision_avoidable_switches"] for r in treat.values()) / opp if opp else None
+                    seed_effects.append(delivery_diff)
+                    paired_rows.append({
+                        "policy_seed": seed, "delivery_diff_pp": 100 * delivery_diff,
+                        "treatment_switch_rate": rate,
+                        "purged_infeasible": sum(r["purged_infeasible"] for r in treat.values()),
+                    })
+                    if rate is not None:
+                        new_rates.append(rate)
+                    for field, target in (("average_delay_slots", delay_effects),
+                                          ("mean_delivered_hops", hop_effects)):
+                        pairs = [(reference[w][field], treat[w][field]) for w in reference
+                                 if reference[w][field] is not None and treat[w][field] is not None]
+                        if pairs:
+                            before = np.mean([b for b, _ in pairs])
+                            target.append(float(np.mean([a for _, a in pairs]) / before - 1))
+                gates = {
+                    "every_seed_delivery_nondecreasing": all(d >= -1e-12 for d in seed_effects),
+                    "mean_delivery_positive": float(np.mean(seed_effects)) > 0,
+                    "constrained_purge_switch_rate_within_12pct": (
+                        max(new_rates) <= 0.12 if method == "qos_only_constrained" else True),
+                    "mean_success_delay_increase_at_most_5pct": (
+                        np.mean(delay_effects) <= 0.05 if delay_effects else True),
+                    "mean_success_hops_increase_at_most_1pct": (
+                        np.mean(hop_effects) <= 0.01 if hop_effects else True),
+                }
+                effects.append({
+                    "scenario": scenario, "method": method, "treatment": treatment,
+                    "paired_seeds": paired_rows,
+                    "delivery_diff_pp": 100 * float(np.mean(seed_effects)),
+                    "mean_success_delay_relative_change": float(np.mean(delay_effects)) if delay_effects else None,
+                    "mean_success_hops_relative_change": float(np.mean(hop_effects)) if hop_effects else None,
+                    "gates": {k: bool(v) for k, v in gates.items()},
+                    "development_screen_pass": bool(all(gates.values())),
+                    "paper_claim_allowed": False,
+                })
+    return effects
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--source", type=Path, required=True,
+                        help="completed development-load-diagnostics output directory")
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
+    source, output = args.source.resolve(), args.output.resolve()
+    manifest = read_json(source / "manifest.json")
+    completion = read_json(source / "completion.json")
+    if completion["status"] != "complete" or sha(source / "manifest.json") != completion["output_sha256"]["manifest.json"]:
+        raise ValueError("source manifest is not bound to a completed run")
+    if set(WORKLOAD_SEEDS) & set(manifest["workload_seeds"]):
+        raise ValueError("probe workloads overlap diagnostic development panel")
+    if not (910001 <= WORKLOAD_SEEDS[0] and WORKLOAD_SEEDS[-1] <= 910100):
+        raise ValueError("probe workloads must stay inside the 910001..910100 development panel")
+    artifacts = [a for a in manifest["artifacts"] if a["method"] == "qos_only_constrained"]
+    for artifact in artifacts:
+        if sha(artifact["path"]) != artifact["sha256"]:
+            raise ValueError("frozen model changed")
+    classical_freeze = read_json(diagnostics.CLASSICAL_ROOT / "training_freeze.json")
+    classical_spec = read_json(diagnostics.CLASSICAL_ROOT / "preregistration.json")
+    output.mkdir(parents=True, exist_ok=False)
+    write_json(output / "manifest.json", {
+        "role": "single_change_development_probe",
+        "source_manifest_sha256": sha(source / "manifest.json"),
+        "runner_sha256": sha(Path(__file__)),
+        "policy_seeds": manifest["policy_seeds"],
+        "artifacts": artifacts, "workloads": WORKLOAD_SEEDS, "loads": LOADS, "arms": ARMS,
+        "intervention": (
+            "arm purge replicates the infeasibility purge; arm purge_srpf additionally "
+            "reorders each queue at slot boundaries by ascending optimistic BFS hop distance "
+            "(remaining deliverable slots minus optimistic BFS hop distance, stable "
+            "packet-ID tie-break); environment-side, applied identically to every "
+            "policy arm; no change to weights, masks, rewards, admission, or switch "
+            "accounting"),
+        "training": False, "sealed_test_access": False,
+        "gates_predeclared": (
+            "per scenario, method and treatment: all seed delivery differences >=0; "
+            "mean >0; constrained treatment switch rates <=0.12; seed-mean relative "
+            "success-delay increase <=5%; success-hop increase <=1%"),
+        "interpretation": (
+            "development screening, no formal significance or promotion claim"),
+    })
+    torch.set_num_threads(1)
+    torch.set_num_interop_threads(1)
+    torch.use_deterministic_algorithms(True)
+    rows, pairing = [], {}
+    started = time.monotonic()
+    try:
+        with (output / "episodes.jsonl").open("x", encoding="utf-8") as episode_file, \
+                gzip.open(output / "packets.jsonl.gz", "wt", encoding="utf-8") as packet_file:
+            for scenario, load in LOADS.items():
+                for method in BASE_METHODS:
+                    for seed in manifest["policy_seeds"] if method != "persistent_global_dijkstra" else [-1]:
+                        if method == "qos_only_constrained":
+                            artifact = next(a for a in artifacts if (a["scenario"], a["seed"]) == (scenario, seed))
+                            policy, _ = load_checkpoint_policy(Path(artifact["path"]), device="cpu")
+                        elif method == "q_routing":
+                            job = next(j for j in classical.build_training_jobs()
+                                       if j.scenario == scenario and j.policy_seed == seed)
+                            entry = classical_freeze["jobs"][job.job_id]["model"]
+                            policy, _ = classical.load_q_model(Path(entry["path"]), job, classical_spec, require_frozen=True)
+                        else:
+                            policy = PersistentDijkstraPolicy()
+                        for arm in ARMS:
+                            label = method if arm == "base" else method + "_" + arm
+                            for workload in WORKLOAD_SEEDS:
+                                row, packets = run_episode(scenario, load, label, policy, seed, workload, arm)
+                                key = (scenario, workload)
+                                events = (row["arrival_sha256"], row["physical_sha256"])
+                                if key in pairing:
+                                    if pairing[key]["events"] != events:
+                                        raise AssertionError("exogenous pairing changed")
+                                    pairing[key]["arms"] += 1
+                                else:
+                                    pairing[key] = {"events": events, "arms": 1}
+                                episode_file.write(canonical(row) + "\n")
+                                identity = {k: row[k] for k in ("scenario", "load", "policy", "policy_seed", "workload_seed")}
+                                for packet in packets:
+                                    packet_file.write(canonical({**identity, **packet}) + "\n")
+                                rows.append(row)
+                            episode_file.flush()
+                            print(f"{len(rows)} {scenario} {label} seed={seed} elapsed={time.monotonic()-started:.1f}s", flush=True)
+        for artifact in artifacts:
+            if sha(artifact["path"]) != artifact["sha256"]:
+                raise AssertionError("frozen input changed")
+        if any(entry["arms"] != 21 for entry in pairing.values()):
+            raise AssertionError("unexpected arm coverage in pairing")
+        summaries, effects = aggregate(rows), assess(rows)
+        write_json(output / "summary.json", summaries)
+        write_json(output / "paired_effects.json", effects)
+        with (output / "summary.csv").open("x", encoding="utf-8", newline="") as stream:
+            fields = ["scenario", "policy", "delivery_ratio", "drop_rate", "backlog_rate", "decision_switch_rate"]
+            writer = csv.DictWriter(stream, fieldnames=fields, extrasaction="ignore")
+            writer.writeheader()
+            writer.writerows(summaries)
+        write_json(output / "completion.json", {"status": "complete", "episodes": len(rows),
+                   "exogenous_pairings_verified": len(pairing), "elapsed_seconds": time.monotonic() - started,
+                   "development_screen_pass": all(e["development_screen_pass"] for e in effects),
+                   "output_sha256": {p.name: sha(p) for p in output.iterdir() if p.is_file()}})
+        print(canonical(effects), flush=True)
+    except Exception as error:
+        write_json(output / "failure.json", {"error": repr(error), "episodes": len(rows)})
+        raise
+
+
+if __name__ == "__main__":
+    main()

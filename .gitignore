@@ -64,3 +64,6 @@ experiments/avoidable-switch-classical-baselines-formal-v1-r3/job_status/
 Thumbs.db
 .idea/
 .vscode/
+
+# Per-packet gzipped ledgers stay local (same policy as *.jsonl)
+*.jsonl.gz
