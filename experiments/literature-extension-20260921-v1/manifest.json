@@ -1,0 +1,34 @@
+{
+  "role": "literature_baseline_extension_dev",
+  "runner_sha256": "48b695f6c842a2f59b9691e388f1524bb9a20fe4db07c78857ab24baae3452c6",
+  "created_utc": "2026-09-21T12:38:40Z",
+  "workloads": [
+    910181,
+    910182,
+    910183,
+    910184,
+    910185,
+    910186,
+    910187,
+    910188,
+    910189,
+    910190
+  ],
+  "seeds": [
+    7,
+    42,
+    1024
+  ],
+  "dqn_episodes": 500,
+  "variant": "no_lifetime",
+  "arms": [
+    "dqn_base",
+    "dqn_mech",
+    "ilpr_base",
+    "ilpr_mech",
+    "q_base"
+  ],
+  "note": "descriptive same-environment comparison; formal preregistered claim is unaffected; ILPR operationalized as persistent cached next hop (keep while feasible, recompute on break); DQN is the queue-aware neural Q-routing family",
+  "training": true,
+  "sealed_test_access": false
+}
