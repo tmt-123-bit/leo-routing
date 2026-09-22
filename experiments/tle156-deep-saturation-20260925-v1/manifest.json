@@ -1,0 +1,26 @@
+{
+  "role": "tle156_scale_point_dev",
+  "runner_sha256": "fa15cc3a46201ffee418f0416d2fbcc244109868934c9db95f00d45afdbfd6f1",
+  "topology_sha256": "c359816227933c7e3d9ab6bb3eb82439d45c3581207d6a1e00d761b4f7182c93",
+  "created_utc": "2026-09-22T06:06:49Z",
+  "load": 24,
+  "sweep_workloads": [
+    880266,
+    880267,
+    880268
+  ],
+  "main_workloads": [
+    880271,
+    880272,
+    880273,
+    880274,
+    880275,
+    880276,
+    880277,
+    880278,
+    880279,
+    880280
+  ],
+  "training": false,
+  "sealed_test_access": false
+}

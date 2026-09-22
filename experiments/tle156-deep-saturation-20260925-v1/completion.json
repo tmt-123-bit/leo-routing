@@ -1,0 +1,10 @@
+{
+  "status": "complete",
+  "episodes": 40,
+  "elapsed_seconds": 501.7015018999955,
+  "output_sha256": {
+    "episodes.jsonl": "a014df5b340d495a9275c0887c8641dea4d293d4e9f41ed8b4564037590ea654",
+    "manifest.json": "ac5948fa8b63798c41d689a61e98f7abd78c530c87deaf502093e8110133cb10",
+    "summary.json": "3624a541b4881c53ab12a75fa5dd074234f1586ae26feb3e2fdda10f8e1d94ec"
+  }
+}
