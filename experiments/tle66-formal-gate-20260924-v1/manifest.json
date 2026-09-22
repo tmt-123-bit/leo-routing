@@ -1,0 +1,35 @@
+{
+  "role": "tle66_formal_gate",
+  "runner_sha256": "80bdef0beb247aa75de1501c9d6c64b58346d37d73fbebc802cdf0176071c64b",
+  "protocol": "docs/TLE66_PACKET_MANAGEMENT_FORMAL_V1.md",
+  "protocol_sha256": "0ba0f85b4d478fee2e562533db807d27c8ac1dc9447dc6aba3d957f032a1fb9b",
+  "topology_sha256": "13be8630b5b0786800d670c1d3ee692630db18b9a7a40b22291c941f0d92ec21",
+  "created_utc": "2026-09-22T05:02:38Z",
+  "workloads": [
+    880131,
+    880132,
+    880133,
+    880134,
+    880135,
+    880136,
+    880137,
+    880138,
+    880139,
+    880140,
+    880141,
+    880142,
+    880143,
+    880144,
+    880145,
+    880146,
+    880147,
+    880148,
+    880149,
+    880150
+  ],
+  "loads": [
+    12
+  ],
+  "training": false,
+  "sealed_test_access": false
+}

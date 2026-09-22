@@ -1,0 +1,87 @@
+{
+  "stage": "formal",
+  "episodes": 400,
+  "primary_pass": true,
+  "scenarios": {
+    "load_12": {
+      "dijkstra": {
+        "base_mean": 0.272258064516129,
+        "mech_mean": 0.3175268817204301,
+        "bootstrap": {
+          "ratio_of_means": 0.1662717219589258,
+          "ci95": [
+            0.1528857736587946,
+            0.18066313209740364
+          ],
+          "one_sided_95_lower": 0.1549513409120653
+        },
+        "paired_gain_positive": 50,
+        "n": 50,
+        "sign_test": {
+          "positive": 50,
+          "n": 50,
+          "exact_two_sided_p": 1.7763568394002505e-15
+        }
+      },
+      "persistent": {
+        "base_mean": 0.24951612903225803,
+        "mech_mean": 0.295,
+        "bootstrap": {
+          "ratio_of_means": 0.18228829993535878,
+          "ci95": [
+            0.16634310857347562,
+            0.1987278954844865
+          ],
+          "one_sided_95_lower": 0.1687973750846954
+        },
+        "paired_gain_positive": 50,
+        "n": 50,
+        "sign_test": {
+          "positive": 50,
+          "n": 50,
+          "exact_two_sided_p": 1.7763568394002505e-15
+        }
+      }
+    },
+    "load_10": {
+      "dijkstra": {
+        "base_mean": 0.30716129032258066,
+        "mech_mean": 0.34251612903225803,
+        "bootstrap": {
+          "ratio_of_means": 0.1151018693551773,
+          "ci95": [
+            0.10431806478067539,
+            0.12622416917353851
+          ],
+          "one_sided_95_lower": 0.10614513466885478
+        },
+        "paired_gain_positive": 50,
+        "n": 50,
+        "sign_test": {
+          "positive": 50,
+          "n": 50,
+          "exact_two_sided_p": 1.7763568394002505e-15
+        }
+      },
+      "persistent": {
+        "base_mean": 0.288,
+        "mech_mean": 0.32593548387096777,
+        "bootstrap": {
+          "ratio_of_means": 0.131720430107527,
+          "ci95": [
+            0.11686428552924988,
+            0.14699230197951638
+          ],
+          "one_sided_95_lower": 0.11919475655430738
+        },
+        "paired_gain_positive": 50,
+        "n": 50,
+        "sign_test": {
+          "positive": 50,
+          "n": 50,
+          "exact_two_sided_p": 1.7763568394002505e-15
+        }
+      }
+    }
+  }
+}

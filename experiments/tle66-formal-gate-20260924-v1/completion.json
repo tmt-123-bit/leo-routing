@@ -1,0 +1,12 @@
+{
+  "status": "complete",
+  "episodes": 40,
+  "elapsed_seconds": 106.48260190000292,
+  "gate_pass": true,
+  "primary_pass": null,
+  "output_sha256": {
+    "episodes.jsonl": "068717dec11d5c41daad917676261ec990d375641e92b85b5d03c2f86c564284",
+    "manifest.json": "7b4a441de46bde46f00f66914ceb4ed5ae83c7740a48a654c8f731cc7701cee1",
+    "result.json": "de7b6c0a8fb2c646abef563551badaf051922854cb927d3a36ee017bbe9240d7"
+  }
+}
