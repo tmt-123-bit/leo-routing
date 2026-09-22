@@ -1,0 +1,21 @@
+{
+  "episodes": 100,
+  "bp_base_mean": 0.37161290322580653,
+  "bp_mech_mean": 0.4305913978494623,
+  "bootstrap": {
+    "ratio_of_means": 0.15870949074074026,
+    "ci95": [
+      0.14610546147014525,
+      0.17209315484775836
+    ],
+    "one_sided_95_lower": 0.1479728482043155
+  },
+  "paired_gain_positive": 50,
+  "n": 50,
+  "sign_test": {
+    "positive": 50,
+    "n": 50,
+    "exact_two_sided_p": 1.7763568394002505e-15
+  },
+  "primary_pass": true
+}
