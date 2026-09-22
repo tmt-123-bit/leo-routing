@@ -1,0 +1,37 @@
+{
+  "role": "backpressure_baseline_dev",
+  "runner_sha256": "37cf28b2dd7ac22a08c360649c871c87616199e78e03dc68086c11303196e2d2",
+  "created_utc": "2026-09-22T05:44:31Z",
+  "gamma_sweep_workloads": [
+    880201,
+    880202,
+    880203,
+    880204,
+    880205
+  ],
+  "main_workloads": [
+    880206,
+    880207,
+    880208,
+    880209,
+    880210,
+    880211,
+    880212,
+    880213,
+    880214,
+    880215,
+    880216,
+    880217,
+    880218,
+    880219,
+    880220,
+    880221,
+    880222,
+    880223,
+    880224,
+    880225
+  ],
+  "note": "EDR-BP style max-weight with shortest-path bias; gamma tuned on the sweep panel, best gamma evaluated on the main panel",
+  "training": false,
+  "sealed_test_access": false
+}
