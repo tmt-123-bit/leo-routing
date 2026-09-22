@@ -1,0 +1,41 @@
+{
+  "role": "tle66_feasibility_eval_dev",
+  "runner_sha256": "1a9ff7eccbb4dd09b5edcd848bcb257a5d5a51a8257195c54a93b4af38a3da85",
+  "created_utc": "2026-09-21T19:05:47Z",
+  "topology": "..\\data\\starlink_66_links.csv",
+  "load": 8,
+  "workloads": [
+    880011,
+    880012,
+    880013,
+    880014,
+    880015,
+    880016,
+    880017,
+    880018,
+    880019,
+    880020
+  ],
+  "system_checkpoints": {
+    "179055553": {
+      "path": "..\\outputs\\tle66-train-20260922\\seed_179055553\\leo_tle__hotspot_high_load__seed-179055553__2026-09-22_01-17-40__TLE66-SRPF-ENV-v1\\validation_best.pt",
+      "sha256": "1818c2da55ca171e6f17b51d51a72eeea42c64d64f4fc6509653307e57eb3cba"
+    },
+    "183895110": {
+      "path": "..\\outputs\\tle66-train-20260922\\seed_183895110\\leo_tle__hotspot_high_load__seed-183895110__2026-09-22_01-55-44__TLE66-SRPF-ENV-v1\\validation_best.pt",
+      "sha256": "0451dec021e7d4ec4b1165948fda78eba2cd77f6d33209ffbe5d79d34acdcbaa"
+    },
+    "310818925": {
+      "path": "..\\outputs\\tle66-train-20260922\\seed_310818925\\leo_tle__hotspot_high_load__seed-310818925__2026-09-22_02-30-46__TLE66-SRPF-ENV-v1\\validation_best.pt",
+      "sha256": "ba0edbbc2b33d23c7050c0e8828fb782f515dbbcc94b18618b5a54cbc55fe045"
+    }
+  },
+  "q_identities": [
+    7,
+    42
+  ],
+  "q_episodes": 500,
+  "note": "one-day feasibility signal; unconstrained QoS MAPPO trained in the SRPF environment (the TLE trainer copy predates the switch constraint); Dijkstra and Q-routing retrained budget-matched",
+  "training": false,
+  "sealed_test_access": false
+}

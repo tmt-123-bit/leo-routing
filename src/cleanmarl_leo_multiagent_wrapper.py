@@ -278,3 +278,48 @@ def smoke_test() -> None:
 
 if __name__ == "__main__":
     smoke_test()
+
+
+class CmadrStyleLossConstraintWrapper(CleanMARLLeoMultiAgentWrapper):
+    """Training-time shim for a CMADR-style loss constraint.
+
+    CMADR (constrained MARL routing) enforces packet-loss limits with Lagrange
+    multipliers. This shim reuses the existing dual-ascent constraint machinery
+    unchanged by feeding it deadline-drop costs instead of switch costs: the
+    per-agent cost flag is 1 when a deadline-expired packet dropped this slot is
+    attributed to that agent (final routing decider, else queue owner), and the
+    opportunity flag is 1 when the agent held a HOL packet. The energy
+    constraint of the original paper is not modeled in this environment.
+    Activation: LEO_CMADR_STYLE=1 rebinds the module-level wrapper class for
+    the whole training process; evaluation harnesses are unaffected.
+    """
+
+    def get_last_avoidable_switch_costs(self) -> np.ndarray:
+        info = self._info or {}
+        blame = set()
+        for packet_id in info.get("deadline_dropped", ()) or ():
+            packet = self.env.packets.get(packet_id)
+            if packet is not None:
+                blame.add(
+                    packet.previous_node
+                    if packet.previous_node is not None
+                    else packet.owner
+                )
+        return np.asarray(
+            [sat in blame for sat in self.external_to_internal], dtype=bool
+        )
+
+    def get_last_switch_opportunities(self) -> np.ndarray:
+        info = self._info or {}
+        ledger = info.get("mask_ledger", {}) or {}
+        return np.asarray(
+            [
+                ledger.get(sat, {}).get("packet_id") is not None
+                for sat in self.external_to_internal
+            ],
+            dtype=bool,
+        )
+
+
+if os.environ.get("LEO_CMADR_STYLE", "").strip() == "1":
+    CleanMARLLeoMultiAgentWrapper = CmadrStyleLossConstraintWrapper

@@ -1,0 +1,477 @@
+{
+  "source_tle": "F:\\leo-routing-preliminary-matlab\\data\\starlink_2026-07-15.tle",
+  "source_tle_sha256": "f103aed1e92dceaf79e26a943959d4dcb7a5a38b4e81f83fc6053608537041f4",
+  "source_url": "https://celestrak.org/NORAD/elements/gp.php?GROUP=starlink&FORMAT=tle",
+  "selected_satellites": [
+    {
+      "environment_id": 1,
+      "name": "STARLINK-34772",
+      "norad_id": 65020,
+      "plane": 0,
+      "local_index": 0
+    },
+    {
+      "environment_id": 2,
+      "name": "STARLINK-34773",
+      "norad_id": 65024,
+      "plane": 0,
+      "local_index": 1
+    },
+    {
+      "environment_id": 3,
+      "name": "STARLINK-31385",
+      "norad_id": 58985,
+      "plane": 0,
+      "local_index": 2
+    },
+    {
+      "environment_id": 4,
+      "name": "STARLINK-4712",
+      "norad_id": 53798,
+      "plane": 0,
+      "local_index": 3
+    },
+    {
+      "environment_id": 5,
+      "name": "STARLINK-34286",
+      "norad_id": 65035,
+      "plane": 0,
+      "local_index": 4
+    },
+    {
+      "environment_id": 6,
+      "name": "STARLINK-31335",
+      "norad_id": 58969,
+      "plane": 0,
+      "local_index": 5
+    },
+    {
+      "environment_id": 7,
+      "name": "STARLINK-35464",
+      "norad_id": 65881,
+      "plane": 1,
+      "local_index": 0
+    },
+    {
+      "environment_id": 8,
+      "name": "STARLINK-35459",
+      "norad_id": 65856,
+      "plane": 1,
+      "local_index": 1
+    },
+    {
+      "environment_id": 9,
+      "name": "STARLINK-2505",
+      "norad_id": 48411,
+      "plane": 1,
+      "local_index": 2
+    },
+    {
+      "environment_id": 10,
+      "name": "STARLINK-34438",
+      "norad_id": 65876,
+      "plane": 1,
+      "local_index": 3
+    },
+    {
+      "environment_id": 11,
+      "name": "STARLINK-34807",
+      "norad_id": 65028,
+      "plane": 1,
+      "local_index": 4
+    },
+    {
+      "environment_id": 12,
+      "name": "STARLINK-35386",
+      "norad_id": 65862,
+      "plane": 1,
+      "local_index": 5
+    },
+    {
+      "environment_id": 13,
+      "name": "STARLINK-31264",
+      "norad_id": 58845,
+      "plane": 2,
+      "local_index": 0
+    },
+    {
+      "environment_id": 14,
+      "name": "STARLINK-34655",
+      "norad_id": 65027,
+      "plane": 2,
+      "local_index": 1
+    },
+    {
+      "environment_id": 15,
+      "name": "STARLINK-35456",
+      "norad_id": 65867,
+      "plane": 2,
+      "local_index": 2
+    },
+    {
+      "environment_id": 16,
+      "name": "STARLINK-34656",
+      "norad_id": 65032,
+      "plane": 2,
+      "local_index": 3
+    },
+    {
+      "environment_id": 17,
+      "name": "STARLINK-35199",
+      "norad_id": 65858,
+      "plane": 2,
+      "local_index": 4
+    },
+    {
+      "environment_id": 18,
+      "name": "STARLINK-34776",
+      "norad_id": 65037,
+      "plane": 2,
+      "local_index": 5
+    },
+    {
+      "environment_id": 19,
+      "name": "STARLINK-34614",
+      "norad_id": 65030,
+      "plane": 3,
+      "local_index": 0
+    },
+    {
+      "environment_id": 20,
+      "name": "STARLINK-34623",
+      "norad_id": 65018,
+      "plane": 3,
+      "local_index": 1
+    },
+    {
+      "environment_id": 21,
+      "name": "STARLINK-34778",
+      "norad_id": 65021,
+      "plane": 3,
+      "local_index": 2
+    },
+    {
+      "environment_id": 22,
+      "name": "STARLINK-34677",
+      "norad_id": 65031,
+      "plane": 3,
+      "local_index": 3
+    },
+    {
+      "environment_id": 23,
+      "name": "STARLINK-34789",
+      "norad_id": 65022,
+      "plane": 3,
+      "local_index": 4
+    },
+    {
+      "environment_id": 24,
+      "name": "STARLINK-34770",
+      "norad_id": 65036,
+      "plane": 3,
+      "local_index": 5
+    },
+    {
+      "environment_id": 25,
+      "name": "STARLINK-1553",
+      "norad_id": 46348,
+      "plane": 4,
+      "local_index": 0
+    },
+    {
+      "environment_id": 26,
+      "name": "STARLINK-31365",
+      "norad_id": 58973,
+      "plane": 4,
+      "local_index": 1
+    },
+    {
+      "environment_id": 27,
+      "name": "STARLINK-31449",
+      "norad_id": 58966,
+      "plane": 4,
+      "local_index": 2
+    },
+    {
+      "environment_id": 28,
+      "name": "STARLINK-32182",
+      "norad_id": 60319,
+      "plane": 4,
+      "local_index": 3
+    },
+    {
+      "environment_id": 29,
+      "name": "STARLINK-31369",
+      "norad_id": 58975,
+      "plane": 4,
+      "local_index": 4
+    },
+    {
+      "environment_id": 30,
+      "name": "STARLINK-36997",
+      "norad_id": 68248,
+      "plane": 4,
+      "local_index": 5
+    },
+    {
+      "environment_id": 31,
+      "name": "STARLINK-31296",
+      "norad_id": 58879,
+      "plane": 5,
+      "local_index": 0
+    },
+    {
+      "environment_id": 32,
+      "name": "STARLINK-4026",
+      "norad_id": 52600,
+      "plane": 5,
+      "local_index": 1
+    },
+    {
+      "environment_id": 33,
+      "name": "STARLINK-31229",
+      "norad_id": 58986,
+      "plane": 5,
+      "local_index": 2
+    },
+    {
+      "environment_id": 34,
+      "name": "STARLINK-31314",
+      "norad_id": 58967,
+      "plane": 5,
+      "local_index": 3
+    },
+    {
+      "environment_id": 35,
+      "name": "STARLINK-32199",
+      "norad_id": 60320,
+      "plane": 5,
+      "local_index": 4
+    },
+    {
+      "environment_id": 36,
+      "name": "STARLINK-31368",
+      "norad_id": 58970,
+      "plane": 5,
+      "local_index": 5
+    },
+    {
+      "environment_id": 37,
+      "name": "STARLINK-3979",
+      "norad_id": 52608,
+      "plane": 6,
+      "local_index": 0
+    },
+    {
+      "environment_id": 38,
+      "name": "STARLINK-4002",
+      "norad_id": 52612,
+      "plane": 6,
+      "local_index": 1
+    },
+    {
+      "environment_id": 39,
+      "name": "STARLINK-3181",
+      "norad_id": 51461,
+      "plane": 6,
+      "local_index": 2
+    },
+    {
+      "environment_id": 40,
+      "name": "STARLINK-3997",
+      "norad_id": 52609,
+      "plane": 6,
+      "local_index": 3
+    },
+    {
+      "environment_id": 41,
+      "name": "STARLINK-3182",
+      "norad_id": 51469,
+      "plane": 6,
+      "local_index": 4
+    },
+    {
+      "environment_id": 42,
+      "name": "STARLINK-3189",
+      "norad_id": 51464,
+      "plane": 6,
+      "local_index": 5
+    },
+    {
+      "environment_id": 43,
+      "name": "STARLINK-37669",
+      "norad_id": 69204,
+      "plane": 7,
+      "local_index": 0
+    },
+    {
+      "environment_id": 44,
+      "name": "STARLINK-37647",
+      "norad_id": 69207,
+      "plane": 7,
+      "local_index": 1
+    },
+    {
+      "environment_id": 45,
+      "name": "STARLINK-37671",
+      "norad_id": 69206,
+      "plane": 7,
+      "local_index": 2
+    },
+    {
+      "environment_id": 46,
+      "name": "STARLINK-37691",
+      "norad_id": 69205,
+      "plane": 7,
+      "local_index": 3
+    },
+    {
+      "environment_id": 47,
+      "name": "STARLINK-37562",
+      "norad_id": 69208,
+      "plane": 7,
+      "local_index": 4
+    },
+    {
+      "environment_id": 48,
+      "name": "STARLINK-37682",
+      "norad_id": 69209,
+      "plane": 7,
+      "local_index": 5
+    },
+    {
+      "environment_id": 49,
+      "name": "STARLINK-37237",
+      "norad_id": 69185,
+      "plane": 8,
+      "local_index": 0
+    },
+    {
+      "environment_id": 50,
+      "name": "STARLINK-37365",
+      "norad_id": 69186,
+      "plane": 8,
+      "local_index": 1
+    },
+    {
+      "environment_id": 51,
+      "name": "STARLINK-37209",
+      "norad_id": 69187,
+      "plane": 8,
+      "local_index": 2
+    },
+    {
+      "environment_id": 52,
+      "name": "STARLINK-31373",
+      "norad_id": 58965,
+      "plane": 8,
+      "local_index": 3
+    },
+    {
+      "environment_id": 53,
+      "name": "STARLINK-37359",
+      "norad_id": 69188,
+      "plane": 8,
+      "local_index": 4
+    },
+    {
+      "environment_id": 54,
+      "name": "STARLINK-37440",
+      "norad_id": 69189,
+      "plane": 8,
+      "local_index": 5
+    },
+    {
+      "environment_id": 55,
+      "name": "STARLINK-4011",
+      "norad_id": 52615,
+      "plane": 9,
+      "local_index": 0
+    },
+    {
+      "environment_id": 56,
+      "name": "STARLINK-4719",
+      "norad_id": 53774,
+      "plane": 9,
+      "local_index": 1
+    },
+    {
+      "environment_id": 57,
+      "name": "STARLINK-5014",
+      "norad_id": 53926,
+      "plane": 9,
+      "local_index": 2
+    },
+    {
+      "environment_id": 58,
+      "name": "STARLINK-4718",
+      "norad_id": 53773,
+      "plane": 9,
+      "local_index": 3
+    },
+    {
+      "environment_id": 59,
+      "name": "STARLINK-35151",
+      "norad_id": 65624,
+      "plane": 9,
+      "local_index": 4
+    },
+    {
+      "environment_id": 60,
+      "name": "STARLINK-35202",
+      "norad_id": 65647,
+      "plane": 9,
+      "local_index": 5
+    },
+    {
+      "environment_id": 61,
+      "name": "STARLINK-35239",
+      "norad_id": 65623,
+      "plane": 10,
+      "local_index": 0
+    },
+    {
+      "environment_id": 62,
+      "name": "STARLINK-35109",
+      "norad_id": 65642,
+      "plane": 10,
+      "local_index": 1
+    },
+    {
+      "environment_id": 63,
+      "name": "STARLINK-35062",
+      "norad_id": 65643,
+      "plane": 10,
+      "local_index": 2
+    },
+    {
+      "environment_id": 64,
+      "name": "STARLINK-31330",
+      "norad_id": 58951,
+      "plane": 10,
+      "local_index": 3
+    },
+    {
+      "environment_id": 65,
+      "name": "STARLINK-32727",
+      "norad_id": 62828,
+      "plane": 10,
+      "local_index": 4
+    },
+    {
+      "environment_id": 66,
+      "name": "STARLINK-4799",
+      "norad_id": 53860,
+      "plane": 10,
+      "local_index": 5
+    }
+  ],
+  "start_utc": "2026-07-14T22:54:53.970047+00:00",
+  "slot_seconds": 10,
+  "slots": 30,
+  "model_limits": [
+    "SGP4 propagation uses the frozen TLE epoch.",
+    "ISLs are constructed as same-plane neighbor links plus nearest adjacent-plane links.",
+    "Capacity and reliability are experiment assumptions, not TLE measurements."
+  ]
+}
