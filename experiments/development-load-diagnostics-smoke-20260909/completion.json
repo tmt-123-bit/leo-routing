@@ -1,0 +1,17 @@
+{
+  "status": "complete",
+  "episodes": 10,
+  "expected": 10,
+  "exogenous_pairings_verified": 2,
+  "input_hashes_unchanged": true,
+  "elapsed_seconds": 3.327596700000413,
+  "output_sha256": {
+    "decisions_sample.jsonl.gz": "bf0332b5c640738993f866bbb04c277b211203accc09ee495882173caca391e3",
+    "episodes.jsonl": "23dcda2e1b61bb7504f68650dd5c77c1398d48872b9d5655af8759889f9c1cb2",
+    "load_diagnostics.png": "5fdd3958ec9deb80e3179dd2c80dfef177402479becf816ed8d24df5367080c3",
+    "manifest.json": "054261b842c104b587b6738b3a724928eda6594b9cd7f03dcfbe106d4eda4209",
+    "packets.jsonl.gz": "747e4c5620ce4612b1f7a563ec02e6b75b8610387f3326813fe31de6972755a9",
+    "summary.csv": "5a88e27feb75fc1d88439fa85c0d9cdcc79809a9e4c214ec5dcb1186c9fbdd07",
+    "summary.json": "bca2f54d238e2e65c512cbc61f1dea5f771cfbc1e4593af7b4f9ed7896a56849"
+  }
+}

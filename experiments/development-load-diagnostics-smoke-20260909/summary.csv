@@ -1,0 +1,11 @@
+scenario,load,policy,episodes,policy_replicates,delivery_ratio,drop_rate,backlog_rate,decision_switch_rate,all_observed_seed_rates_within_budget
+hotspot_high_load,2,global_dijkstra,1,1,0.9125,0.0,0.0875,0.18556701030927836,False
+hotspot_high_load,2,persistent_global_dijkstra,1,1,0.925,0.0,0.075,0.0,True
+hotspot_high_load,2,q_routing,1,1,0.925,0.0,0.075,0.25773195876288657,False
+hotspot_high_load,2,qos_only_baseline,1,1,0.9,0.0,0.1,0.14,False
+hotspot_high_load,2,qos_only_constrained,1,1,0.925,0.0,0.075,0.0,True
+medium_load,2,global_dijkstra,1,1,0.9166666666666666,0.0,0.08333333333333333,0.15151515151515152,False
+medium_load,2,persistent_global_dijkstra,1,1,0.9305555555555556,0.0,0.06944444444444445,0.0,True
+medium_load,2,q_routing,1,1,0.9305555555555556,0.0,0.06944444444444445,0.14705882352941177,False
+medium_load,2,qos_only_baseline,1,1,0.9305555555555556,0.0,0.06944444444444445,0.125,False
+medium_load,2,qos_only_constrained,1,1,0.9305555555555556,0.0,0.06944444444444445,0.0,True

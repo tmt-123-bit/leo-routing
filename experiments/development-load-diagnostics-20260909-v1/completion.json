@@ -1,0 +1,18 @@
+{
+  "status": "complete",
+  "episodes": 1100,
+  "expected": 1100,
+  "exogenous_pairings_verified": 100,
+  "input_hashes_unchanged": true,
+  "elapsed_seconds": 235.6158203,
+  "output_sha256": {
+    "decisions_sample.jsonl.gz": "0e335844bbf0cf59abcbe29f903d7449152171043cdeee3f52c97c9b0ab41fe2",
+    "episodes.jsonl": "0fe7ca37f4e16dc52fcf1020f9c38396eb093dd7386b29ccd131138b3209cf70",
+    "load_diagnostics.png": "77021b979017eb33522bb77ca4b6faea94580560d3dbe87e583e07568fb290b8",
+    "manifest.json": "44265ddea77e2bef1e16364ed3216fc01c629bfc405794feb4806ca0e5827bc7",
+    "packets.jsonl.gz": "9a03a98998ea2cecdaeff5471f1009eee1e327565955e6ef31762f89269c38c6",
+    "summary.csv": "c71c6bdbd33b655ae130e218ad552d729e541499d0fa460f54188b61c91deecf",
+    "summary.json": "84d957e2f1af9fbe69699662a2048dd86eefc8be7b5a35372b5d13d10eea8354",
+    "training_log_audit.csv": "0433b39b3594deb3c6d8bf08924957ca67f6d3ab9debb29e47f772044c912592"
+  }
+}

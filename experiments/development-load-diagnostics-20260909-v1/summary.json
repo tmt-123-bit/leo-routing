@@ -1,0 +1,2522 @@
+[
+  {
+    "scenario": "hotspot_high_load",
+    "load": 2,
+    "policy": "global_dijkstra",
+    "episodes": 10,
+    "policy_replicates": 1,
+    "totals": {
+      "generated": 800,
+      "delivered": 739,
+      "dropped": 0,
+      "backlog": 61,
+      "generated_final_slot": 20,
+      "backlog_final_slot_arrivals": 20,
+      "decision_avoidable_switches": 175,
+      "decision_switch_opportunities": 1031,
+      "decision_forced_switches": 1,
+      "accepted_forwards": 1989,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 5,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 0
+    },
+    "per_seed": [
+      {
+        "policy_seed": -1,
+        "delivery_ratio": 0.9237499999999998,
+        "switches": 175,
+        "opportunities": 1031,
+        "rate": 0.1697381183317168
+      }
+    ],
+    "delivery_ratio": 0.9237499999999998,
+    "drop_rate": 0.0,
+    "backlog_rate": 0.07625,
+    "decision_switch_rate": 0.1697381183317168,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 2,
+    "policy": "persistent_global_dijkstra",
+    "episodes": 10,
+    "policy_replicates": 1,
+    "totals": {
+      "generated": 800,
+      "delivered": 741,
+      "dropped": 0,
+      "backlog": 59,
+      "generated_final_slot": 20,
+      "backlog_final_slot_arrivals": 20,
+      "decision_avoidable_switches": 0,
+      "decision_switch_opportunities": 1052,
+      "decision_forced_switches": 2,
+      "accepted_forwards": 1985,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 3,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 0
+    },
+    "per_seed": [
+      {
+        "policy_seed": -1,
+        "delivery_ratio": 0.9262500000000001,
+        "switches": 0,
+        "opportunities": 1052,
+        "rate": 0.0
+      }
+    ],
+    "delivery_ratio": 0.9262500000000001,
+    "drop_rate": 0.0,
+    "backlog_rate": 0.07375,
+    "decision_switch_rate": 0.0,
+    "all_observed_seed_rates_within_budget": true,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 2,
+    "policy": "q_routing",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 2400,
+      "delivered": 2236,
+      "dropped": 0,
+      "backlog": 164,
+      "generated_final_slot": 60,
+      "backlog_final_slot_arrivals": 60,
+      "decision_avoidable_switches": 669,
+      "decision_switch_opportunities": 3075,
+      "decision_forced_switches": 16,
+      "accepted_forwards": 6005,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 3,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 0
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.93125,
+        "switches": 224,
+        "opportunities": 1026,
+        "rate": 0.21832358674463936
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.9324999999999999,
+        "switches": 214,
+        "opportunities": 1017,
+        "rate": 0.21042281219272368
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.93125,
+        "switches": 231,
+        "opportunities": 1032,
+        "rate": 0.2238372093023256
+      }
+    ],
+    "delivery_ratio": 0.9316666666666666,
+    "drop_rate": 0.0,
+    "backlog_rate": 0.06833333333333333,
+    "decision_switch_rate": 0.21752786941322955,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 2,
+    "policy": "qos_only_baseline",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 2400,
+      "delivered": 2180,
+      "dropped": 5,
+      "backlog": 215,
+      "generated_final_slot": 60,
+      "backlog_final_slot_arrivals": 60,
+      "decision_avoidable_switches": 616,
+      "decision_switch_opportunities": 3293,
+      "decision_forced_switches": 283,
+      "accepted_forwards": 6521,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 34,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 5
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.91625,
+        "switches": 200,
+        "opportunities": 1070,
+        "rate": 0.18691588785046728
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.9012499999999999,
+        "switches": 228,
+        "opportunities": 1123,
+        "rate": 0.20302760463045413
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.9075,
+        "switches": 188,
+        "opportunities": 1100,
+        "rate": 0.1709090909090909
+      }
+    ],
+    "delivery_ratio": 0.9083333333333332,
+    "drop_rate": 0.0020833333333333333,
+    "backlog_rate": 0.08958333333333333,
+    "decision_switch_rate": 0.18695086113000411,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 2,
+    "policy": "qos_only_constrained",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 2400,
+      "delivered": 2224,
+      "dropped": 0,
+      "backlog": 176,
+      "generated_final_slot": 60,
+      "backlog_final_slot_arrivals": 60,
+      "decision_avoidable_switches": 3,
+      "decision_switch_opportunities": 3210,
+      "decision_forced_switches": 40,
+      "accepted_forwards": 6088,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 10,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 0
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.91875,
+        "switches": 3,
+        "opportunities": 1094,
+        "rate": 0.002742230347349177
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.9275,
+        "switches": 0,
+        "opportunities": 1062,
+        "rate": 0.0
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.9337499999999999,
+        "switches": 0,
+        "opportunities": 1054,
+        "rate": 0.0
+      }
+    ],
+    "delivery_ratio": 0.9266666666666666,
+    "drop_rate": 0.0,
+    "backlog_rate": 0.07333333333333333,
+    "decision_switch_rate": 0.0009140767824497258,
+    "all_observed_seed_rates_within_budget": true,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 4,
+    "policy": "global_dijkstra",
+    "episodes": 10,
+    "policy_replicates": 1,
+    "totals": {
+      "generated": 1400,
+      "delivered": 1176,
+      "dropped": 7,
+      "backlog": 217,
+      "generated_final_slot": 40,
+      "backlog_final_slot_arrivals": 40,
+      "decision_avoidable_switches": 373,
+      "decision_switch_opportunities": 1914,
+      "decision_forced_switches": 3,
+      "accepted_forwards": 3311,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 79,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 7
+    },
+    "per_seed": [
+      {
+        "policy_seed": -1,
+        "delivery_ratio": 0.8400000000000002,
+        "switches": 373,
+        "opportunities": 1914,
+        "rate": 0.1948798328108673
+      }
+    ],
+    "delivery_ratio": 0.8400000000000002,
+    "drop_rate": 0.005,
+    "backlog_rate": 0.155,
+    "decision_switch_rate": 0.1948798328108673,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 4,
+    "policy": "persistent_global_dijkstra",
+    "episodes": 10,
+    "policy_replicates": 1,
+    "totals": {
+      "generated": 1400,
+      "delivered": 1178,
+      "dropped": 6,
+      "backlog": 216,
+      "generated_final_slot": 40,
+      "backlog_final_slot_arrivals": 40,
+      "decision_avoidable_switches": 0,
+      "decision_switch_opportunities": 1949,
+      "decision_forced_switches": 7,
+      "accepted_forwards": 3326,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 78,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 6
+    },
+    "per_seed": [
+      {
+        "policy_seed": -1,
+        "delivery_ratio": 0.8414285714285714,
+        "switches": 0,
+        "opportunities": 1949,
+        "rate": 0.0
+      }
+    ],
+    "delivery_ratio": 0.8414285714285714,
+    "drop_rate": 0.004285714285714286,
+    "backlog_rate": 0.15428571428571428,
+    "decision_switch_rate": 0.0,
+    "all_observed_seed_rates_within_budget": true,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 4,
+    "policy": "q_routing",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 4200,
+      "delivered": 3668,
+      "dropped": 1,
+      "backlog": 531,
+      "generated_final_slot": 120,
+      "backlog_final_slot_arrivals": 120,
+      "decision_avoidable_switches": 1465,
+      "decision_switch_opportunities": 5903,
+      "decision_forced_switches": 45,
+      "accepted_forwards": 10188,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 123,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 1
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.8714285714285713,
+        "switches": 490,
+        "opportunities": 1965,
+        "rate": 0.24936386768447838
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.8699999999999999,
+        "switches": 477,
+        "opportunities": 1962,
+        "rate": 0.24311926605504589
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.8785714285714284,
+        "switches": 498,
+        "opportunities": 1976,
+        "rate": 0.2520242914979757
+      }
+    ],
+    "delivery_ratio": 0.8733333333333332,
+    "drop_rate": 0.0002380952380952381,
+    "backlog_rate": 0.12642857142857142,
+    "decision_switch_rate": 0.2481691417458333,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 4,
+    "policy": "qos_only_baseline",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 4200,
+      "delivered": 3536,
+      "dropped": 40,
+      "backlog": 624,
+      "generated_final_slot": 120,
+      "backlog_final_slot_arrivals": 120,
+      "decision_avoidable_switches": 1359,
+      "decision_switch_opportunities": 6251,
+      "decision_forced_switches": 571,
+      "accepted_forwards": 11125,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 199,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 40
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.8450000000000001,
+        "switches": 498,
+        "opportunities": 2091,
+        "rate": 0.2381635581061693
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.8414285714285713,
+        "switches": 512,
+        "opportunities": 2117,
+        "rate": 0.2418516769012754
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.8392857142857142,
+        "switches": 349,
+        "opportunities": 2043,
+        "rate": 0.17082721488007832
+      }
+    ],
+    "delivery_ratio": 0.8419047619047619,
+    "drop_rate": 0.009523809523809525,
+    "backlog_rate": 0.14857142857142858,
+    "decision_switch_rate": 0.21694748329584101,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 4,
+    "policy": "qos_only_constrained",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 4200,
+      "delivered": 3538,
+      "dropped": 19,
+      "backlog": 643,
+      "generated_final_slot": 120,
+      "backlog_final_slot_arrivals": 120,
+      "decision_avoidable_switches": 20,
+      "decision_switch_opportunities": 6090,
+      "decision_forced_switches": 114,
+      "accepted_forwards": 10405,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 224,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 19
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.832857142857143,
+        "switches": 18,
+        "opportunities": 2113,
+        "rate": 0.008518693800283956
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.8457142857142858,
+        "switches": 0,
+        "opportunities": 2011,
+        "rate": 0.0
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.8485714285714285,
+        "switches": 2,
+        "opportunities": 1966,
+        "rate": 0.001017293997965412
+      }
+    ],
+    "delivery_ratio": 0.8423809523809526,
+    "drop_rate": 0.004523809523809524,
+    "backlog_rate": 0.1530952380952381,
+    "decision_switch_rate": 0.003178662599416456,
+    "all_observed_seed_rates_within_budget": true,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 6,
+    "policy": "global_dijkstra",
+    "episodes": 10,
+    "policy_replicates": 1,
+    "totals": {
+      "generated": 2000,
+      "delivered": 1379,
+      "dropped": 70,
+      "backlog": 551,
+      "generated_final_slot": 60,
+      "backlog_final_slot_arrivals": 60,
+      "decision_avoidable_switches": 517,
+      "decision_switch_opportunities": 2643,
+      "decision_forced_switches": 2,
+      "accepted_forwards": 4243,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 323,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 70
+    },
+    "per_seed": [
+      {
+        "policy_seed": -1,
+        "delivery_ratio": 0.6895,
+        "switches": 517,
+        "opportunities": 2643,
+        "rate": 0.19561104805145668
+      }
+    ],
+    "delivery_ratio": 0.6895,
+    "drop_rate": 0.035,
+    "backlog_rate": 0.2755,
+    "decision_switch_rate": 0.19561104805145668,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 6,
+    "policy": "persistent_global_dijkstra",
+    "episodes": 10,
+    "policy_replicates": 1,
+    "totals": {
+      "generated": 2000,
+      "delivered": 1379,
+      "dropped": 73,
+      "backlog": 548,
+      "generated_final_slot": 60,
+      "backlog_final_slot_arrivals": 60,
+      "decision_avoidable_switches": 0,
+      "decision_switch_opportunities": 2669,
+      "decision_forced_switches": 8,
+      "accepted_forwards": 4267,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 323,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 73
+    },
+    "per_seed": [
+      {
+        "policy_seed": -1,
+        "delivery_ratio": 0.6895,
+        "switches": 0,
+        "opportunities": 2669,
+        "rate": 0.0
+      }
+    ],
+    "delivery_ratio": 0.6895,
+    "drop_rate": 0.0365,
+    "backlog_rate": 0.274,
+    "decision_switch_rate": 0.0,
+    "all_observed_seed_rates_within_budget": true,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 6,
+    "policy": "q_routing",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 6000,
+      "delivered": 4321,
+      "dropped": 79,
+      "backlog": 1600,
+      "generated_final_slot": 180,
+      "backlog_final_slot_arrivals": 180,
+      "decision_avoidable_switches": 2394,
+      "decision_switch_opportunities": 8217,
+      "decision_forced_switches": 58,
+      "accepted_forwards": 13190,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 914,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 79
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.7215,
+        "switches": 794,
+        "opportunities": 2740,
+        "rate": 0.28978102189781024
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.72,
+        "switches": 782,
+        "opportunities": 2731,
+        "rate": 0.2863419992676675
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.7190000000000001,
+        "switches": 818,
+        "opportunities": 2746,
+        "rate": 0.29788783685360526
+      }
+    ],
+    "delivery_ratio": 0.7201666666666666,
+    "drop_rate": 0.013166666666666667,
+    "backlog_rate": 0.26666666666666666,
+    "decision_switch_rate": 0.29133695267302767,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 6,
+    "policy": "qos_only_baseline",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 6000,
+      "delivered": 4219,
+      "dropped": 182,
+      "backlog": 1599,
+      "generated_final_slot": 180,
+      "backlog_final_slot_arrivals": 180,
+      "decision_avoidable_switches": 2459,
+      "decision_switch_opportunities": 8910,
+      "decision_forced_switches": 993,
+      "accepted_forwards": 14963,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 902,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 182
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.6990000000000001,
+        "switches": 869,
+        "opportunities": 2956,
+        "rate": 0.293978349120433
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.704,
+        "switches": 995,
+        "opportunities": 3052,
+        "rate": 0.3260157273918742
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.7065,
+        "switches": 595,
+        "opportunities": 2902,
+        "rate": 0.20503101309441765
+      }
+    ],
+    "delivery_ratio": 0.7031666666666667,
+    "drop_rate": 0.030333333333333334,
+    "backlog_rate": 0.2665,
+    "decision_switch_rate": 0.2750083632022416,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 6,
+    "policy": "qos_only_constrained",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 6000,
+      "delivered": 4204,
+      "dropped": 148,
+      "backlog": 1648,
+      "generated_final_slot": 180,
+      "backlog_final_slot_arrivals": 180,
+      "decision_avoidable_switches": 54,
+      "decision_switch_opportunities": 8489,
+      "decision_forced_switches": 158,
+      "accepted_forwards": 13727,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 965,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 148
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.7,
+        "switches": 43,
+        "opportunities": 2974,
+        "rate": 0.014458641560188298
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.7,
+        "switches": 0,
+        "opportunities": 2774,
+        "rate": 0.0
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.7020000000000001,
+        "switches": 11,
+        "opportunities": 2741,
+        "rate": 0.004013133892739876
+      }
+    ],
+    "delivery_ratio": 0.7006666666666667,
+    "drop_rate": 0.024666666666666667,
+    "backlog_rate": 0.27466666666666667,
+    "decision_switch_rate": 0.006157258484309391,
+    "all_observed_seed_rates_within_budget": true,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 8,
+    "policy": "global_dijkstra",
+    "episodes": 10,
+    "policy_replicates": 1,
+    "totals": {
+      "generated": 2600,
+      "delivered": 1455,
+      "dropped": 196,
+      "backlog": 949,
+      "generated_final_slot": 80,
+      "backlog_final_slot_arrivals": 80,
+      "decision_avoidable_switches": 620,
+      "decision_switch_opportunities": 3225,
+      "decision_forced_switches": 7,
+      "accepted_forwards": 5082,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 640,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 196
+    },
+    "per_seed": [
+      {
+        "policy_seed": -1,
+        "delivery_ratio": 0.5596153846153846,
+        "switches": 620,
+        "opportunities": 3225,
+        "rate": 0.19224806201550387
+      }
+    ],
+    "delivery_ratio": 0.5596153846153846,
+    "drop_rate": 0.07538461538461538,
+    "backlog_rate": 0.365,
+    "decision_switch_rate": 0.19224806201550387,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 8,
+    "policy": "persistent_global_dijkstra",
+    "episodes": 10,
+    "policy_replicates": 1,
+    "totals": {
+      "generated": 2600,
+      "delivered": 1438,
+      "dropped": 204,
+      "backlog": 958,
+      "generated_final_slot": 80,
+      "backlog_final_slot_arrivals": 80,
+      "decision_avoidable_switches": 0,
+      "decision_switch_opportunities": 3140,
+      "decision_forced_switches": 18,
+      "accepted_forwards": 5034,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 654,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 204
+    },
+    "per_seed": [
+      {
+        "policy_seed": -1,
+        "delivery_ratio": 0.553076923076923,
+        "switches": 0,
+        "opportunities": 3140,
+        "rate": 0.0
+      }
+    ],
+    "delivery_ratio": 0.553076923076923,
+    "drop_rate": 0.07846153846153846,
+    "backlog_rate": 0.36846153846153845,
+    "decision_switch_rate": 0.0,
+    "all_observed_seed_rates_within_budget": true,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 8,
+    "policy": "q_routing",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 7800,
+      "delivered": 4604,
+      "dropped": 436,
+      "backlog": 2760,
+      "generated_final_slot": 240,
+      "backlog_final_slot_arrivals": 240,
+      "decision_avoidable_switches": 3359,
+      "decision_switch_opportunities": 9986,
+      "decision_forced_switches": 120,
+      "accepted_forwards": 15941,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 1832,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 436
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.5873076923076923,
+        "switches": 1118,
+        "opportunities": 3320,
+        "rate": 0.33674698795180724
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.5926923076923076,
+        "switches": 1131,
+        "opportunities": 3328,
+        "rate": 0.33984375
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.5907692307692307,
+        "switches": 1110,
+        "opportunities": 3338,
+        "rate": 0.33253445176752544
+      }
+    ],
+    "delivery_ratio": 0.5902564102564102,
+    "drop_rate": 0.0558974358974359,
+    "backlog_rate": 0.35384615384615387,
+    "decision_switch_rate": 0.33637506323977756,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 8,
+    "policy": "qos_only_baseline",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 7800,
+      "delivered": 4421,
+      "dropped": 562,
+      "backlog": 2817,
+      "generated_final_slot": 240,
+      "backlog_final_slot_arrivals": 240,
+      "decision_avoidable_switches": 3568,
+      "decision_switch_opportunities": 10672,
+      "decision_forced_switches": 1488,
+      "accepted_forwards": 18024,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 1871,
+      "drop_no_route": 2,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 2,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 558
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.5684615384615384,
+        "switches": 1212,
+        "opportunities": 3551,
+        "rate": 0.3413123063925655
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.5676923076923076,
+        "switches": 1412,
+        "opportunities": 3600,
+        "rate": 0.39222222222222225
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.5642307692307692,
+        "switches": 944,
+        "opportunities": 3521,
+        "rate": 0.2681056518034649
+      }
+    ],
+    "delivery_ratio": 0.5667948717948716,
+    "drop_rate": 0.07205128205128206,
+    "backlog_rate": 0.36115384615384616,
+    "decision_switch_rate": 0.33388006013941757,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 8,
+    "policy": "qos_only_constrained",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 7800,
+      "delivered": 4454,
+      "dropped": 505,
+      "backlog": 2841,
+      "generated_final_slot": 240,
+      "backlog_final_slot_arrivals": 240,
+      "decision_avoidable_switches": 96,
+      "decision_switch_opportunities": 10250,
+      "decision_forced_switches": 298,
+      "accepted_forwards": 16496,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 1904,
+      "drop_no_route": 2,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 503
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.5726923076923077,
+        "switches": 70,
+        "opportunities": 3585,
+        "rate": 0.019525801952580194
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.5711538461538461,
+        "switches": 0,
+        "opportunities": 3360,
+        "rate": 0.0
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.5692307692307692,
+        "switches": 26,
+        "opportunities": 3305,
+        "rate": 0.007866868381240545
+      }
+    ],
+    "delivery_ratio": 0.571025641025641,
+    "drop_rate": 0.06474358974358975,
+    "backlog_rate": 0.36423076923076925,
+    "decision_switch_rate": 0.00913089011127358,
+    "all_observed_seed_rates_within_budget": true,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 16,
+    "policy": "global_dijkstra",
+    "episodes": 10,
+    "policy_replicates": 1,
+    "totals": {
+      "generated": 5000,
+      "delivered": 1483,
+      "dropped": 862,
+      "backlog": 2655,
+      "generated_final_slot": 160,
+      "backlog_final_slot_arrivals": 160,
+      "decision_avoidable_switches": 900,
+      "decision_switch_opportunities": 4561,
+      "decision_forced_switches": 4,
+      "accepted_forwards": 6718,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 2019,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 862
+    },
+    "per_seed": [
+      {
+        "policy_seed": -1,
+        "delivery_ratio": 0.29660000000000003,
+        "switches": 900,
+        "opportunities": 4561,
+        "rate": 0.197325147993861
+      }
+    ],
+    "delivery_ratio": 0.29660000000000003,
+    "drop_rate": 0.1724,
+    "backlog_rate": 0.531,
+    "decision_switch_rate": 0.197325147993861,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 16,
+    "policy": "persistent_global_dijkstra",
+    "episodes": 10,
+    "policy_replicates": 1,
+    "totals": {
+      "generated": 5000,
+      "delivered": 1498,
+      "dropped": 861,
+      "backlog": 2641,
+      "generated_final_slot": 160,
+      "backlog_final_slot_arrivals": 160,
+      "decision_avoidable_switches": 0,
+      "decision_switch_opportunities": 4371,
+      "decision_forced_switches": 22,
+      "accepted_forwards": 6610,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 2009,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 4,
+      "drop_source_queue_overflow": 1,
+      "drop_deadline_exceeded": 856
+    },
+    "per_seed": [
+      {
+        "policy_seed": -1,
+        "delivery_ratio": 0.29960000000000003,
+        "switches": 0,
+        "opportunities": 4371,
+        "rate": 0.0
+      }
+    ],
+    "delivery_ratio": 0.29960000000000003,
+    "drop_rate": 0.1722,
+    "backlog_rate": 0.5282,
+    "decision_switch_rate": 0.0,
+    "all_observed_seed_rates_within_budget": true,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 16,
+    "policy": "q_routing",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 15000,
+      "delivered": 4621,
+      "dropped": 2580,
+      "backlog": 7799,
+      "generated_final_slot": 480,
+      "backlog_final_slot_arrivals": 480,
+      "decision_avoidable_switches": 5525,
+      "decision_switch_opportunities": 13769,
+      "decision_forced_switches": 183,
+      "accepted_forwards": 20689,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 5888,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 2580
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.31079999999999997,
+        "switches": 1827,
+        "opportunities": 4602,
+        "rate": 0.3970013037809648
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.307,
+        "switches": 1868,
+        "opportunities": 4587,
+        "rate": 0.40723784608676694
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.30639999999999995,
+        "switches": 1830,
+        "opportunities": 4580,
+        "rate": 0.39956331877729256
+      }
+    ],
+    "delivery_ratio": 0.30806666666666666,
+    "drop_rate": 0.172,
+    "backlog_rate": 0.5199333333333334,
+    "decision_switch_rate": 0.4012674895483414,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 16,
+    "policy": "qos_only_baseline",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 15000,
+      "delivered": 4244,
+      "dropped": 2755,
+      "backlog": 8001,
+      "generated_final_slot": 480,
+      "backlog_final_slot_arrivals": 480,
+      "decision_avoidable_switches": 5250,
+      "decision_switch_opportunities": 13149,
+      "decision_forced_switches": 1394,
+      "accepted_forwards": 21031,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 6081,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 2755
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.2834,
+        "switches": 1759,
+        "opportunities": 4384,
+        "rate": 0.4012317518248175
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.28179999999999994,
+        "switches": 2005,
+        "opportunities": 4385,
+        "rate": 0.4572405929304447
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.2836,
+        "switches": 1486,
+        "opportunities": 4380,
+        "rate": 0.33926940639269404
+      }
+    ],
+    "delivery_ratio": 0.2829333333333333,
+    "drop_rate": 0.18366666666666667,
+    "backlog_rate": 0.5334,
+    "decision_switch_rate": 0.3992472503826521,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "hotspot_high_load",
+    "load": 16,
+    "policy": "qos_only_constrained",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 15000,
+      "delivered": 4367,
+      "dropped": 2641,
+      "backlog": 7992,
+      "generated_final_slot": 480,
+      "backlog_final_slot_arrivals": 480,
+      "decision_avoidable_switches": 244,
+      "decision_switch_opportunities": 13424,
+      "decision_forced_switches": 500,
+      "accepted_forwards": 20723,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 6074,
+      "drop_no_route": 1,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 2640
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.28440000000000004,
+        "switches": 169,
+        "opportunities": 4477,
+        "rate": 0.03774849229394684
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.29779999999999995,
+        "switches": 1,
+        "opportunities": 4501,
+        "rate": 0.00022217285047767163
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.2912,
+        "switches": 74,
+        "opportunities": 4446,
+        "rate": 0.016644174538911382
+      }
+    ],
+    "delivery_ratio": 0.29113333333333336,
+    "drop_rate": 0.17606666666666668,
+    "backlog_rate": 0.5328,
+    "decision_switch_rate": 0.018204946561111966,
+    "all_observed_seed_rates_within_budget": true,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 2,
+    "policy": "global_dijkstra",
+    "episodes": 10,
+    "policy_replicates": 1,
+    "totals": {
+      "generated": 720,
+      "delivered": 663,
+      "dropped": 0,
+      "backlog": 57,
+      "generated_final_slot": 20,
+      "backlog_final_slot_arrivals": 20,
+      "decision_avoidable_switches": 102,
+      "decision_switch_opportunities": 667,
+      "decision_forced_switches": 0,
+      "accepted_forwards": 1764,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 1,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 0
+    },
+    "per_seed": [
+      {
+        "policy_seed": -1,
+        "delivery_ratio": 0.9208333333333334,
+        "switches": 102,
+        "opportunities": 667,
+        "rate": 0.15292353823088456
+      }
+    ],
+    "delivery_ratio": 0.9208333333333334,
+    "drop_rate": 0.0,
+    "backlog_rate": 0.07916666666666666,
+    "decision_switch_rate": 0.15292353823088456,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 2,
+    "policy": "persistent_global_dijkstra",
+    "episodes": 10,
+    "policy_replicates": 1,
+    "totals": {
+      "generated": 720,
+      "delivered": 662,
+      "dropped": 0,
+      "backlog": 58,
+      "generated_final_slot": 20,
+      "backlog_final_slot_arrivals": 20,
+      "decision_avoidable_switches": 0,
+      "decision_switch_opportunities": 688,
+      "decision_forced_switches": 1,
+      "accepted_forwards": 1764,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 0,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 0
+    },
+    "per_seed": [
+      {
+        "policy_seed": -1,
+        "delivery_ratio": 0.9194444444444445,
+        "switches": 0,
+        "opportunities": 688,
+        "rate": 0.0
+      }
+    ],
+    "delivery_ratio": 0.9194444444444445,
+    "drop_rate": 0.0,
+    "backlog_rate": 0.08055555555555556,
+    "decision_switch_rate": 0.0,
+    "all_observed_seed_rates_within_budget": true,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 2,
+    "policy": "q_routing",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 2160,
+      "delivered": 1991,
+      "dropped": 0,
+      "backlog": 169,
+      "generated_final_slot": 60,
+      "backlog_final_slot_arrivals": 60,
+      "decision_avoidable_switches": 391,
+      "decision_switch_opportunities": 2000,
+      "decision_forced_switches": 17,
+      "accepted_forwards": 5353,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 2,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 0
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.9222222222222223,
+        "switches": 119,
+        "opportunities": 673,
+        "rate": 0.17682020802377416
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.9208333333333334,
+        "switches": 139,
+        "opportunities": 663,
+        "rate": 0.2096530920060332
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.9222222222222223,
+        "switches": 133,
+        "opportunities": 664,
+        "rate": 0.2003012048192771
+      }
+    ],
+    "delivery_ratio": 0.9217592592592593,
+    "drop_rate": 0.0,
+    "backlog_rate": 0.07824074074074074,
+    "decision_switch_rate": 0.1955915016163615,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 2,
+    "policy": "qos_only_baseline",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 2160,
+      "delivered": 1985,
+      "dropped": 0,
+      "backlog": 175,
+      "generated_final_slot": 60,
+      "backlog_final_slot_arrivals": 60,
+      "decision_avoidable_switches": 273,
+      "decision_switch_opportunities": 2018,
+      "decision_forced_switches": 13,
+      "accepted_forwards": 5361,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 5,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 0
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.9166666666666666,
+        "switches": 113,
+        "opportunities": 669,
+        "rate": 0.16890881913303438
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.9208333333333334,
+        "switches": 77,
+        "opportunities": 679,
+        "rate": 0.1134020618556701
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.9194444444444445,
+        "switches": 83,
+        "opportunities": 670,
+        "rate": 0.12388059701492538
+      }
+    ],
+    "delivery_ratio": 0.9189814814814815,
+    "drop_rate": 0.0,
+    "backlog_rate": 0.08101851851851852,
+    "decision_switch_rate": 0.1353971593345433,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 2,
+    "policy": "qos_only_constrained",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 2160,
+      "delivered": 1986,
+      "dropped": 0,
+      "backlog": 174,
+      "generated_final_slot": 60,
+      "backlog_final_slot_arrivals": 60,
+      "decision_avoidable_switches": 33,
+      "decision_switch_opportunities": 2056,
+      "decision_forced_switches": 29,
+      "accepted_forwards": 5374,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 4,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 0
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.9208333333333334,
+        "switches": 6,
+        "opportunities": 690,
+        "rate": 0.008695652173913044
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.9194444444444446,
+        "switches": 10,
+        "opportunities": 682,
+        "rate": 0.01466275659824047
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.9180555555555555,
+        "switches": 17,
+        "opportunities": 684,
+        "rate": 0.024853801169590642
+      }
+    ],
+    "delivery_ratio": 0.9194444444444446,
+    "drop_rate": 0.0,
+    "backlog_rate": 0.08055555555555556,
+    "decision_switch_rate": 0.016070736647248052,
+    "all_observed_seed_rates_within_budget": true,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 4,
+    "policy": "global_dijkstra",
+    "episodes": 10,
+    "policy_replicates": 1,
+    "totals": {
+      "generated": 1320,
+      "delivered": 1118,
+      "dropped": 4,
+      "backlog": 198,
+      "generated_final_slot": 40,
+      "backlog_final_slot_arrivals": 40,
+      "decision_avoidable_switches": 283,
+      "decision_switch_opportunities": 1500,
+      "decision_forced_switches": 3,
+      "accepted_forwards": 3170,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 62,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 4
+    },
+    "per_seed": [
+      {
+        "policy_seed": -1,
+        "delivery_ratio": 0.8469696969696969,
+        "switches": 283,
+        "opportunities": 1500,
+        "rate": 0.18866666666666668
+      }
+    ],
+    "delivery_ratio": 0.8469696969696969,
+    "drop_rate": 0.0030303030303030303,
+    "backlog_rate": 0.15,
+    "decision_switch_rate": 0.18866666666666668,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 4,
+    "policy": "persistent_global_dijkstra",
+    "episodes": 10,
+    "policy_replicates": 1,
+    "totals": {
+      "generated": 1320,
+      "delivered": 1123,
+      "dropped": 4,
+      "backlog": 193,
+      "generated_final_slot": 40,
+      "backlog_final_slot_arrivals": 40,
+      "decision_avoidable_switches": 0,
+      "decision_switch_opportunities": 1549,
+      "decision_forced_switches": 6,
+      "accepted_forwards": 3184,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 56,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 4
+    },
+    "per_seed": [
+      {
+        "policy_seed": -1,
+        "delivery_ratio": 0.8507575757575758,
+        "switches": 0,
+        "opportunities": 1549,
+        "rate": 0.0
+      }
+    ],
+    "delivery_ratio": 0.8507575757575758,
+    "drop_rate": 0.0030303030303030303,
+    "backlog_rate": 0.1462121212121212,
+    "decision_switch_rate": 0.0,
+    "all_observed_seed_rates_within_budget": true,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 4,
+    "policy": "q_routing",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 3960,
+      "delivered": 3467,
+      "dropped": 0,
+      "backlog": 493,
+      "generated_final_slot": 120,
+      "backlog_final_slot_arrivals": 120,
+      "decision_avoidable_switches": 1133,
+      "decision_switch_opportunities": 4593,
+      "decision_forced_switches": 30,
+      "accepted_forwards": 9707,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 96,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 0
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.8765151515151516,
+        "switches": 385,
+        "opportunities": 1532,
+        "rate": 0.25130548302872063
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.8757575757575757,
+        "switches": 379,
+        "opportunities": 1532,
+        "rate": 0.24738903394255873
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.8742424242424243,
+        "switches": 369,
+        "opportunities": 1529,
+        "rate": 0.24133420536298233
+      }
+    ],
+    "delivery_ratio": 0.8755050505050507,
+    "drop_rate": 0.0,
+    "backlog_rate": 0.12449494949494949,
+    "decision_switch_rate": 0.24667624077808722,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 4,
+    "policy": "qos_only_baseline",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 3960,
+      "delivered": 3461,
+      "dropped": 2,
+      "backlog": 497,
+      "generated_final_slot": 120,
+      "backlog_final_slot_arrivals": 120,
+      "decision_avoidable_switches": 852,
+      "decision_switch_opportunities": 4588,
+      "decision_forced_switches": 56,
+      "accepted_forwards": 9780,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 91,
+      "drop_no_route": 2,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 0
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.8734848484848484,
+        "switches": 327,
+        "opportunities": 1517,
+        "rate": 0.21555702043506922
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.8742424242424243,
+        "switches": 259,
+        "opportunities": 1536,
+        "rate": 0.16861979166666666
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.8742424242424244,
+        "switches": 266,
+        "opportunities": 1535,
+        "rate": 0.1732899022801303
+      }
+    ],
+    "delivery_ratio": 0.873989898989899,
+    "drop_rate": 0.000505050505050505,
+    "backlog_rate": 0.1255050505050505,
+    "decision_switch_rate": 0.1858222381272887,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 4,
+    "policy": "qos_only_constrained",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 3960,
+      "delivered": 3403,
+      "dropped": 6,
+      "backlog": 551,
+      "generated_final_slot": 120,
+      "backlog_final_slot_arrivals": 120,
+      "decision_avoidable_switches": 143,
+      "decision_switch_opportunities": 4599,
+      "decision_forced_switches": 53,
+      "accepted_forwards": 9729,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 146,
+      "drop_no_route": 1,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 5
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.8598484848484848,
+        "switches": 42,
+        "opportunities": 1531,
+        "rate": 0.027433050293925537
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.8530303030303031,
+        "switches": 51,
+        "opportunities": 1527,
+        "rate": 0.03339882121807466
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.8651515151515152,
+        "switches": 50,
+        "opportunities": 1541,
+        "rate": 0.03244646333549643
+      }
+    ],
+    "delivery_ratio": 0.8593434343434344,
+    "drop_rate": 0.0015151515151515152,
+    "backlog_rate": 0.13914141414141415,
+    "decision_switch_rate": 0.031092778282498873,
+    "all_observed_seed_rates_within_budget": true,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 6,
+    "policy": "global_dijkstra",
+    "episodes": 10,
+    "policy_replicates": 1,
+    "totals": {
+      "generated": 1920,
+      "delivered": 1446,
+      "dropped": 33,
+      "backlog": 441,
+      "generated_final_slot": 60,
+      "backlog_final_slot_arrivals": 60,
+      "decision_avoidable_switches": 386,
+      "decision_switch_opportunities": 2085,
+      "decision_forced_switches": 0,
+      "accepted_forwards": 4249,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 222,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 33
+    },
+    "per_seed": [
+      {
+        "policy_seed": -1,
+        "delivery_ratio": 0.753125,
+        "switches": 386,
+        "opportunities": 2085,
+        "rate": 0.18513189448441247
+      }
+    ],
+    "delivery_ratio": 0.753125,
+    "drop_rate": 0.0171875,
+    "backlog_rate": 0.2296875,
+    "decision_switch_rate": 0.18513189448441247,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 6,
+    "policy": "persistent_global_dijkstra",
+    "episodes": 10,
+    "policy_replicates": 1,
+    "totals": {
+      "generated": 1920,
+      "delivered": 1436,
+      "dropped": 41,
+      "backlog": 443,
+      "generated_final_slot": 60,
+      "backlog_final_slot_arrivals": 60,
+      "decision_avoidable_switches": 0,
+      "decision_switch_opportunities": 2142,
+      "decision_forced_switches": 5,
+      "accepted_forwards": 4275,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 232,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 41
+    },
+    "per_seed": [
+      {
+        "policy_seed": -1,
+        "delivery_ratio": 0.7479166666666668,
+        "switches": 0,
+        "opportunities": 2142,
+        "rate": 0.0
+      }
+    ],
+    "delivery_ratio": 0.7479166666666668,
+    "drop_rate": 0.021354166666666667,
+    "backlog_rate": 0.23072916666666668,
+    "decision_switch_rate": 0.0,
+    "all_observed_seed_rates_within_budget": true,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 6,
+    "policy": "q_routing",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 5760,
+      "delivered": 4555,
+      "dropped": 16,
+      "backlog": 1189,
+      "generated_final_slot": 180,
+      "backlog_final_slot_arrivals": 180,
+      "decision_avoidable_switches": 1729,
+      "decision_switch_opportunities": 6583,
+      "decision_forced_switches": 57,
+      "accepted_forwards": 13299,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 543,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 16
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.7927083333333333,
+        "switches": 573,
+        "opportunities": 2196,
+        "rate": 0.2609289617486339
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.7859375,
+        "switches": 573,
+        "opportunities": 2186,
+        "rate": 0.26212259835315643
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.79375,
+        "switches": 583,
+        "opportunities": 2201,
+        "rate": 0.26487960018173556
+      }
+    ],
+    "delivery_ratio": 0.790798611111111,
+    "drop_rate": 0.002777777777777778,
+    "backlog_rate": 0.2064236111111111,
+    "decision_switch_rate": 0.26264372009450865,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 6,
+    "policy": "qos_only_baseline",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 5760,
+      "delivered": 4613,
+      "dropped": 21,
+      "backlog": 1126,
+      "generated_final_slot": 180,
+      "backlog_final_slot_arrivals": 180,
+      "decision_avoidable_switches": 1465,
+      "decision_switch_opportunities": 6636,
+      "decision_forced_switches": 92,
+      "accepted_forwards": 13560,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 482,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 21
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.7989583333333333,
+        "switches": 593,
+        "opportunities": 2211,
+        "rate": 0.26820443238353686
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.8015625,
+        "switches": 420,
+        "opportunities": 2207,
+        "rate": 0.19030357951971003
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.8020833333333334,
+        "switches": 452,
+        "opportunities": 2218,
+        "rate": 0.2037871956717764
+      }
+    ],
+    "delivery_ratio": 0.8008680555555556,
+    "drop_rate": 0.0036458333333333334,
+    "backlog_rate": 0.1954861111111111,
+    "decision_switch_rate": 0.2207650691916744,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 6,
+    "policy": "qos_only_constrained",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 5760,
+      "delivered": 4546,
+      "dropped": 26,
+      "backlog": 1188,
+      "generated_final_slot": 180,
+      "backlog_final_slot_arrivals": 180,
+      "decision_avoidable_switches": 301,
+      "decision_switch_opportunities": 6574,
+      "decision_forced_switches": 70,
+      "accepted_forwards": 13375,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 545,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 26
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.7927083333333333,
+        "switches": 95,
+        "opportunities": 2194,
+        "rate": 0.043299908842297175
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.7869791666666666,
+        "switches": 107,
+        "opportunities": 2184,
+        "rate": 0.04899267399267399
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.7880208333333333,
+        "switches": 99,
+        "opportunities": 2196,
+        "rate": 0.045081967213114756
+      }
+    ],
+    "delivery_ratio": 0.7892361111111111,
+    "drop_rate": 0.0045138888888888885,
+    "backlog_rate": 0.20625,
+    "decision_switch_rate": 0.0457915166826953,
+    "all_observed_seed_rates_within_budget": true,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 8,
+    "policy": "global_dijkstra",
+    "episodes": 10,
+    "policy_replicates": 1,
+    "totals": {
+      "generated": 2520,
+      "delivered": 1538,
+      "dropped": 142,
+      "backlog": 840,
+      "generated_final_slot": 80,
+      "backlog_final_slot_arrivals": 80,
+      "decision_avoidable_switches": 535,
+      "decision_switch_opportunities": 2605,
+      "decision_forced_switches": 6,
+      "accepted_forwards": 5009,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 530,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 142
+    },
+    "per_seed": [
+      {
+        "policy_seed": -1,
+        "delivery_ratio": 0.6103174603174603,
+        "switches": 535,
+        "opportunities": 2605,
+        "rate": 0.2053742802303263
+      }
+    ],
+    "delivery_ratio": 0.6103174603174603,
+    "drop_rate": 0.05634920634920635,
+    "backlog_rate": 0.3333333333333333,
+    "decision_switch_rate": 0.2053742802303263,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 8,
+    "policy": "persistent_global_dijkstra",
+    "episodes": 10,
+    "policy_replicates": 1,
+    "totals": {
+      "generated": 2520,
+      "delivered": 1519,
+      "dropped": 159,
+      "backlog": 842,
+      "generated_final_slot": 80,
+      "backlog_final_slot_arrivals": 80,
+      "decision_avoidable_switches": 0,
+      "decision_switch_opportunities": 2615,
+      "decision_forced_switches": 11,
+      "accepted_forwards": 5031,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 536,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 159
+    },
+    "per_seed": [
+      {
+        "policy_seed": -1,
+        "delivery_ratio": 0.6027777777777777,
+        "switches": 0,
+        "opportunities": 2615,
+        "rate": 0.0
+      }
+    ],
+    "delivery_ratio": 0.6027777777777777,
+    "drop_rate": 0.0630952380952381,
+    "backlog_rate": 0.3341269841269841,
+    "decision_switch_rate": 0.0,
+    "all_observed_seed_rates_within_budget": true,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 8,
+    "policy": "q_routing",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 7560,
+      "delivered": 4886,
+      "dropped": 260,
+      "backlog": 2414,
+      "generated_final_slot": 240,
+      "backlog_final_slot_arrivals": 240,
+      "decision_avoidable_switches": 2467,
+      "decision_switch_opportunities": 8329,
+      "decision_forced_switches": 123,
+      "accepted_forwards": 15917,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 1492,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 260
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.6444444444444445,
+        "switches": 802,
+        "opportunities": 2787,
+        "rate": 0.28776462145676357
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.645238095238095,
+        "switches": 834,
+        "opportunities": 2766,
+        "rate": 0.30151843817787416
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.6492063492063492,
+        "switches": 831,
+        "opportunities": 2776,
+        "rate": 0.2993515850144092
+      }
+    ],
+    "delivery_ratio": 0.6462962962962963,
+    "drop_rate": 0.03439153439153439,
+    "backlog_rate": 0.3193121693121693,
+    "decision_switch_rate": 0.296211548216349,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 8,
+    "policy": "qos_only_baseline",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 7560,
+      "delivered": 4891,
+      "dropped": 247,
+      "backlog": 2422,
+      "generated_final_slot": 240,
+      "backlog_final_slot_arrivals": 240,
+      "decision_avoidable_switches": 2279,
+      "decision_switch_opportunities": 8505,
+      "decision_forced_switches": 352,
+      "accepted_forwards": 16452,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 1485,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 247
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.6416666666666666,
+        "switches": 928,
+        "opportunities": 2838,
+        "rate": 0.3269908386187456
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.6531746031746032,
+        "switches": 648,
+        "opportunities": 2816,
+        "rate": 0.23011363636363635
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.6460317460317461,
+        "switches": 703,
+        "opportunities": 2851,
+        "rate": 0.24658014731673097
+      }
+    ],
+    "delivery_ratio": 0.6469576719576718,
+    "drop_rate": 0.03267195767195767,
+    "backlog_rate": 0.32037037037037036,
+    "decision_switch_rate": 0.2678948740997043,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 8,
+    "policy": "qos_only_constrained",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 7560,
+      "delivered": 4872,
+      "dropped": 267,
+      "backlog": 2421,
+      "generated_final_slot": 240,
+      "backlog_final_slot_arrivals": 240,
+      "decision_avoidable_switches": 523,
+      "decision_switch_opportunities": 8282,
+      "decision_forced_switches": 154,
+      "accepted_forwards": 15940,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 1492,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 267
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.6472222222222224,
+        "switches": 118,
+        "opportunities": 2789,
+        "rate": 0.042309071351738975
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.6507936507936508,
+        "switches": 168,
+        "opportunities": 2743,
+        "rate": 0.06124681006197594
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.6353174603174605,
+        "switches": 237,
+        "opportunities": 2750,
+        "rate": 0.08618181818181818
+      }
+    ],
+    "delivery_ratio": 0.6444444444444446,
+    "drop_rate": 0.03531746031746032,
+    "backlog_rate": 0.3202380952380952,
+    "decision_switch_rate": 0.0632458998651777,
+    "all_observed_seed_rates_within_budget": true,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 16,
+    "policy": "global_dijkstra",
+    "episodes": 10,
+    "policy_replicates": 1,
+    "totals": {
+      "generated": 4920,
+      "delivered": 1681,
+      "dropped": 712,
+      "backlog": 2527,
+      "generated_final_slot": 160,
+      "backlog_final_slot_arrivals": 160,
+      "decision_avoidable_switches": 802,
+      "decision_switch_opportunities": 3740,
+      "decision_forced_switches": 3,
+      "accepted_forwards": 6742,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 1891,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 712
+    },
+    "per_seed": [
+      {
+        "policy_seed": -1,
+        "delivery_ratio": 0.3416666666666667,
+        "switches": 802,
+        "opportunities": 3740,
+        "rate": 0.2144385026737968
+      }
+    ],
+    "delivery_ratio": 0.3416666666666667,
+    "drop_rate": 0.14471544715447154,
+    "backlog_rate": 0.5136178861788618,
+    "decision_switch_rate": 0.2144385026737968,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 16,
+    "policy": "persistent_global_dijkstra",
+    "episodes": 10,
+    "policy_replicates": 1,
+    "totals": {
+      "generated": 4920,
+      "delivered": 1690,
+      "dropped": 716,
+      "backlog": 2514,
+      "generated_final_slot": 160,
+      "backlog_final_slot_arrivals": 160,
+      "decision_avoidable_switches": 0,
+      "decision_switch_opportunities": 3675,
+      "decision_forced_switches": 10,
+      "accepted_forwards": 6714,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 1878,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 716
+    },
+    "per_seed": [
+      {
+        "policy_seed": -1,
+        "delivery_ratio": 0.3434959349593496,
+        "switches": 0,
+        "opportunities": 3675,
+        "rate": 0.0
+      }
+    ],
+    "delivery_ratio": 0.3434959349593496,
+    "drop_rate": 0.14552845528455285,
+    "backlog_rate": 0.5109756097560976,
+    "decision_switch_rate": 0.0,
+    "all_observed_seed_rates_within_budget": true,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 16,
+    "policy": "q_routing",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 14760,
+      "delivered": 5161,
+      "dropped": 2125,
+      "backlog": 7474,
+      "generated_final_slot": 480,
+      "backlog_final_slot_arrivals": 480,
+      "decision_avoidable_switches": 4011,
+      "decision_switch_opportunities": 11307,
+      "decision_forced_switches": 146,
+      "accepted_forwards": 20586,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 5564,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 2125
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.34796747967479674,
+        "switches": 1302,
+        "opportunities": 3778,
+        "rate": 0.3446267866596083
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.3516260162601626,
+        "switches": 1374,
+        "opportunities": 3768,
+        "rate": 0.3646496815286624
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.34939024390243906,
+        "switches": 1335,
+        "opportunities": 3761,
+        "rate": 0.35495878755650095
+      }
+    ],
+    "delivery_ratio": 0.34966124661246617,
+    "drop_rate": 0.143970189701897,
+    "backlog_rate": 0.5063685636856369,
+    "decision_switch_rate": 0.3547450852482572,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 16,
+    "policy": "qos_only_baseline",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 14760,
+      "delivered": 5059,
+      "dropped": 2172,
+      "backlog": 7529,
+      "generated_final_slot": 480,
+      "backlog_final_slot_arrivals": 480,
+      "decision_avoidable_switches": 3714,
+      "decision_switch_opportunities": 11149,
+      "decision_forced_switches": 482,
+      "accepted_forwards": 20739,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 5613,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 2172
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.3404471544715447,
+        "switches": 1453,
+        "opportunities": 3706,
+        "rate": 0.3920669185105235
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.34532520325203253,
+        "switches": 1099,
+        "opportunities": 3739,
+        "rate": 0.293928857983418
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.34247967479674796,
+        "switches": 1162,
+        "opportunities": 3704,
+        "rate": 0.31371490280777536
+      }
+    ],
+    "delivery_ratio": 0.34275067750677507,
+    "drop_rate": 0.14715447154471545,
+    "backlog_rate": 0.5100948509485095,
+    "decision_switch_rate": 0.3332368931005723,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  },
+  {
+    "scenario": "medium_load",
+    "load": 16,
+    "policy": "qos_only_constrained",
+    "episodes": 30,
+    "policy_replicates": 3,
+    "totals": {
+      "generated": 14760,
+      "delivered": 5139,
+      "dropped": 2139,
+      "backlog": 7482,
+      "generated_final_slot": 480,
+      "backlog_final_slot_arrivals": 480,
+      "decision_avoidable_switches": 1105,
+      "decision_switch_opportunities": 11225,
+      "decision_forced_switches": 217,
+      "accepted_forwards": 20625,
+      "blocked_proposals": 0,
+      "backlog_age_at_least_5": 5569,
+      "drop_no_route": 0,
+      "drop_invalid_action": 0,
+      "drop_ttl_exceeded": 0,
+      "drop_queue_overflow": 0,
+      "drop_source_queue_overflow": 0,
+      "drop_deadline_exceeded": 2139
+    },
+    "per_seed": [
+      {
+        "policy_seed": 179055553,
+        "delivery_ratio": 0.3481707317073171,
+        "switches": 282,
+        "opportunities": 3735,
+        "rate": 0.07550200803212852
+      },
+      {
+        "policy_seed": 183895110,
+        "delivery_ratio": 0.3518292682926829,
+        "switches": 351,
+        "opportunities": 3748,
+        "rate": 0.09364994663820704
+      },
+      {
+        "policy_seed": 310818925,
+        "delivery_ratio": 0.3445121951219512,
+        "switches": 472,
+        "opportunities": 3742,
+        "rate": 0.12613575628006413
+      }
+    ],
+    "delivery_ratio": 0.34817073170731705,
+    "drop_rate": 0.14491869918699188,
+    "backlog_rate": 0.5069105691056911,
+    "decision_switch_rate": 0.09842923698346656,
+    "all_observed_seed_rates_within_budget": false,
+    "descriptive_only": true
+  }
+]
