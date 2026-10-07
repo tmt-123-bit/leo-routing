@@ -125,6 +125,8 @@ struct Sim {
   uint64_t sent=0, delivered=0, deviceQueueDrops=0;
   uint64_t deadlineDrops=0, ttlDrops=0, queueDrops=0, sourceDrops=0, blocked=0;
   uint64_t holds=0, decisions=0, truncatedBacklog=0;
+  uint64_t purgedInfeasible=0;
+  uint32_t mechMode=0;            // 0=off, 1=purge, 2=purge+SRPF
   std::map<uint32_t,std::string> dropReason;   // global pktId -> reason
   std::map<uint32_t,double> deliveredDelayMs;
   std::set<uint32_t> allSent;
@@ -167,6 +169,67 @@ static int EpisodeForGlobalSlot(uint32_t gslot) {
 static bool DeadlineExceeded(uint32_t localSlot, uint32_t created, uint32_t cls) {
   return (int64_t)localSlot - (int64_t)created + 1
        >= (int64_t)g.deadlineSlots[cls % 3];
+}
+
+// ---- environment-side packet management (--mech=purge|purge_srpf) ----
+// Mirrors the slot env's observe()-time intervention: at each slot boundary,
+// queued packets whose optimistic BFS hop distance to their destination
+// exceeds the remaining deadline budget (+1 safety margin, the validated
+// exact boundary) are removed before the policy observes state; with
+// purge_srpf queues are then ordered by remaining hops (stable packet-id
+// tie-break), matching the env stack's service order. The ns-3 topology is
+// a static grid, so one BFS per destination is cached for the whole run.
+static std::map<uint32_t, std::map<uint32_t, uint32_t>> distToDstCache;
+static const std::map<uint32_t, uint32_t>& HopDistances(uint32_t dst) {
+  auto hit = distToDstCache.find(dst);
+  if (hit != distToDstCache.end()) return hit->second;
+  std::map<uint32_t, uint32_t> dist{{dst, 0}};
+  std::deque<uint32_t> frontier{dst};
+  while (!frontier.empty()) {
+    uint32_t u = frontier.front(); frontier.pop_front();
+    for (uint32_t v : nbrsOf[u])
+      if (!dist.count(v)) { dist[v] = dist[u] + 1; frontier.push_back(v); }
+  }
+  auto [ins, _] = distToDstCache.emplace(dst, std::move(dist));
+  return ins->second;
+}
+
+static void ApplyPacketManagement(uint32_t lslot) {
+  if (g.mechMode == 0) return;
+  for (auto& [node, q] : g.nodeQ) {
+    if (q.empty()) continue;
+    std::deque<QPkt> keep;
+    for (const auto& pkt : q) {
+      uint32_t deadlineBound =
+          pkt.createdSlot + g.deadlineSlots[pkt.cls % 3] - 1;
+      uint32_t bound = std::min(deadlineBound, g.episodeSlots);
+      int64_t budget = (int64_t)bound - (int64_t)lslot + 1;
+      const auto& dist = HopDistances(pkt.finalDst);
+      auto di = dist.find(node);
+      if (di != dist.end() && (int64_t)di->second > budget) {
+        g.purgedInfeasible++;
+        g.dropReason[pkt.pktId] = "early_infeasible";
+        continue;
+      }
+      keep.push_back(pkt);
+    }
+    if (g.mechMode == 2) {
+      auto hopKey = [&](const QPkt& p)->uint64_t {
+        const auto& dist = HopDistances(p.finalDst);
+        auto di = dist.find(node);
+        return (di != dist.end()) ? (uint64_t)di->second : 1000000ull;
+      };
+      std::vector<QPkt> tmp(keep.begin(), keep.end());
+      std::stable_sort(tmp.begin(), tmp.end(),
+          [&](const QPkt& a, const QPkt& b) {
+            uint64_t ka = hopKey(a), kb = hopKey(b);
+            if (ka != kb) return ka < kb;
+            return a.pktId < b.pktId;
+          });
+      keep.assign(tmp.begin(), tmp.end());
+    }
+    q.swap(keep);
+  }
 }
 
 static void MarkBacklog(uint32_t pktId) {
@@ -318,6 +381,9 @@ void SlotBoundary(uint32_t gslot)
 
   uint32_t lslot = gslot - (uint32_t)activeEp * g.episodeSlots;
 
+  // env observe()-time packet management precedes the state report
+  ApplyPacketManagement(lslot);
+
   // directed TX deltas since last boundary, isolated to this episode
   std::map<std::pair<uint32_t,uint32_t>,uint32_t> txDelta;
   for (auto& [k, total] : g.episodeLinkTx) {
@@ -421,6 +487,7 @@ void SlotBoundary(uint32_t gslot)
 int main(int argc, char* argv[])
 {
   std::string inputFile, outputFile, host = "127.0.0.1", policyName = "mappo";
+  std::string mech = "off";
   std::string deadlineStr = "30,12,20";
   double slotSec = 1.0, intraMs = INTRA_DELAY_MS, crossMs = CROSS_DELAY_MS;
   uint32_t bwKbps = 36, qsize = 64, episodeSlots = 30, linkCap = 3;
@@ -442,6 +509,8 @@ int main(int argc, char* argv[])
   cmd.AddValue("node-qsize", "per-node local queue cap (env max_queue_packets)", nodeQCap);
   cmd.AddValue("max-hops", "env max_local_hops (TTL)", maxHops);
   cmd.AddValue("deadline-slots", "per-class deadlines", deadlineStr);
+  cmd.AddValue("mech", "off | purge | purge_srpf (env-side packet management)",
+               mech);
   cmd.AddValue("intra-ms", "intra-plane delay (ms)", intraMs);
   cmd.AddValue("cross-ms", "cross-plane delay (ms)", crossMs);
   cmd.Parse(argc, argv);
@@ -465,6 +534,10 @@ int main(int argc, char* argv[])
   g.numEpisodes = numEpisodes;
   g.linkCapacity = linkCap; g.nodeQCap = nodeQCap; g.maxHops = maxHops;
   g.policyName = policyName; g.output = outputFile;
+  if (mech == "off") g.mechMode = 0;
+  else if (mech == "purge") g.mechMode = 1;
+  else if (mech == "purge_srpf") g.mechMode = 2;
+  else { std::cerr << "unknown --mech: " << mech << "\n"; return 1; }
   {
     std::stringstream ss(deadlineStr); std::string cell; uint32_t i = 0;
     while (std::getline(ss, cell, ',') && i < 3)
@@ -618,6 +691,7 @@ int main(int argc, char* argv[])
             << ",source_drops=" << g.sourceDrops
             << ",device_queue_drops=" << g.deviceQueueDrops
             << ",truncated_backlog=" << g.truncatedBacklog
+            << ",purged_infeasible=" << g.purgedInfeasible
             << ",blocked_by_link_capacity=" << g.blocked
             << ",holds=" << g.holds
             << ",decisions=" << g.decisions

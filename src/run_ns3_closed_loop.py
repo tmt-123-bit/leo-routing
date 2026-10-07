@@ -392,6 +392,7 @@ TERMINAL_REASON_TO_RESULT = {
     "source_queue_overflow": "source_drops",
     "device_queue_full": "device_queue_drops",
     "backlog": "truncated_backlog",
+    "early_infeasible": "purged_infeasible",
 }
 
 
@@ -830,6 +831,9 @@ def main() -> None:
                     default=Path("experiments/ns3-closedloop-audited-v2"))
     ap.add_argument("--workload-seeds", default="21001,21002,21003,21004,21005")
     ap.add_argument("--policies", default="mappo,dijkstra")
+    ap.add_argument("--mech", choices=("off", "purge", "purge_srpf"),
+                    default="off",
+                    help="env-side packet management arm for the ns-3 data plane")
     ap.add_argument("--port", type=int, default=7341)
     ap.add_argument("--skip-build", action="store_true")
     args = ap.parse_args()
@@ -997,6 +1001,7 @@ def main() -> None:
             "max_local_hops": max_hops,
         },
         "closed_loop_program": ns3_program,
+        "mech": args.mech,
     }
     write_new_run_manifest(run_manifest_path, run_manifest)
     print(f"run manifest: {run_manifest_path.resolve()}", flush=True)
@@ -1048,6 +1053,7 @@ def main() -> None:
             f"--link-capacity={link_cap}",
             f"--node-qsize={node_q}",
             f"--max-hops={max_hops}",
+            f"--mech={args.mech}",
         ]
         cmd = f"cd {shlex.quote(WSL_NS3_ROOT)} && "
         cmd += " ".join(shlex.quote(argument) for argument in ns3_arguments)
@@ -1109,8 +1115,8 @@ def main() -> None:
     keys = ["policy", "sent", "delivered", "delivery_ratio", "mean_delay_ms",
             "p50_delay_ms", "p95_delay_ms", "deadline_drops", "ttl_drops",
             "queue_drops", "source_drops", "device_queue_drops",
-            "truncated_backlog", "blocked_by_link_capacity", "holds", "decisions",
-            "load_imbalance", "wall_sec"]
+            "truncated_backlog", "blocked_by_link_capacity", "purged_infeasible",
+            "holds", "decisions", "load_imbalance", "wall_sec"]
     summary_path = args.outdir / "closedloop_summary.csv"
     with summary_path.open("x", encoding="utf-8-sig", newline="\n") as f:
         f.write(",".join(keys) + "\n")
