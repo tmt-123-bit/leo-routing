@@ -1,51 +1,24 @@
-# LEO Routing with Constraint-Aware MAPPO
+# LEO 路由与包管理：约束 MAPPO（第一层） + 可行性清除机制（第二层）
 
-这个仓库做的是动态 LEO 星座中的分布式下一跳路由。每颗卫星独立选下一跳，Actor 参数共享；图 Critic 只在训练时使用。运行策略时不需要全局路由表，只读取本地包、缓存下一跳以及一跳链路和队列状态。
+这个仓库现在包含一个两层系统，对应论文的两个部分：
 
-现在研究的问题很具体：缓存的下一跳明明还能用，策略有没有必要换路？这类切换不会马上造成丢包，却会增加转发表更新和路由振荡。当前版本给它单独记账，并在 MAPPO 训练中设置 12% 的上限。
+**第一层（路由，前期工作）**：动态 LEO 星座中的分布式下一跳路由。每颗卫星独立选下一跳，Actor 参数共享；图 Critic 只在训练时使用。核心约束是"可避免切换"——缓存下一跳仍可用时不必要换路，用拉格朗日乘子压进 12% 预算。sealed test 换路率 1.94%（Q-routing 为 39.60%），投递率通过预设 non-inferiority 门限。
 
-## 版本变化
+**第二层（包管理，核心贡献）**：诊断发现瓶颈不在选路而在目的端服务容量——问题从"怎么选路"重构为"哪些包值得占用服务轮次"。机制分两步：① **必死包清除**：BFS 乐观下界（当前可用链路最少跳数 × 每跳最小时延）超过死线余量 +1 的包必然超时，提前清除腾出服务轮次，**不误杀是可证明的定理**（乐观下界=必要条件），不是经验调参；② **临门包排序**：队列按剩余跳数（SRPF）/ 死线（EDF）/ 新鲜度（LCFS）重排。四个性质：可证安全、策略正交（不换路由不重训）、免调参（保守性扫描）、本地微秒级（零泛洪）。
 
-最开始的版本使用了剩余链路寿命信息。原本的考虑是提前避开快要断开的链路，但实验里经常出现另一个问题：策略过早绕路，包走得更远，局部队列也更拥挤。后来将这部分关闭，保留拓扑中的真实断链，但不再把预测寿命交给 Actor，也不再使用寿命奖励和硬 mask。
+第一层训练出的 MAPPO checkpoint 已零样本桥接进官方 Hypatia 路由仲裁器（见 `hypatia_patch/`），两层在同一官方环境中完成端到端验证。
 
-代码里保留了几种配置，名称对应如下：
+## 研究脉络
 
-| 历史名称 | 当前名称 | Lifetime feature | Lifetime reward | Hard mask |
-|---|---|---:|---:|---:|
-| `no_lifetime` | `proposed` / L0 | 关闭 | 关闭 | 关闭 |
-| - | `with_lifetime_feature` / L1 | 开启 | 关闭 | 关闭 |
-| - | `with_lifetime_reward` / L2 | 开启 | 开启 | 关闭 |
-| `full` | `with_hard_lifetime_mask` / L3 | 开启 | 开启 | 开启 |
+方法演化只有一条主线：
 
-5k-step 消融中，关闭 lifetime 的结果更好，所以后续正式实验采用了 `no_lifetime`。这组消融的训练量只有正式实验的 10%，只能解释方案选择，不能当作完整的组件证明。50k-step 全量消融目前也没有跑完。
+1. **Lifetime 消融**：早期版本使用剩余链路寿命特征，实验发现策略过早绕路。关闭后保留真实断链，不再使用寿命特征/奖励/硬 mask。5k-step 消融只解释方案选择，50k 全量消融未跑完。
+2. **可避免切换约束**：关闭 lifetime 后 QoS-only MAPPO 反复替换仍可用的下一跳。加入 decision-level 约束，sealed test 切换率下降 72.8%~94.9%，投递率过 non-inferiority 门限（详见下文"第一层"）。
+3. **问题重构（当前主线）**：切换率压下来以后，诊断显示损失大头是目的端服务容量（积压+超时），不是选路。研究重心从路由层移到**包管理层**——ISL 队列里的清除与排序决策。这一层先在自研时隙仿真器上做机制发现与预注册面板，再整体迁移到官方 Hypatia/ns-3 环境做外部验证（`hypatia_patch/`）。
 
-关闭 lifetime 以后还有一个现象：QoS-only MAPPO 会因为候选分数的小幅变化，反复替换仍然可用的下一跳。当前版本就是在这里加了“可避免切换”约束。Lifetime 仍然关闭，QoS 奖励也没换，主要改动是给非必要换路单独设预算。
+## 第一层：约束 MAPPO sealed test（24 星，历史正式结果）
 
-## 两组实验
-
-仓库里有一组早期五场景结果和一组当前的 sealed test。它们的训练和评估协议不同，需要分别看。
-
-### 当前验证的优化版本
-
-在原始 24 星环境、30 时隙窗口和完整保护条件下，当前 opt-in 优化版本完成了一次独立复核：中负载投递率由 78.1178% 提升到 78.4102%（+0.2923 个百分点），热点高负载由 29.4228% 提升到 30.3270%（+0.9043 个百分点）。共复核 16,400 个独立回合和 8,996,000 条包记录；投递、业务类别、其他目的地、时延、跳数及切换率条件均通过。热点收益主要来自直达目的地语义输入修正；中负载只有部分训练种子采用更新后的 Actor，其余种子保留原模型。该版本不会自动替换历史默认模型，模型包和逐包证据保存在本地实验输出中。
-
-### 五场景 QoS-MAPPO
-
-这是关闭 lifetime 后的版本，用来比较 MAPPO 和传统路由的投递率。修正后的 `eval-main` 包含 8 个 policy seed，每个 seed 使用相同的 50 个 workload。相对 Global Dijkstra 的结果是：
-
-| 场景 | MAPPO - Dijkstra |
-|---|---:|
-| `low_load` | +0.22 pp |
-| `medium_load` | +5.31 pp |
-| `hotspot_high_load` | -0.90 pp |
-| `frequent_break` | +5.15 pp |
-| `fault_links` | +4.89 pp |
-
-这里采用修正 evaluator 后重新统计的数字，所以和早期汇报的 `+4.81 / +2.42 / +4.31 / -1.12 pp` 有出入。原始 checkpoint 没有重新训练，改的是评估和统计口径。具体记录见 [`RESULTS_SUMMARY.md`](RESULTS_SUMMARY.md) 和 `experiments/legacy-reanalysis/eval-main/`。
-
-### 两场景 constraint sealed test
-
-当前正式实验只做中负载和热点高负载两个场景。比较对象包括 3 个 MAPPO 版本和 3 个经典方法；每个 MAPPO 版本使用 8 个独立训练 seed，测试集是 50 个此前未使用的 workload。最终表共有 4,100 行，没有缺行或重复。
+当前正式实验只做中负载和热点高负载两个场景。比较对象包括 3 个 MAPPO 版本和 3 个经典方法；每个 MAPPO 版本使用 8 个独立训练 seed，测试集是 50 个此前未使用的 workload。
 
 主比较是 `qos_only_constrained` 相对同奖励、同结构的 `qos_only_baseline`：
 
@@ -54,28 +27,9 @@
 | `medium_load` | -0.958 pp | [-1.587, -0.182] pp | -15.219 pp | [-19.739, -10.357] pp |
 | `hotspot_high_load` | +0.772 pp | [+0.353, +1.188] pp | -36.245 pp | [-40.872, -31.305] pp |
 
-实验开始前写了四个通过条件：
+实验前写了四个通过条件（投递率单侧下界 ≥ −2 pp；切换率差值上界 < 0；constrained 切换率上界 ≤ 12%；每个 seed 切换率 ≤ 12%），全部通过。中负载少投递约 0.96 pp 是预设门限内的代价，不是无损改进。
 
-- 投递率单侧 95% 下界不低于 -2 pp；
-- 可避免切换率差值的单侧上界低于 0；
-- constrained 策略的切换率单侧上界不高于 12%；
-- 每个 policy seed 的切换率都不高于 12%。
-
-中负载下少投递了约 0.96 pp，并非无损改进，只是没有超过预先允许的 2 pp。热点场景相对普通 MAPPO 多投递约 0.77 pp，但仍低于 Q-routing（0.2945 对 0.3114）。
-
-## 和传统路由思路相比
-
-几种方法解决问题的着力点不一样：
-
-| 方法 | 怎么选路 | 与本项目的区别 |
-|---|---|---|
-| Global Dijkstra | 按当前全局链路代价计算最短路 | MAPPO 在每颗卫星本地决策，并使用队列和包状态 |
-| OSPF-ECMP | 在等价最短路之间分流 | Actor 可以在全部可行邻居中选择，并屏蔽已经失效的链路 |
-| Q-routing | 根据下游反馈更新逐目的地 Q 值 | MAPPO 共享网络参数，并额外控制缓存下一跳的切换频率 |
-| QoS-only MAPPO | 把投递、时延和开销写进同一个奖励 | 当前版本沿用这套奖励，但另设 12% 切换率预算 |
-| Reward-shaped MAPPO | 在奖励里增加换路惩罚 | 固定惩罚只能间接影响换路；约束版本直接检查最终切换率 |
-
-sealed test 中，各方法的投递率 / 可避免切换率如下：
+各方法投递率 / 可避免切换率：
 
 | 方法 | `medium_load` | `hotspot_high_load` |
 |---|---:|---:|
@@ -86,15 +40,9 @@ sealed test 中，各方法的投递率 / 可避免切换率如下：
 | OSPF-ECMP | 0.7386 / 0.1875 | 0.3012 / 0.1982 |
 | Global Dijkstra | 0.7381 / 0.1886 | 0.3011 / 0.1985 |
 
-相对 QoS-only MAPPO，可避免切换率在两个场景分别下降 72.8% 和 94.9%。相对 Q-routing，下降 78.2% 和 95.1%，代价是投递率低 0.46 pp 和 1.69 pp。OSPF-ECMP 和 Dijkstra 在热点场景的投递率也更高，因此这版结果不能解释成全面领先传统路由。
-
-和上一版相比，方法上的变化其实只有一条主线：上一版解决 lifetime 带来的绕路，当前版本继续解决 MAPPO 自身的非必要换路。实验上则补了同结构的 QoS-only 对照、reward-shaped 对照、独立 checkpoint gate 和一次性 sealed test。统计时先在每个 policy seed 内汇总 50 个 workload，再比较 8 个独立 seed，不把同一策略跑出的 50 个 episode 当成 50 次独立训练。
-
-## 方法
+这版结果不能解释成全面领先传统路由：热点场景投递率仍低于 Q-routing。五场景早期结果的修正版统计见 [`RESULTS_SUMMARY.md`](RESULTS_SUMMARY.md)。
 
 ### 决策级可避免切换
-
-对每个 contention 之前的有效路由决策：
 
 ```text
 o = 1  当缓存下一跳和至少一个替代下一跳都可行
@@ -102,69 +50,91 @@ c = 1  当 o = 1 且策略选择了不同下一跳
 R = sum(c) / sum(o)
 ```
 
-首次选路、缓存链路已经失效后的强制切换、`NO_OP` 和 padding 都不进入分子。计数发生在 contention 之前，因此不会因为后续链路竞争失败而漏掉策略已经提出的切换。
+首次选路、缓存链路失效后的强制切换、`NO_OP` 和 padding 不进入分子。计数发生在 contention 之前。
 
 ### Candidate-set MAPPO
 
 - 26 维候选特征，覆盖队列、链路状态、几何进展、包上下文和缓存信息；
-- 共享候选编码器和对称池化，候选顺序变化只会重排 logits；
-- 不可行动作在采样前 mask；
-- 图 Critic 只在 centralized training 中使用；
-- team reward 加零均值 local credit；
-- PPO 使用 GAE、value clipping、可行动作归一化 entropy 和 KL 约束。
+- 共享候选编码器和对称池化，候选顺序变化只重排 logits；
+- 不可行动作采样前 mask；图 Critic 仅 centralized training 使用；
+- team reward 加零均值 local credit；PPO 使用 GAE、value clipping、归一化 entropy 和 KL 约束。
 
-约束臂的 Actor loss 为：
+约束臂 Actor loss：`L_actor = L_PPO + lambda * C_surrogate`，`lambda_next = clip(lambda + 0.05 * (R_rollout - 0.12), 0, 5)`。它是经验约束控制器，不是 CPO，不提供逐轨迹硬保证。
 
-```text
-L_actor = L_PPO + lambda * C_surrogate
+## 第二层：包管理方法族（核心贡献）
 
-lambda_next = clip(lambda + 0.05 * (R_rollout - 0.12), 0, 5)
-```
+环境：hotspot 高负载 ｜ 固定路由（缓存 Dijkstra）｜ 只变包管理臂 ｜ 丢弃族参数经调参冻结为各家族最优。指标：投递率（送达/生成），Δ = 相对 FIFO 基线。
 
-`lambda` 每个完整 rollout 更新一次。它是经验约束控制器，不是 CPO，也不提供逐轨迹的硬保证。
+**11 种方法**（自研环境与官方环境同一清单）：FIFO（基线）、EDF 最早死线优先（实时调度/RC-EDF）、类别严格优先级（QoS 分级/CBQ）、LCFS 新包优先（AoI 文献）、CoDel 滞留丢弃（互联网 AQM）、RED 随机早丢（AQM 经典）、Drop-front 队首压力丢（DTN drop-oldest, RFC 6693）、**清除 Purge**（本工作：BFS 乐观下界证明必然超时→提前清除，可证不误杀）、**清除+SRPF**（本工作主栈）、**清除+EDF**（交叉消融）、**清除+LCFS**（本工作，千星新冠军）。
 
-## 实验设计
+### 自研时隙仿真器主要结果
 
-| 项目 | 设置 |
-|---|---|
-| 星座 | 4 planes x 6 satellites |
-| 场景 | `medium_load`, `hotspot_high_load` |
-| MAPPO arms | QoS baseline, constrained, reward-shaped control |
-| Policy seeds | 每个 arm/scenario 8 个 |
-| 训练预算 | 50,000 target steps，实际完整 rollout 边界 50,040 |
-| 训练 workloads | 76001--76200 |
-| checkpoint selection | 77001--77010 |
-| independent gate | 77011--77020 |
-| sealed test | 78001--78050，只实例化一次 |
-| 经典基线 | Q-routing, OSPF-ECMP, Global Dijkstra |
+**66 星深饱和**（负载12，40 workload，base=0.2753）：清除+SRPF 0.3190（+15.9%，单侧下界+14.7%）> 清除+EDF +13.7% > 清除 +10.8% > 类别优先级 +3.9% > EDF/RED/Drop-front ≈0 > LCFS −2.5% > CoDel −4.2%。预注册正式面板（独立新 workload）：清除+SRPF **+16.63%（下界+15.50%，40/40 正，p=9.1e-13）**，P1/S1/S2 三判定全过。
 
-Q-routing 每个场景、每个 policy identity 重新训练 500 episodes。OSPF-ECMP 使用 8 个路由随机身份；Global Dijkstra 是确定性的，只使用一个 sentinel identity。
+**千星 1008**（负载12，20 workload，base=0.2405）：清除+LCFS 0.2539（+5.6%，下界+4.6%）🥇 > 清除+EDF +3.4% > 清除 +2.5% > 清除+SRPF +2.1%；LCFS 单独 +4.0%（无安全性质，下界不可比）；类别优先级 −2.2%；CoDel −6.6%；RED/Drop-front 0 次触发。
 
-统计推断以 policy seed 为独立单位，不把 50 个 workload 当成 50 次独立训练。置信区间使用 5,000 次 crossed bootstrap，同时重采样 seed 行和 workload 列；敏感性检验枚举 `2^8` 个 sign flips，并对四个主检验做 Holm 校正。
+**跨规模倒 U 包络**：24星 +7.80%（8/8 正，p=0.0078）→ 66星 +16.63%（40/40 正）→ 156星 +31.6%（甜点区）→ 1008星 +2~6%。时标×2 因果实验确认千星端崩塌是损失模式迁移（传递不可达→目的端瓶颈排队），不是死线太短。
+
+### 官方 Hypatia/ns-3 环境验证（hypatia_patch/）
+
+应要求，全部仿真从自研仿真器迁移到官方 Hypatia（github.com/snkas/hypatia，IMC'20）+ ns-3.31 包级数据面 + satgenpy 官方星座管线重跑。机制以源码扩展形式并入官方代码库（"implemented as an extension of Hypatia"）。
+
+**11 方法 × 5 规模 = 55 次仿真**（指标=准时投递率；统一 40 条死线 UDP 流、25000 包/臂）：
+
+| 方法 | 24星(4×6 kNN) | 66星(11×6 kNN) | 156星 | 1008星 | 1584星(完整星链) |
+|---|---:|---:|---:|---:|---:|
+| FIFO（基线） | 12.50 | 2.50 | 20.22 | 49.69 | 59.97 |
+| EDF | 12.50 | 2.50 | 20.22 | 47.54 | 56.85 |
+| 类别严格优先级 | 12.50 | 2.50 | 20.22 | 50.80 | 59.85 |
+| LCFS | 12.50 | 2.50 | 20.22 | 48.16 | 59.97 |
+| CoDel | 5.00 | 0.00 | 7.50 | 5.00 | 7.50 |
+| RED | 12.50 | 2.50 | 20.21 | 51.01 | 59.86 |
+| Drop-front | 12.50 | 2.50 | 20.19 | 46.93 | 55.64 |
+| **清除 Purge** | 12.50 | 2.50 | 20.24 | **53.31** | 62.03 |
+| **清除+SRPF** | 12.50 | 2.50 | 20.24 | **53.31** | 60.00 |
+| **清除+EDF** | 12.50 | 2.50 | 20.22 | 52.80 | **64.08** |
+| **清除+LCFS** | 12.50 | 2.50 | 20.24 | 52.74 | 60.73 |
+
+读表：1584 星清除+EDF 夺冠（+6.8%，热点流准时 +54%）；1008 星清除族包揽前四（+6.1~+7.3%，热点 +51%）；24/66/156 星全族持平（官方环境独立复现倒 U 边界行为）；CoDel 五档全部灾难。
+
+**路由层正交性（1584 星，每算法跑"原始 + 叠加机制"）**：最短路（Hypatia 官方算法1）59.97→64.08%（+6.8%）；配对多路径（官方算法3）10.84→15.01%（**+38.5%**，路由越弱杠杆越大）；ILPR 持久化（忠实移植）≡ 最短路；CMADR 预算约束（忠实移植）≡ 最短路；POMAP 式队列感知（桥接在线运行）≡ 最短路；约束 MAPPO checkpoint 零样本桥接（退化档持平）。地面中继（官方算法2）为无 ISL 架构不可比；MATMR 原文无公开源码未移植。
+
+**统一发现（四重独立证据）**：官方 100ms 粒度路由是准静态的（每窗全网仅 ~20 条变更）且 ISL 队列浅而弥散——路由层一切适应性结构性无操作空间，性能分化的唯一舞台在包管理层，正是本机制所在层。机制叠加在每一种可比路由上全部为正。
+
+**分析面板**：死线扫描复现倒 U 包络（40ms 档 +22.0%）；margin 扫描证明免调参（1.5~6ms 平台期，4× 过度保守杀可行包）；5 流量种子统计面板 +7.55pp（相对 +13.9%，配对 t=4.84，p<0.01，5/5 种子为正）。
+
+注意：两套环境指标口径不同（官方=准时投递率，自研=投递率），数字不可互换；各工况的归属在实验记录中分别标注。
 
 ## 仓库结构
 
 ```text
-src/          环境、MAPPO、基线、统计、实验 runner 和测试
+src/          自研时隙仿真器：环境、MAPPO、基线、包管理机制、统计、实验 runner 和测试
+hypatia_patch/  官方 Hypatia/ns-3 扩展（C++ 机制 + Python 驱动，deploy.sh 一键部署）
 docs/         预注册协议、修订记录和 claim boundary
 experiments/  紧凑结果、冻结文件和公开的 sealed rows
 figures/      历史实验图表
-data/         TLE 与导出的 24 星拓扑
+data/         TLE 与导出的拓扑
 ```
 
-这次正式结果对应：
+`hypatia_patch/` 内容：
 
 ```text
-experiments/avoidable-switch-constraint-formal-v1-r2/
-experiments/avoidable-switch-classical-baselines-formal-v1-r3/
-experiments/avoidable-switch-joint-sealed-test-v1/
+model/    PurgeSrpfQueue（11 模式 ISL 队列，isl_queue_type 一键切换）、DeadlineTag、
+          DeadlineUdpApplication、SatnetHopOracle（实时跳数 oracle）
+helper/   DeadlineUdpScheduler（可选第 8 类流量列）
+edit/     官方源码接入点：拓扑队列接线、main_satnet、激光设备空指针保护、
+          桥接仲裁器 helper（TCP 上报→外部策略服务→五元组热装）
+bridge_server.py   qaware / MAPPO 零样本策略服务（Python 策略服务 ↔ WSL ns-3）
+custom_knn.py / custom_pn.py   kNN / +Grid 星座壳层生成器（含三时点稳定性校验）
+ilpr_postprocess.py / cmadr_postprocess.py   SOTA 路由忠实移植后处理器
+family_sweep.sh 等驱动   任意壳层 × 任意方法组合的扫描；deploy.sh 一键部署重建
 ```
 
-前两个目录在 GitHub 中只保留顶层 preregistration、aggregate rows、statistics 和 freeze。训练 checkpoint、逐 job 状态、重复 JSONL 和运行日志留在本地，不进入 Git。sealed test 的公开数据以 `sealed_test_rows.csv` 为准。
+两个已知的 ns-3 集成坑（实现备注）：① ns-3.31 UDP 发送错误路径会让整条流停滞，判死必须放在出队时 `DropAfterDequeue` 而非入队拒绝；② 激光设备 Send() 假设"入队后队列非空"，清掉唯一包会 SIGSEGV，需要空指针保护。
 
 ## 安装
 
-Python 3.10 或 3.11 均可。PyTorch/CUDA 版本请按本机驱动选择，其余依赖：
+自研仿真器：Python 3.10 或 3.11，PyTorch/CUDA 按本机驱动选择。
 
 ```bash
 python -m venv .venv
@@ -172,18 +142,18 @@ source .venv/bin/activate       # Windows PowerShell: .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
 
-MAPPO trainer 目前通过 CleanMARL 兼容入口运行。正式训练 runner 会记录源码、依赖、CUDA 设备和 checkpoint hash；不要直接修改已冻结目录继续训练。
+官方 Hypatia 扩展：先按官方流程在 WSL Ubuntu 克隆构建 Hypatia（ns-3.31 构建需 `./waf configure --build-profile=optimized --disable-werror`），再运行 `bash hypatia_patch/deploy.sh` 拷贝补丁并重建。MAPPO 桥接臂另需 PyTorch 策略服务（`bridge_server.py`）。
 
 ## 测试
 
-在仓库根目录执行：
+自研仿真器（仓库根目录）：
 
 ```bash
 cd src
 python -m unittest discover -p "test_*.py"
 ```
 
-只检查本次 constraint/sealed-test 链路：
+只检查 constraint/sealed-test 链路：
 
 ```bash
 cd src
@@ -232,14 +202,15 @@ c5cc82c7edb96add6e8da1275924e83cf159e65a2062184d52f3364ad8e508a9
 
 ## 结果边界
 
-目前证据支持的说法很具体：在这个 24 星 slot simulator 的两个已测试负载场景中，显式 decision-level constraint 相对匹配的 QoS-only MAPPO 大幅降低了可避免切换率，并通过预设的投递率 non-inferiority 门限。
+目前证据支持的说法很具体：
+
+- 24 星自研环境中，显式 decision-level 约束相对匹配的 QoS-only MAPPO 大幅降低可避免切换率，并通过预设投递率 non-inferiority 门限；
+- 66 星深饱和与千星自研环境中，可行性清除族是唯一全规模正增益的包管理家族，清除+SRPF 通过预注册正式面板（+16.63%，下界+15.50%）；
+- 官方 Hypatia/ns-3 环境中（24→1584 星五档），清除族是唯一全规模非负且大规模显著为正的方法（1584 星 +6.8%，热点流 +54%），且叠加在每一种可比路由上全部为正；官方环境的准静态路由层使包管理层成为巨型星座性能分化的唯一舞台。
 
 它还不能说明：
 
-- 对任意 LEO 星座和流量都有效；
-- 优于所有经典路由方法；
+- 机制在目的端瓶颈排队型损失下有效（千星崩塌边界已定位为损失模式迁移，需网关调度/接入控制，future work）；
+- 优于所有经典路由方法（第一层热点场景投递率仍低于 Q-routing）；
 - 已经验证控制面收敛或真实信令开销；
-- 能零样本扩展到大星座；
-- 已达到工程部署条件。
-
-下一步更有价值的是在 TLE/SGP4 或 Hypatia/ns-3 环境中做独立外部验证，而不是继续调整这次 sealed result。
+- 能达到工程部署条件。
